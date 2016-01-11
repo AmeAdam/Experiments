@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="AmeCreateProject.Views.AmeProjectView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AmeCreateProject.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid Margin="0,0,-202,0">
+        <TextBox x:Name="tbProjectName" HorizontalAlignment="Left" Margin="247,40,0,0" TextWrapping="Wrap" Text="{Binding Path=ProjectName}" VerticalAlignment="Top" Height="32" Width="203"/>
+        <TextBox x:Name="tbProjectDate" HorizontalAlignment="Left" Margin="92,40,0,0" TextWrapping="Wrap" Text="{Binding Path=ProjectDate, Mode=TwoWay}" VerticalAlignment="Top" Height="32" Width="109"/>
+        <Button x:Name="bPrevDate" Content="&lt;" HorizontalAlignment="Left" Margin="49,37,0,0" VerticalAlignment="Top" Width="41" Command="{Binding Path=PrevDayCommand}"/>
+        <Button x:Name="bNextDate" Content="&gt;" HorizontalAlignment="Left" Margin="203,37,0,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="-2.263,-3.578" Command="{Binding Path=NextDayCommand}" />
+        <Button x:Name="button" Content="Create" HorizontalAlignment="Left" Margin="455,37,0,0" VerticalAlignment="Top" Command="{Binding Path=CreateProjectCommand}"/>
+    </Grid>
+</UserControl>
