@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using AmeCreateProject.Model;
 using AmeCreateProject.Utils;
 using Microsoft.Practices.Prism.Commands;
@@ -9,6 +12,7 @@ namespace AmeCreateProject.ViewModel
 {
     public class AmeProjectViewModel : BindableBase
     {
+        private const string ProjectDir = @"E:\Projekty\2015 Przedszkole nr 11\";
         private readonly IRemovableMediaUtils mediaUtils;
         public DelegateCommand NextDayCommand { get; private set; }
         public DelegateCommand PrevDayCommand { get; private set; }
@@ -21,6 +25,7 @@ namespace AmeCreateProject.ViewModel
             NextDayCommand = new DelegateCommand(NextDay);
             PrevDayCommand = new DelegateCommand(PrevDay);
             CreateProjectCommand = new DelegateCommand(CreateProject);
+            RefreshDirectoryWarning();
         }
 
         private void CreateProject()
@@ -31,12 +36,14 @@ namespace AmeCreateProject.ViewModel
         {
             Model.Date = Model.Date.AddDays(-1);
             OnPropertyChanged(() => ProjectDate);
+            RefreshDirectoryWarning();
         }
 
         private void NextDay()
         {
             Model.Date = Model.Date.AddDays(1);
             OnPropertyChanged(() => ProjectDate);
+            RefreshDirectoryWarning();
         }
 
         public AmeProjectModel Model { get; set; }
@@ -51,6 +58,8 @@ namespace AmeCreateProject.ViewModel
             }
         }
 
+        public string WarnignDirectoryExist { get; set; }
+
         public string ProjectDate
         {
             get { return Model.Date.ToString("yyyy-MM-dd"); }
@@ -61,6 +70,16 @@ namespace AmeCreateProject.ViewModel
                     Model.Date = date;
                 OnPropertyChanged(() => ProjectDate);
             }
+        }
+
+        private void RefreshDirectoryWarning()
+        {
+            var existingDirectory = Directory.GetDirectories(ProjectDir, ProjectDate + "*").FirstOrDefault();
+            if (existingDirectory == null)
+                WarnignDirectoryExist = null;
+            else
+                WarnignDirectoryExist = Path.GetFileName(existingDirectory);
+            OnPropertyChanged(() => WarnignDirectoryExist);
         }
     }
 }

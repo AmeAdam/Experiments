@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AmeCreateProject"
         xmlns:regions="http://prismlibrary.com/"
         mc:Ignorable="d"
-        Title="PrismAppShell" Height="300" Width="300">
+        Title="PrismAppShell" Height="393.529" Width="582.353">
     <Grid>
         <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" 
                 Name="dockPanel1" VerticalAlignment="Stretch">

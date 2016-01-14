@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Hacking";
+}
+
+<div class="jumbotron">
+    <h1>Przedszkolna Chatka Hacked</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Galerie</h2>
+        @foreach (Tuple<string, string> item in ViewBag.List)
+        {
+            @Html.ActionLink(item.Item2, "Galeria", "Home", new {link = item.Item1}, null);
+            <br/>
+        }
+    </div>
+</div>
