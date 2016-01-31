@@ -24,5 +24,12 @@ namespace AmeWindowsService
         protected override void OnStop()
         {
         }
+
+        public void RunStandalone(string[] args)
+        {
+            OnStart(args);
+            Console.ReadLine();
+            OnStop();
+        }
     }
 }
