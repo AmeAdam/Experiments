@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using AmeCreateProject.Model;
 using AmeCreateProject.Utils;
 using Microsoft.Practices.Prism.Commands;
@@ -12,11 +13,13 @@ namespace AmeCreateProject.ViewModel
 {
     public class AmeProjectViewModel : BindableBase
     {
-        private const string ProjectDir = @"E:\Projekty\2015 Przedszkole nr 11\";
+        public string ProjectDir { get; set; } = @"E:\Projekty\2015 Przedszkole nr 11\";
         private readonly IRemovableMediaUtils mediaUtils;
         public DelegateCommand NextDayCommand { get; private set; }
         public DelegateCommand PrevDayCommand { get; private set; }
         public DelegateCommand CreateProjectCommand { get; private set; }
+        public DelegateCommand ChangeProjectDirCommand { get; private set; }
+        
 
         public AmeProjectViewModel(IRemovableMediaUtils mediaUtils)
         {
@@ -25,7 +28,21 @@ namespace AmeCreateProject.ViewModel
             NextDayCommand = new DelegateCommand(NextDay);
             PrevDayCommand = new DelegateCommand(PrevDay);
             CreateProjectCommand = new DelegateCommand(CreateProject);
+            ChangeProjectDirCommand = new DelegateCommand(ChangeProjectDir);
             RefreshDirectoryWarning();
+        }
+
+        private void ChangeProjectDir()
+        {
+            var dialog = new FolderBrowserDialog();
+            dialog.SelectedPath = ProjectDir;
+            DialogResult result = dialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                ProjectDir = dialog.SelectedPath;
+                OnPropertyChanged(() => ProjectDir);
+                RefreshDirectoryWarning();
+            }
         }
 
         private void CreateProject()
