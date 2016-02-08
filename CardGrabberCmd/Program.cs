@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 using Microsoft.VisualBasic.FileIO;
 using SharpSvn;
@@ -14,6 +15,7 @@ namespace CardGrabberCmd
         static void Main(string[] args)
         {
             var dir = args[0]; //Environment.CurrentDirectory;
+           // var dir = @"D:\Projekty\2015 Przedszkolna Chatka\2016-02-08 Bal Karnawałowy";
             Console.WriteLine("Katalog docelowy: "+dir);
             CreateSvn(dir);
 
@@ -56,6 +58,34 @@ namespace CardGrabberCmd
                         Directory.Delete(subSourceDirectory);
                     }
                 }
+
+                foreach (var sourceDirNode in destDirNode.Elements("source-canon"))
+                {
+                    var sourcePath = drive + (string) sourceDirNode;
+                    var zdjeciaPath = Path.Combine(dir, "Zdjecia");
+                    Directory.CreateDirectory(zdjeciaPath);
+                    foreach (var cr2File in Directory.GetFiles(sourcePath, "*.CR2"))
+                    {
+                        var destCr2Path = Path.Combine(destDir, Path.GetFileName(cr2File));
+                        File.Move(cr2File, destCr2Path);
+
+                        var bmpDec = BitmapDecoder.Create(new Uri(destCr2Path), BitmapCreateOptions.DelayCreation,
+                            BitmapCacheOption.None);
+                        var bmpEnc = new JpegBitmapEncoder();
+                        bmpEnc.QualityLevel = 80;
+                        bmpEnc.Frames.Add(bmpDec.Frames[0]);
+                        var destJpgPath = Path.Combine(zdjeciaPath, Path.GetFileNameWithoutExtension(destCr2Path)+".jpg");
+                        using (var ms = File.Create(destJpgPath, 30000000))
+                        {
+                            bmpEnc.Save(ms);
+                        }
+                    }
+
+                    var destDirMov = Path.Combine(dir, "Canon");
+                    Directory.CreateDirectory(destDirMov);
+                    foreach (var movFile in Directory.GetFiles(sourcePath, "*.MOV"))
+                        File.Move(movFile, Path.Combine(destDirMov, Path.GetFileName(movFile)));
+                }
             }
         }
 
@@ -91,8 +121,15 @@ namespace CardGrabberCmd
                 LogMessage = "Nowy projekt"
             });
             svn.CheckOut(new SvnUriTarget(path), dir);
-            svn.SetProperty(dir, "svn:ignore", "A\nB\nC\nCanon\nZdjecia\nZdjeciaRaw\nCardGrabberCmd.exe");
-            svn.Commit(dir, new SvnCommitArgs {LogMessage = "add ignores", Depth = SvnDepth.Empty});
+            svn.SetProperty(dir, "svn:ignore", "A\nB\nC\nCanon\nZdjecia");
+
+            var rawPath = Path.Combine(dir, "ZdjeciaRaw");
+            Directory.CreateDirectory(rawPath);
+
+            svn.Add(rawPath);
+            svn.SetProperty(rawPath, "svn:ignore", "*.CR2");
+
+            svn.Commit(dir, new SvnCommitArgs {LogMessage = "add ignores", Depth = SvnDepth.Children});
             Console.WriteLine("SVN created");
         }
 
