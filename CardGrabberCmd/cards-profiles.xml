@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<card-profiles xmlns="http://kamerzysta.bydgoszcz.pl">
+  <target-folder-structure>
+    <folder>
+      <name>A</name>
+      <svn-ignore />
+    </folder>
+    <folder>
+      <name>B</name>
+      <svn-ignore />
+    </folder>
+    <folder>
+      <name>B1</name>
+      <svn-ignore />
+    </folder>
+    <folder>
+      <name>B2</name>
+      <svn-ignore />
+    </folder>
+    <folder>
+      <name>C</name>
+      <svn-ignore />
+    </folder>
+    <folder>
+      <name>Canon</name>
+      <svn-ignore />
+    </folder>
+    <folder>
+      <name>Zdjecia</name>
+      <svn-ignore />
+    </folder>
+    <folder>
+      <name>ZdjeciaRaw</name>
+      <svn-ignore>*.CR2</svn-ignore>
+    </folder>
+  </target-folder-structure>
+
+  <media id="AG AC90">
+    <name>A</name>
+    <move-all>
+      <source></source>
+      <target>A</target>
+    </move-all>
+    <move-cam-foto>
+      <source></source>
+      <target>Zdjecia</target>
+    </move-cam-foto>
+  </media>
+
+  <media id="HMC 151">
+    <name>B</name>
+    <move-all>
+      <source></source>
+      <target>B</target>
+    </move-all>
+  </media>
+
+  <media id="HDC SD90">
+    <name>C</name>
+    <move-all>
+      <source></source>
+      <target>C</target>
+    </move-all>
+    <move-cam-foto>
+      <source></source>
+      <target>Zdjecia</target>
+    </move-cam-foto>
+  </media>
+
+  <media id="Canon 650d">
+    <name>Canon</name>
+    <move-files>
+      <source></source>
+      <filter>*.MOV</filter>
+      <target>Canon</target>
+    </move-files>
+    <move-files>
+      <source></source>
+      <filter>*.jpg</filter>
+      <target>Zdjecia</target>
+    </move-files>
+    <move-cr2>
+      <source></source>
+      <target>ZdjeciaRaw</target>
+      <target-jpg>Zdjecia</target-jpg>
+    </move-cr2>
+  </media>
+
+</card-profiles>
