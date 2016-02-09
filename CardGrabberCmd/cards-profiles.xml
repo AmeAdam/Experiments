@@ -37,53 +37,38 @@
 
   <media id="AG AC90">
     <name>A</name>
-    <move-all>
-      <source></source>
+    <move-avchd>
       <target>A</target>
-    </move-all>
-    <move-cam-foto>
-      <source></source>
+    </move-avchd>
+    <move-dcim>
       <target>Zdjecia</target>
-    </move-cam-foto>
+    </move-dcim>
   </media>
 
   <media id="HMC 151">
     <name>B</name>
-    <move-all>
-      <source></source>
+    <move-avchd>
       <target>B</target>
-    </move-all>
+    </move-avchd>
   </media>
 
   <media id="HDC SD90">
     <name>C</name>
-    <move-all>
-      <source></source>
+    <move-avchd>
       <target>C</target>
-    </move-all>
-    <move-cam-foto>
-      <source></source>
+    </move-avchd>
+    <move-dcim>
       <target>Zdjecia</target>
-    </move-cam-foto>
+    </move-dcim>
   </media>
 
   <media id="Canon 650d">
     <name>Canon</name>
-    <move-files>
-      <source></source>
-      <filter>*.MOV</filter>
-      <target>Canon</target>
-    </move-files>
-    <move-files>
-      <source></source>
-      <filter>*.jpg</filter>
-      <target>Zdjecia</target>
-    </move-files>
-    <move-cr2>
-      <source></source>
-      <target>ZdjeciaRaw</target>
+    <move-dcim-canon>
+      <target-mov>Canon</target-mov>
+      <target-cr2>ZdjeciaRaw</target-cr2>
       <target-jpg>Zdjecia</target-jpg>
-    </move-cr2>
+    </move-dcim-canon>
   </media>
 
 </card-profiles>
