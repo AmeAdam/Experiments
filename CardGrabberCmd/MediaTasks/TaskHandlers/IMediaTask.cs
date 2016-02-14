@@ -1,4 +1,4 @@
-﻿namespace CardGrabberCmd.MediaTasks
+﻿namespace CardGrabberCmd.MediaTasks.TaskHandlers
 {
     public interface IMediaTask
     {

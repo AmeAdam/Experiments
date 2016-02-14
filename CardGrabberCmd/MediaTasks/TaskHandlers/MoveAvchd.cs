@@ -1,7 +1,7 @@
 using System.IO;
-using System.Xml.Linq;
+using CardGrabberCmd.MediaTasks.Settings;
 
-namespace CardGrabberCmd.MediaTasks
+namespace CardGrabberCmd.MediaTasks.TaskHandlers
 {
     public class MoveAvchd : BaseMediaTask
     {
@@ -10,10 +10,10 @@ namespace CardGrabberCmd.MediaTasks
         private readonly string relativeTarget;
 
 
-        public MoveAvchd(Media parent, XElement settings)
+        public MoveAvchd(Media parent, TaskSettings settings)
         {
             this.parent = parent;
-            relativeTarget = (string)settings.Element(XName.Get("target", Media.AmeNamespace));
+            relativeTarget = settings.GetParamValue("target");
         }
 
         public override void Execute()

@@ -1,74 +1,71 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <card-profiles xmlns="http://kamerzysta.bydgoszcz.pl">
-  <target-folder-structure>
-    <folder>
-      <name>A</name>
-      <svn-ignore />
-    </folder>
-    <folder>
-      <name>B</name>
-      <svn-ignore />
-    </folder>
-    <folder>
-      <name>B1</name>
-      <svn-ignore />
-    </folder>
-    <folder>
-      <name>B2</name>
-      <svn-ignore />
-    </folder>
-    <folder>
-      <name>C</name>
-      <svn-ignore />
-    </folder>
-    <folder>
-      <name>Canon</name>
-      <svn-ignore />
-    </folder>
-    <folder>
-      <name>Zdjecia</name>
-      <svn-ignore />
-    </folder>
-    <folder>
-      <name>ZdjeciaRaw</name>
-      <svn-ignore>*.CR2</svn-ignore>
-    </folder>
-  </target-folder-structure>
+  <target-folder>
+    <name>A</name>
+    <svn-ignore />
+  </target-folder>
+  <target-folder>
+    <name>B</name>
+    <svn-ignore />
+  </target-folder>
+  <target-folder>
+    <name>B1</name>
+    <svn-ignore />
+  </target-folder>
+  <target-folder>
+    <name>B2</name>
+    <svn-ignore />
+  </target-folder>
+  <target-folder>
+    <name>C</name>
+    <svn-ignore />
+  </target-folder>
+  <target-folder>
+    <name>Canon</name>
+    <svn-ignore />
+  </target-folder>
+  <target-folder>
+    <name>Zdjecia</name>
+    <svn-ignore />
+  </target-folder>
+  <target-folder>
+    <name>ZdjeciaRaw</name>
+    <svn-ignore>*.CR2</svn-ignore>
+  </target-folder>
 
   <media id="AG AC90">
     <name>A</name>
-    <move-avchd>
-      <target>A</target>
-    </move-avchd>
-    <move-dcim>
-      <target>Zdjecia</target>
-    </move-dcim>
+    <task name="move-avchd">
+      <param name="target" value="A" />
+    </task>
+    <task name="move-dcim">
+      <param name="target" value="Zdjecia" />
+    </task>
   </media>
 
   <media id="HMC 151">
     <name>B</name>
-    <move-avchd>
-      <target>B</target>
-    </move-avchd>
+    <task name="move-avchd">
+      <param name="target" value="B" />
+    </task>
   </media>
 
   <media id="HDC SD90">
     <name>C</name>
-    <move-avchd>
-      <target>C</target>
-    </move-avchd>
-    <move-dcim>
-      <target>Zdjecia</target>
-    </move-dcim>
+    <task name="move-avchd">
+      <param name="target" value="C" />
+    </task>
+    <task name="move-dcim">
+      <param name="target" value="Zdjecia" />
+    </task>
   </media>
 
   <media id="Canon 650d">
     <name>Canon</name>
-    <move-dcim-canon>
-      <target-mov>Canon</target-mov>
-      <target-cr2>ZdjeciaRaw</target-cr2>
-      <target-jpg>Zdjecia</target-jpg>
-    </move-dcim-canon>
+    <task name="move-dcim-canon">
+      <param name="target-mov" value="Canon" />
+      <param name="target-cr2" value="ZdjeciaRaw" />
+      <param name="target-jpg" value="Zdjecia" />
+    </task>
   </media>
-
 </card-profiles>

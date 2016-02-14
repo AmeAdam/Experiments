@@ -61,11 +61,17 @@
   <ItemGroup>
     <Compile Include="MediaTasks\MediaTaskFactory.cs" />
     <Compile Include="MediaTasks\BaseMediaTask.cs" />
-    <Compile Include="MediaTasks\IMediaTask.cs" />
-    <Compile Include="Media.cs" />
-    <Compile Include="MediaTasks\MoveAvchd.cs" />
-    <Compile Include="MediaTasks\MoveDcim.cs" />
-    <Compile Include="MediaTasks\MoveDcimCanon.cs" />
+    <Compile Include="MediaTasks\Settings\AmeCardSettings.cs" />
+    <Compile Include="MediaTasks\TaskHandlers\IMediaTask.cs" />
+    <Compile Include="MediaTasks\Settings\CardProfilesSettings.cs" />
+    <Compile Include="MediaTasks\Media.cs" />
+    <Compile Include="MediaTasks\TaskHandlers\MoveAvchd.cs" />
+    <Compile Include="MediaTasks\TaskHandlers\MoveDcim.cs" />
+    <Compile Include="MediaTasks\TaskHandlers\MoveDcimCanon.cs" />
+    <Compile Include="MediaTasks\Settings\MediaSettings.cs" />
+    <Compile Include="MediaTasks\Settings\TargetFolder.cs" />
+    <Compile Include="MediaTasks\Settings\TaskParam.cs" />
+    <Compile Include="MediaTasks\Settings\TaskSettings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,7 +1,7 @@
 using System.IO;
-using System.Xml.Linq;
+using CardGrabberCmd.MediaTasks.Settings;
 
-namespace CardGrabberCmd.MediaTasks
+namespace CardGrabberCmd.MediaTasks.TaskHandlers
 {
     public class MoveDcim : BaseMediaTask
     {
@@ -9,10 +9,10 @@ namespace CardGrabberCmd.MediaTasks
         private const string RelativeSource = @"DCIM";
         private readonly string relativeTarget;
 
-        public MoveDcim(Media parent, XElement settings)
+        public MoveDcim(Media parent, TaskSettings settings)
         {
             this.parent = parent;
-            relativeTarget = (string)settings.Element(XName.Get("target", Media.AmeNamespace));
+            relativeTarget = settings.GetParamValue("target");
         }
 
         public override void Execute()

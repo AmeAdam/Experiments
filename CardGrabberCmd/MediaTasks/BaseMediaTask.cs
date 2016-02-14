@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using CardGrabberCmd.MediaTasks.TaskHandlers;
 using Microsoft.VisualBasic.FileIO;
 
 namespace CardGrabberCmd.MediaTasks

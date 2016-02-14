@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Windows.Media.Imaging;
-using System.Xml.Linq;
+using CardGrabberCmd.MediaTasks.Settings;
 
-namespace CardGrabberCmd.MediaTasks
+namespace CardGrabberCmd.MediaTasks.TaskHandlers
 {
     public class MoveDcimCanon : BaseMediaTask
     {
@@ -13,12 +13,12 @@ namespace CardGrabberCmd.MediaTasks
         private readonly string relativeTargetCr2;
         private readonly string relativeTargetJpg;
 
-        public MoveDcimCanon(Media parent, XElement settings)
+        public MoveDcimCanon(Media parent, TaskSettings settings)
         {
             this.parent = parent;
-            relativeTargetMov = (string)settings.Element(XName.Get("target-mov", Media.AmeNamespace));
-            relativeTargetCr2 = (string)settings.Element(XName.Get("target-cr2", Media.AmeNamespace));
-            relativeTargetJpg = (string)settings.Element(XName.Get("target-jpg", Media.AmeNamespace));
+            relativeTargetMov = settings.GetParamValue("target-mov");
+            relativeTargetCr2 = settings.GetParamValue("target-cr2");
+            relativeTargetJpg = settings.GetParamValue("target-jpg");
         }
 
         public override void Execute()
