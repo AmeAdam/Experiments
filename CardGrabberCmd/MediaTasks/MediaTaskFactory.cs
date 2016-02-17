@@ -44,7 +44,7 @@ namespace CardGrabberCmd.MediaTasks
                 return null;
             }
         }
-
+        
         public Media CreateMedia(DriveInfo drive, AmeCardSettings cardSettings)
         {
             var profile = profiles.Medias.FirstOrDefault(m => m.Id == cardSettings.Id);
@@ -60,7 +60,7 @@ namespace CardGrabberCmd.MediaTasks
                 //DestinationFolder = "?"
             };
 
-            media.Tasks = profile.Tasks.Select(t => CreateTaskHandler(t, media)).ToList();
+            media.TaskHandlers = profile.Tasks.Select(t => CreateTaskHandler(t, media)).ToList();
             return media;
         }
 

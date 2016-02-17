@@ -32,6 +32,7 @@ namespace CardGrabberCmd.MediaTasks
                 ? Directory.GetFiles(absoluteSource, searchPattern)
                 : Directory.GetFiles(absoluteSource);
 
+
             foreach (var sourceFile in sourceFiles)
             {
                 var destFile = Path.Combine(absoluteTarget, Path.GetFileName(sourceFile) ?? "");
