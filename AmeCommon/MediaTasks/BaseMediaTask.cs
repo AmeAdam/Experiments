@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using CardGrabberCmd.MediaTasks.TaskHandlers;
+using AmeCommon.MediaTasks.TaskHandlers;
 using Microsoft.VisualBasic.FileIO;
 
-namespace CardGrabberCmd.MediaTasks
+namespace AmeCommon.MediaTasks
 {
     public abstract class BaseMediaTask : IMediaTask
     {

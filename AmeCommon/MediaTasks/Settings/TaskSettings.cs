@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace CardGrabberCmd.MediaTasks.Settings
+namespace AmeCommon.MediaTasks.Settings
 {
     [Serializable]
     public class TaskSettings

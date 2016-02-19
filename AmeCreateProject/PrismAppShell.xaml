@@ -6,11 +6,9 @@
         xmlns:local="clr-namespace:AmeCreateProject"
         xmlns:regions="http://prismlibrary.com/"
         mc:Ignorable="d"
-        Title="PrismAppShell" Height="393.529" Width="582.353">
-    <Grid>
+        Title="AME - Program do zgrywania kart SD" Height="393.529" Width="582.353" MinWidth="450" MinHeight="300">
         <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" 
                 Name="dockPanel1" VerticalAlignment="Stretch">
             <ContentControl regions:RegionManager.RegionName="CenterRegion"></ContentControl>
         </DockPanel>
-    </Grid>
 </Window>

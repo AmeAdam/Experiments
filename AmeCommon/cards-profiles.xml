@@ -33,6 +33,14 @@
     <svn-ignore>*.CR2</svn-ignore>
   </target-folder>
 
+  <media id="AME-HDD-E">
+    <name>E</name>
+  </media>
+
+  <media id="AME-HDD-D">
+    <name>D</name>
+  </media>
+
   <media id="AG AC90">
     <name>A</name>
     <task name="move-avchd">

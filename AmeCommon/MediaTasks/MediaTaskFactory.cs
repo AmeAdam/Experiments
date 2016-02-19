@@ -4,10 +4,10 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using CardGrabberCmd.MediaTasks.Settings;
-using CardGrabberCmd.MediaTasks.TaskHandlers;
+using AmeCommon.MediaTasks.Settings;
+using AmeCommon.MediaTasks.TaskHandlers;
 
-namespace CardGrabberCmd.MediaTasks
+namespace AmeCommon.MediaTasks
 {
     public class MediaTaskFactory
     {
@@ -45,8 +45,12 @@ namespace CardGrabberCmd.MediaTasks
             }
         }
         
-        public Media CreateMedia(DriveInfo drive, AmeCardSettings cardSettings)
+        public Media CreateMedia(DriveInfo drive)
         {
+            var cardSettings = ReadCardSettings(drive);
+            if (cardSettings == null)
+                return null;
+
             var profile = profiles.Medias.FirstOrDefault(m => m.Id == cardSettings.Id);
             if (profile == null)
                 throw new ApplicationException("Could not found profile settings for: " + cardSettings.Id);

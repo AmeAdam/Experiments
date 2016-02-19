@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using AmeCreateProject.Utils;
 using AmeCreateProject.ViewModel;
 using Prism.Modularity;
 using Prism.Unity;
+using AmeCommon.MediaTasks;
 
 namespace AmeCreateProject
 {
@@ -11,8 +11,8 @@ namespace AmeCreateProject
         protected override void ConfigureContainer()
         {
             base.ConfigureContainer();
-            RegisterTypeIfMissing(typeof(IRemovableMediaUtils), typeof(RemovableMediaUtils), true);
             RegisterTypeIfMissing(typeof(AmeProjectViewModel), typeof(AmeProjectViewModel), false);
+            RegisterTypeIfMissing(typeof(MediaService), typeof(MediaService), true);            
         }
 
         protected override DependencyObject CreateShell()

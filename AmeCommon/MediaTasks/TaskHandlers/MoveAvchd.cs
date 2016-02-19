@@ -1,7 +1,7 @@
 using System.IO;
-using CardGrabberCmd.MediaTasks.Settings;
+using AmeCommon.MediaTasks.Settings;
 
-namespace CardGrabberCmd.MediaTasks.TaskHandlers
+namespace AmeCommon.MediaTasks.TaskHandlers
 {
     public class MoveAvchd : BaseMediaTask
     {

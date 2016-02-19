@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:AmeCreateProject.Views"
              xmlns:AmeCreateProject="clr-namespace:AmeCreateProject" x:Class="AmeCreateProject.Views.AmeProjectView"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="508.036">
+             d:DesignHeight="300" MinWidth="400" Margin="10">
     <UserControl.Resources>
         <Style x:Key="HyperLinkButtonStyle" TargetType="Button">
             <Setter Property="Focusable" Value="False" />
@@ -24,20 +24,28 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid Margin="0,0,-212,0" HorizontalAlignment="Left" Width="512">
-        <TextBlock Margin="22,0,-22,0">
-         <Hyperlink Command="{Binding ChangeProjectDirCommand}">
-          <TextBlock Text="{Binding ProjectDir}" />
-        </Hyperlink>
-      </TextBlock>
-        
-        <TextBox x:Name="tbProjectDate" HorizontalAlignment="Left" Margin="62,25,0,0" TextWrapping="Wrap" Text="{Binding ProjectDate, Mode=TwoWay}" VerticalAlignment="Top" Height="32" Width="110" IsEnabled="False" FontSize="16" TextAlignment="Center"/>
-        <Button x:Name="bPrevDate" Content="&lt;" HorizontalAlignment="Left" Margin="22,25,0,0" VerticalAlignment="Top" Width="40" Command="{Binding PrevDayCommand}" Height="32"/>
-        <Button x:Name="bNextDate" Content="&gt;" HorizontalAlignment="Left" Margin="172,25,0,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="-2.263,-3.578" Command="{Binding NextDayCommand}" Height="32" />
-        <Button x:Name="button" Content="Create" HorizontalAlignment="Left" Margin="411,25,0,0" VerticalAlignment="Top" Command="{Binding CreateProjectCommand}" Height="32" Width="50"/>
-        <Label x:Name="label" Content="{Binding Path=WarnignDirectoryExist}" HorizontalAlignment="Left" Margin="22,54,0,0" VerticalAlignment="Top" Height="24" Width="439" Foreground="Red"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="32" Margin="214,25,0,0" TextWrapping="Wrap" Text="{Binding Path=ProjectName}" VerticalAlignment="Top" Width="197"/>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <TextBlock DockPanel.Dock="Top" Margin="0,0,2,2"><Hyperlink Command="{Binding ChangeProjectDirCommand}">
+                <InlineUIContainer><TextBlock Text="{Binding ProjectDir}" /></InlineUIContainer></Hyperlink>
+            </TextBlock>
+            <Label DockPanel.Dock="Bottom" x:Name="label" Content="{Binding Path=WarnignDirectoryExist}" Height="24" Foreground="Red" HorizontalAlignment="Left" Margin="0,0,2,2" />
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Top" Height="32">
+                <Button x:Name="bPrevDate" Content="&lt;" VerticalAlignment="Top" Width="42" Command="{Binding PrevDayCommand}" Height="32"/>
+                <TextBox x:Name="tbProjectDate" TextWrapping="Wrap" Text="{Binding ProjectDate, Mode=TwoWay}" VerticalAlignment="Top" Height="32" Width="110" IsEnabled="False" FontSize="16" TextAlignment="Center"/>
+                <Button x:Name="bNextDate" Content="&gt;" VerticalAlignment="Top" Width="42" Command="{Binding NextDayCommand}" Height="32" />
+            </StackPanel>
+            <Button DockPanel.Dock="Right" x:Name="button" Content="Create" VerticalAlignment="Top" HorizontalAlignment="Left"  Command="{Binding CreateProjectCommand}" Height="32" Width="50"/>
+            <TextBox x:Name="textBox" Height="32" Text="{Binding Path=ProjectName}" VerticalAlignment="Top" MinWidth="200" />
+        </DockPanel>
 
+        <ListView ItemsSource="{Binding Path=MediasList}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <local:MediaView />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </DockPanel>
 
-    </Grid>
 </UserControl>

@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Windows.Media.Imaging;
-using CardGrabberCmd.MediaTasks.Settings;
+using AmeCommon.MediaTasks.Settings;
 
-namespace CardGrabberCmd.MediaTasks.TaskHandlers
+namespace AmeCommon.MediaTasks.TaskHandlers
 {
     public class MoveDcimCanon : BaseMediaTask
     {

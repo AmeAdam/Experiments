@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace CardGrabberCmd.MediaTasks.Settings
+namespace AmeCommon.MediaTasks.Settings
 {
     [XmlRoot("card-profiles", Namespace = AmeNamespace)]
     [Serializable]

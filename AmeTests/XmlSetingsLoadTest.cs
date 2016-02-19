@@ -8,7 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using CardGrabberCmd;
-using CardGrabberCmd.MediaTasks.Settings;
+using AmeCommon.MediaTasks.Settings;
 using NUnit.Framework.Internal;
 using NUnit.Framework;
 

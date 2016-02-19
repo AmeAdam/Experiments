@@ -18,7 +18,7 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -114,14 +114,17 @@
     <Compile Include="SdCardControl.xaml.cs">
       <DependentUpon>SdCardControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\RemovableMediaUtils.cs" />
     <Compile Include="ViewModel\AmeProjectViewModel.cs" />
+    <Compile Include="ViewModel\MediaViewModel.cs" />
     <Compile Include="Views\AmeProjectView.xaml.cs">
       <DependentUpon>AmeProjectView.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\MediaView.xaml.cs">
+      <DependentUpon>MediaView.xaml</DependentUpon>
     </Compile>
     <Page Include="PrismAppShell.xaml">
       <SubType>Designer</SubType>
@@ -132,6 +135,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AmeProjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MediaView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -173,6 +180,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\hdc-sd90.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AmeCommon\AmeCommon.csproj">
+      <Project>{45984092-ad7d-485f-9822-350948523a4d}</Project>
+      <Name>AmeCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using CardGrabberCmd.MediaTasks.TaskHandlers;
+using AmeCommon.MediaTasks.TaskHandlers;
 using System;
 using System.Threading.Tasks;
 
-namespace CardGrabberCmd.MediaTasks
+namespace AmeCommon.MediaTasks
 {
     public class Media
     {
@@ -21,6 +21,34 @@ namespace CardGrabberCmd.MediaTasks
         {
             return Task.Factory.StartNew(ExecuteAllTasksInternal);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, this))
+                return true;
+            return Equals(obj as Media);
+        }
+
+        public bool Equals(Media other)
+        {
+            if (ReferenceEquals(other, this))
+                return true;
+            if (ReferenceEquals(null, other))
+                return false;
+            return Id == other.Id && Name == other.Name && Index == other.Index;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = Id != null ? Id.GetHashCode() : 0;
+                result = (result * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                result = (result * 397) ^ (Index != null ? Index.GetHashCode() : 0);
+                return result;
+            }
+        }
+
 
         private void SetStatus(EnumMediaStatus newStatus, string message, Action<Media, EnumMediaStatus, string> handler)
         {
