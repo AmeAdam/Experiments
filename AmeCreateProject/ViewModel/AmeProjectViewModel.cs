@@ -14,7 +14,13 @@ namespace AmeCreateProject.ViewModel
     public class AmeProjectViewModel : BindableBase
     {
         private MediaService mediaUtils;
-        public string ProjectDir { get; set; } = @"E:\Projekty\";
+        private AmeProjectModel Model { get; set; }
+        public string ProjectDir
+        {
+            get { return Model.ProjectDir; }
+            set { Model.ProjectDir = value; }
+        }
+
         public DelegateCommand NextDayCommand { get; private set; }
         public DelegateCommand PrevDayCommand { get; private set; }
         public DelegateCommand CreateProjectCommand { get; private set; }
@@ -30,7 +36,6 @@ namespace AmeCreateProject.ViewModel
             CreateProjectCommand = new DelegateCommand(CreateProject);
             ChangeProjectDirCommand = new DelegateCommand(ChangeProjectDir);
             MediasList = new ObservableCollection<MediaViewModel>(mediaUtils.GetAllMedias().Select(m => new MediaViewModel(m)));
-            RefreshDirectoryWarning();
         }
 
         private void ChangeProjectDir()
@@ -42,7 +47,6 @@ namespace AmeCreateProject.ViewModel
             {
                 ProjectDir = dialog.SelectedPath;
                 OnPropertyChanged(() => ProjectDir);
-                RefreshDirectoryWarning();
             }
         }
 
@@ -52,19 +56,17 @@ namespace AmeCreateProject.ViewModel
 
         private void PrevDay()
         {
-            Model.Date = Model.Date.AddDays(-1);
+            Model.MovePrevious();
             OnPropertyChanged(() => ProjectDate);
-            RefreshDirectoryWarning();
+            OnPropertyChanged(() => ProjectName);
         }
 
         private void NextDay()
         {
-            Model.Date = Model.Date.AddDays(1);
+            Model.MoveNext();
             OnPropertyChanged(() => ProjectDate);
-            RefreshDirectoryWarning();
+            OnPropertyChanged(() => ProjectName);
         }
-
-        public AmeProjectModel Model { get; set; }
 
         public string ProjectName
         {
@@ -88,16 +90,6 @@ namespace AmeCreateProject.ViewModel
                     Model.Date = date;
                 OnPropertyChanged(() => ProjectDate);
             }
-        }
-
-        private void RefreshDirectoryWarning()
-        {
-            var existingDirectory = Directory.GetDirectories(ProjectDir, ProjectDate + "*").FirstOrDefault();
-            if (existingDirectory == null)
-                WarnignDirectoryExist = null;
-            else
-                WarnignDirectoryExist = Path.GetFileName(existingDirectory);
-            OnPropertyChanged(() => WarnignDirectoryExist);
         }
     }
 }

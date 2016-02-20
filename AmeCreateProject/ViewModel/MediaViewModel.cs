@@ -1,5 +1,8 @@
 ﻿using AmeCommon.MediaTasks;
+using AmeCreateProject.Resources;
 using Microsoft.Practices.Prism.Mvvm;
+using System.IO;
+using System.Reflection;
 
 namespace AmeCreateProject.ViewModel
 {
@@ -17,12 +20,21 @@ namespace AmeCreateProject.ViewModel
         private void OnStatusChanged(Media parent, EnumMediaStatus status, string message)
         {
             lastMessage = message ?? "";
-            OnPropertyChanged(nameof(Status));
+            OnPropertyChanged(nameof(Message));
         }
 
-        public string Name { get { return media.Id; } }
-        public string DestinationFolderName { get { return media.Name; } }
-        public string Status { get { return media.Status.ToString() + " " + lastMessage; } }
+        public string Description { get { return media.Id + " " + media.Name; } }
+        public string Message { get { return media.Status.ToString() + " " + lastMessage; } }
+        public string ImagePath
+        {
+            get
+            {
+                var path = Path.GetFullPath(@"Images/"+media.Id+".jpg");
+                if (File.Exists(path))
+                    return path;
+                return "/Resources/unknown.png";
+            }
+        }
 
     }
 }

@@ -39,7 +39,7 @@
             <TextBox x:Name="textBox" Height="32" Text="{Binding Path=ProjectName}" VerticalAlignment="Top" MinWidth="200" />
         </DockPanel>
 
-        <ListView ItemsSource="{Binding Path=MediasList}">
+        <ListView ItemsSource="{Binding Path=MediasList}" HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <local:MediaView />
