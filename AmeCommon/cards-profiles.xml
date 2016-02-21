@@ -76,4 +76,14 @@
       <param name="target-jpg" value="Zdjecia" />
     </task>
   </media>
+
+  <media id="Sony DSC-HX7V">
+    <name>Sony</name>
+    <task name="move-avchd">
+      <param name="target" value="D" />
+    </task>
+    <task name="move-dcim">
+      <param name="target" value="Zdjecia" />
+    </task>
+  </media>
 </card-profiles>

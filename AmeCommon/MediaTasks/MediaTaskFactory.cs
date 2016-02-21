@@ -61,6 +61,7 @@ namespace AmeCommon.MediaTasks
                 Name = cardSettings.Name,
                 Index = cardSettings.Index,
                 SourceDisk = drive,
+                Status = EnumMediaStatus.None,
                 //DestinationFolder = "?"
             };
 

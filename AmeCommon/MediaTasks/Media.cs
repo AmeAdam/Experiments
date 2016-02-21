@@ -17,7 +17,7 @@ namespace AmeCommon.MediaTasks
         public EnumMediaStatus Status { get; set; } = EnumMediaStatus.None;
         public event Action<Media, EnumMediaStatus, string> StatusChanged;
 
-        public Task ExecuteAllTasks()
+        public Task ExecuteAllTasksAsync()
         {
             return Task.Factory.StartNew(ExecuteAllTasksInternal);
         }

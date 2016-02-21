@@ -22,7 +22,7 @@ namespace AmeCommon.MediaTasks.TaskHandlers
             MoveAllFiles(absoluteSource, absoluteTarget);
             foreach (var chilSourcedDir in Directory.GetDirectories(absoluteSource))
             {
-                MoveAllDirectoryContent(chilSourcedDir, absoluteTarget);
+                MoveAllDirectoryContent(chilSourcedDir, absoluteTarget, true);
             }
         }
     }

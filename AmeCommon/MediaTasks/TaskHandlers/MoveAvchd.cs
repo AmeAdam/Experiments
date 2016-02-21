@@ -21,7 +21,7 @@ namespace AmeCommon.MediaTasks.TaskHandlers
             var absoluteTarget = Path.Combine(parent.DestinationFolder.FullName, relativeTarget);
             var absoluteSource = Path.Combine(parent.SourceDisk.Name, RelativeSource);
             Directory.CreateDirectory(absoluteTarget);
-            MoveAllDirectoryContent(absoluteSource, absoluteTarget);
+            MoveAllDirectoryContent(absoluteSource, absoluteTarget, false);
         }
     }
 }

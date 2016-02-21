@@ -83,6 +83,11 @@ namespace AmeCreateProject.Model
             }
         }
 
+        public string DestinationDir
+        {
+            get { return Path.Combine(ProjectDir, DirName); }
+        }
+
         public string ProjectDate
         {
             get { return Date.ToString("yyyy-MM-dd"); }

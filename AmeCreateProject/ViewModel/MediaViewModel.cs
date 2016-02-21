@@ -1,8 +1,7 @@
 ﻿using AmeCommon.MediaTasks;
-using AmeCreateProject.Resources;
 using Microsoft.Practices.Prism.Mvvm;
 using System.IO;
-using System.Reflection;
+using System.Windows;
 
 namespace AmeCreateProject.ViewModel
 {
@@ -15,16 +14,56 @@ namespace AmeCreateProject.ViewModel
         {
             this.media = media;
             media.StatusChanged += OnStatusChanged;
+            IsActive = media.SourceDisk.DriveType == DriveType.Removable;
         }
 
         private void OnStatusChanged(Media parent, EnumMediaStatus status, string message)
         {
             lastMessage = message ?? "";
             OnPropertyChanged(nameof(Message));
+            OnPropertyChanged(nameof(ImgProgressVisible));
+            OnPropertyChanged(nameof(ImgDoneVisible));
+            OnPropertyChanged(nameof(ImgErrorVisible));
         }
 
+        public bool IsActive { get; set; }
+
+        public Media Tag {  get { return media; } }
+
         public string Description { get { return media.Id + " " + media.Name; } }
-        public string Message { get { return media.Status.ToString() + " " + lastMessage; } }
+
+        public string Message
+        {
+            get
+            {
+                return lastMessage;
+            }
+        }
+
+        public Visibility ImgProgressVisible
+        {
+            get
+            {
+                return media.Status == EnumMediaStatus.InProgress ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public Visibility ImgDoneVisible
+        {
+            get
+            {
+                return media.Status == EnumMediaStatus.Completed ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public Visibility ImgErrorVisible
+        {
+            get
+            {
+                return media.Status == EnumMediaStatus.Failed ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         public string ImagePath
         {
             get
@@ -35,6 +74,5 @@ namespace AmeCreateProject.ViewModel
                 return "/Resources/unknown.png";
             }
         }
-
     }
 }

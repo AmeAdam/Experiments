@@ -120,6 +120,7 @@
     </Compile>
     <Compile Include="ViewModel\AmeProjectViewModel.cs" />
     <Compile Include="ViewModel\MediaViewModel.cs" />
+    <Compile Include="Views\VisiblityConverter.cs" />
     <Compile Include="Views\AmeProjectView.xaml.cs">
       <DependentUpon>AmeProjectView.xaml</DependentUpon>
     </Compile>
@@ -194,13 +195,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\ajax-loader.gif" />
+    <Resource Include="Resources\wait.gif" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\loader.gif" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\done.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Sony DSC-HX7V.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

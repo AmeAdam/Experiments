@@ -8,6 +8,7 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using System.Collections.ObjectModel;
 using AmeCommon.MediaTasks;
+using System.Threading.Tasks;
 
 namespace AmeCreateProject.ViewModel
 {
@@ -26,15 +27,16 @@ namespace AmeCreateProject.ViewModel
         public DelegateCommand CreateProjectCommand { get; private set; }
         public DelegateCommand ChangeProjectDirCommand { get; private set; }
         public ObservableCollection<MediaViewModel> MediasList { get; private set; }
+        private volatile bool inProgress;
       
         public AmeProjectViewModel(MediaService mediaUtils)
         {
             this.mediaUtils = mediaUtils;
             Model = new AmeProjectModel();
-            NextDayCommand = new DelegateCommand(NextDay);
-            PrevDayCommand = new DelegateCommand(PrevDay);
-            CreateProjectCommand = new DelegateCommand(CreateProject);
-            ChangeProjectDirCommand = new DelegateCommand(ChangeProjectDir);
+            NextDayCommand = new DelegateCommand(NextDay, () => !inProgress);
+            PrevDayCommand = new DelegateCommand(PrevDay, () => !inProgress);
+            CreateProjectCommand = new DelegateCommand(CreateProject, () => !inProgress);
+            ChangeProjectDirCommand = new DelegateCommand(ChangeProjectDir, () => !inProgress);
             MediasList = new ObservableCollection<MediaViewModel>(mediaUtils.GetAllMedias().Select(m => new MediaViewModel(m)));
         }
 
@@ -52,6 +54,27 @@ namespace AmeCreateProject.ViewModel
 
         private void CreateProject()
         {
+            inProgress = true;
+            Task.Factory.StartNew(ExecuteSelectedTasks);
+        }
+
+        private void ExecuteSelectedTasks()
+        {
+            try {
+                var destDir = new DirectoryInfo(Model.DestinationDir);
+                var taskHandlers = MediasList
+                    .Where(m => m.IsActive)
+                    .Select(m =>
+                    {
+                        m.Tag.DestinationFolder = destDir;
+                        return m.Tag.ExecuteAllTasksAsync();
+                    });
+                Task.WaitAll(taskHandlers.ToArray());
+            }
+            finally
+            {
+                inProgress = false;
+            }
         }
 
         private void PrevDay()
