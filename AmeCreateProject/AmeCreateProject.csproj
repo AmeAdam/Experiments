@@ -120,7 +120,7 @@
     </Compile>
     <Compile Include="ViewModel\AmeProjectViewModel.cs" />
     <Compile Include="ViewModel\MediaViewModel.cs" />
-    <Compile Include="Views\VisiblityConverter.cs" />
+    <Compile Include="Views\MediaStatusToImageConverter.cs" />
     <Compile Include="Views\AmeProjectView.xaml.cs">
       <DependentUpon>AmeProjectView.xaml</DependentUpon>
     </Compile>
@@ -211,6 +211,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Sony DSC-HX7V.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\AG AC90.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\HMC 151.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Canon 650d.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

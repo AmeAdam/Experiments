@@ -3,6 +3,7 @@ using AmeCreateProject.ViewModel;
 using Prism.Modularity;
 using Prism.Unity;
 using AmeCommon.MediaTasks;
+using AmeCreateProject.Model;
 
 namespace AmeCreateProject
 {
@@ -12,6 +13,7 @@ namespace AmeCreateProject
         {
             base.ConfigureContainer();
             RegisterTypeIfMissing(typeof(AmeProjectViewModel), typeof(AmeProjectViewModel), false);
+            RegisterTypeIfMissing(typeof(AmeProjectModel), typeof(AmeProjectModel), false);            
             RegisterTypeIfMissing(typeof(MediaService), typeof(MediaService), true);            
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AmeCommon.MediaTasks;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -12,8 +13,17 @@ namespace AmeCreateProject.Model
         public DateTime Date { get; set; } = DateTime.Now.Date;
         public string Name { get; set; } = DefaultName;
         public string DirName => Date.ToString("yyyy-MM-dd") + " " + Name;
-        private string projectDir = @"E:\Projekty";
+        private string projectDir;
         private List<string> allDirectories;
+        public List<Media> MediaList { get; private set; }
+        public DriveInfo Drive => new DriveInfo(Path.GetPathRoot(projectDir));
+
+        public AmeProjectModel(MediaService mediaUtils)
+        {
+            MediaList = mediaUtils.GetAllMedias();
+            ProjectDir = @"E:\Projekty";
+            SetDirectory(allDirectories.FirstOrDefault());
+        }
 
         public string ProjectDir
         {
@@ -22,18 +32,13 @@ namespace AmeCreateProject.Model
             {
                 projectDir = value;
                 UpdateDirectoriesList();
+                var drive = new DriveInfo(Path.GetPathRoot(projectDir));
             }
         }
 
         private void UpdateDirectoriesList()
         {
             allDirectories = Directory.GetDirectories(ProjectDir, Date.ToString("yyyy-MM-dd") + " *").ToList();
-        }
-
-        public AmeProjectModel()
-        {
-            UpdateDirectoriesList();
-            SetDirectory(allDirectories.FirstOrDefault());
         }
 
         public void MoveNext()

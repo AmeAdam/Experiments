@@ -7,20 +7,14 @@ using AmeCreateProject.Model;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using System.Collections.ObjectModel;
-using AmeCommon.MediaTasks;
 using System.Threading.Tasks;
 
 namespace AmeCreateProject.ViewModel
 {
     public class AmeProjectViewModel : BindableBase
     {
-        private MediaService mediaUtils;
         private AmeProjectModel Model { get; set; }
-        public string ProjectDir
-        {
-            get { return Model.ProjectDir; }
-            set { Model.ProjectDir = value; }
-        }
+        public string ProjectDir => Model.ProjectDir + " | " + Model.Drive.AvailableFreeSpace / (1024 * 1024 * 1024) + "GB wolnego miejsca";
 
         public DelegateCommand NextDayCommand { get; private set; }
         public DelegateCommand PrevDayCommand { get; private set; }
@@ -29,15 +23,14 @@ namespace AmeCreateProject.ViewModel
         public ObservableCollection<MediaViewModel> MediasList { get; private set; }
         private volatile bool inProgress;
       
-        public AmeProjectViewModel(MediaService mediaUtils)
+        public AmeProjectViewModel(AmeProjectModel model)
         {
-            this.mediaUtils = mediaUtils;
-            Model = new AmeProjectModel();
+            Model = model;
             NextDayCommand = new DelegateCommand(NextDay, () => !inProgress);
             PrevDayCommand = new DelegateCommand(PrevDay, () => !inProgress);
             CreateProjectCommand = new DelegateCommand(CreateProject, () => !inProgress);
             ChangeProjectDirCommand = new DelegateCommand(ChangeProjectDir, () => !inProgress);
-            MediasList = new ObservableCollection<MediaViewModel>(mediaUtils.GetAllMedias().Select(m => new MediaViewModel(m)));
+            MediasList = new ObservableCollection<MediaViewModel>(Model.MediaList.Select(m => new MediaViewModel(m)));
         }
 
         private void ChangeProjectDir()
@@ -47,10 +40,13 @@ namespace AmeCreateProject.ViewModel
             DialogResult result = dialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                ProjectDir = dialog.SelectedPath;
+                Model.ProjectDir = dialog.SelectedPath;
                 OnPropertyChanged(() => ProjectDir);
+                OnPropertyChanged(() => DiskSize);
             }
         }
+
+        public long DiskSize => Model.Drive.AvailableFreeSpace / (1024 * 1024 * 1024);
 
         private void CreateProject()
         {

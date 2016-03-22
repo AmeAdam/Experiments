@@ -82,10 +82,11 @@ namespace AmeCommon.MediaTasks
 
     public enum EnumMediaStatus
     {
-        None,
-        InProgress,
-        Completed,
-        Failed
+        None = 0,
+        Empty = 1,
+        InProgress = 2,
+        Completed = 3,
+        Failed = 4
     }
 
 }

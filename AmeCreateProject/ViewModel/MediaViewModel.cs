@@ -1,14 +1,12 @@
 ﻿using AmeCommon.MediaTasks;
 using Microsoft.Practices.Prism.Mvvm;
 using System.IO;
-using System.Windows;
 
 namespace AmeCreateProject.ViewModel
 {
     public class MediaViewModel : BindableBase
     {
         private Media media;
-        private string lastMessage = "";
 
         public MediaViewModel(Media media)
         {
@@ -19,50 +17,20 @@ namespace AmeCreateProject.ViewModel
 
         private void OnStatusChanged(Media parent, EnumMediaStatus status, string message)
         {
-            lastMessage = message ?? "";
+            Message = message ?? "";
             OnPropertyChanged(nameof(Message));
-            OnPropertyChanged(nameof(ImgProgressVisible));
-            OnPropertyChanged(nameof(ImgDoneVisible));
-            OnPropertyChanged(nameof(ImgErrorVisible));
+            OnPropertyChanged(nameof(Status));
         }
 
         public bool IsActive { get; set; }
 
-        public Media Tag {  get { return media; } }
+        public Media Tag { get { return media; } }
 
         public string Description { get { return media.Id + " " + media.Name; } }
 
-        public string Message
-        {
-            get
-            {
-                return lastMessage;
-            }
-        }
+        public string Message { get; private set; }
 
-        public Visibility ImgProgressVisible
-        {
-            get
-            {
-                return media.Status == EnumMediaStatus.InProgress ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        public Visibility ImgDoneVisible
-        {
-            get
-            {
-                return media.Status == EnumMediaStatus.Completed ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        public Visibility ImgErrorVisible
-        {
-            get
-            {
-                return media.Status == EnumMediaStatus.Failed ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
+        public EnumMediaViewStatus Status { get { return (EnumMediaViewStatus)(media.Status); } }
 
         public string ImagePath
         {
@@ -74,5 +42,14 @@ namespace AmeCreateProject.ViewModel
                 return "/Resources/unknown.png";
             }
         }
+    }
+
+    public enum EnumMediaViewStatus
+    {
+        None = 0,
+        Empty = 1,
+        InProgress = 2,
+        Completed = 3,
+        Failed = 4
     }
 }
