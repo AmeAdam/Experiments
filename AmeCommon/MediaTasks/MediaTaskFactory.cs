@@ -79,6 +79,8 @@ namespace AmeCommon.MediaTasks
                     return new MoveDcim(parent, taskSettings);
                 case "move-dcim-canon":
                     return new MoveDcimCanon(parent, taskSettings);
+                case "move-zoom":
+                    return new MoveZoom(parent, taskSettings);
                 default:
                     throw new ApplicationException("Not supported task: " + taskSettings.Name);
             }

@@ -52,6 +52,7 @@ namespace AmeCreateProject.ViewModel
         {
             inProgress = true;
             Task.Factory.StartNew(ExecuteSelectedTasks);
+
         }
 
         private void ExecuteSelectedTasks()

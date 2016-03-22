@@ -10,6 +10,9 @@ namespace AmeCommon.MediaTasks.Settings
     {
         public const string AmeNamespace = "http://kamerzysta.bydgoszcz.pl";
 
+        [XmlElement("svn-settings")]
+        public SvnSettings SvnSettings { get; set; }
+
         [XmlElement("target-folder")]
         public List<TargetFolder> TargetFolders { get; set; }
 

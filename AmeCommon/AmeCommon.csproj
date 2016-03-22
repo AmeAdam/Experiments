@@ -52,11 +52,13 @@
     <Compile Include="MediaTasks\Settings\AmeCardSettings.cs" />
     <Compile Include="MediaTasks\Settings\CardProfilesSettings.cs" />
     <Compile Include="MediaTasks\Settings\MediaSettings.cs" />
+    <Compile Include="MediaTasks\Settings\SvnSettings.cs" />
     <Compile Include="MediaTasks\Settings\TargetFolder.cs" />
     <Compile Include="MediaTasks\Settings\TaskParam.cs" />
     <Compile Include="MediaTasks\Settings\TaskSettings.cs" />
     <Compile Include="MediaTasks\TaskHandlers\IMediaTask.cs" />
     <Compile Include="MediaTasks\TaskHandlers\MoveAvchd.cs" />
+    <Compile Include="MediaTasks\TaskHandlers\MoveZoom.cs" />
     <Compile Include="MediaTasks\TaskHandlers\MoveDcim.cs" />
     <Compile Include="MediaTasks\TaskHandlers\MoveDcimCanon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -66,6 +68,9 @@
     <Content Include="cards-profiles.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Svn\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

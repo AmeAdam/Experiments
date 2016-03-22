@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <card-profiles xmlns="http://kamerzysta.bydgoszcz.pl">
+  <svn-settings>
+    <rootPath>svn://video-bydgoszcz.pl/video/</rootPath>
+    <user>adam</user>
+    <password>Video1@</password>
+  </svn-settings>
   <target-folder>
     <name>A</name>
     <svn-ignore />
@@ -84,6 +89,13 @@
     </task>
     <task name="move-dcim">
       <param name="target" value="Zdjecia" />
+    </task>
+  </media>
+
+  <media id="Zoom H4n">
+    <name>Sound</name>
+    <task name="move-zoom">
+      <param name="target" value="Sound" />
     </task>
   </media>
 </card-profiles>
