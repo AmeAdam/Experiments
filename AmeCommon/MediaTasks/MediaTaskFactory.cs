@@ -6,21 +6,17 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using AmeCommon.MediaTasks.Settings;
 using AmeCommon.MediaTasks.TaskHandlers;
+using AmeCommon.Settings;
 
 namespace AmeCommon.MediaTasks
 {
-    public class MediaTaskFactory
+    public class MediaTaskFactory : IMediaTaskFactory
     {
-        private readonly CardProfilesSettings profiles;
+        private readonly ISettingsProvider settings;
 
-        public MediaTaskFactory()
+        public MediaTaskFactory(ISettingsProvider settings)
         {
-            var doc = XDocument.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cards-profiles.xml"));
-            XmlSerializer xs = new XmlSerializer(typeof(CardProfilesSettings));
-            using (var xr = doc.CreateReader())
-            {
-                profiles = (CardProfilesSettings)xs.Deserialize(xr);
-            }
+            this.settings = settings;
         }
 
         private static AmeCardSettings ReadCardSettings(DriveInfo drive)
@@ -51,7 +47,7 @@ namespace AmeCommon.MediaTasks
             if (cardSettings == null)
                 return null;
 
-            var profile = profiles.Medias.FirstOrDefault(m => m.Id == cardSettings.Id);
+            var profile = settings.Medias.FirstOrDefault(m => m.Id == cardSettings.Id);
             if (profile == null)
                 throw new ApplicationException("Could not found profile settings for: " + cardSettings.Id);
 

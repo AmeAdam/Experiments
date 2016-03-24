@@ -4,6 +4,7 @@ using Prism.Modularity;
 using Prism.Unity;
 using AmeCommon.MediaTasks;
 using AmeCreateProject.Model;
+using AmeCommon.Settings;
 
 namespace AmeCreateProject
 {
@@ -13,8 +14,11 @@ namespace AmeCreateProject
         {
             base.ConfigureContainer();
             RegisterTypeIfMissing(typeof(AmeProjectViewModel), typeof(AmeProjectViewModel), false);
-            RegisterTypeIfMissing(typeof(AmeProjectModel), typeof(AmeProjectModel), false);            
-            RegisterTypeIfMissing(typeof(MediaService), typeof(MediaService), true);            
+            RegisterTypeIfMissing(typeof(AmeProjectModel), typeof(AmeProjectModel), false);
+
+            RegisterTypeIfMissing(typeof(ISettingsProvider), typeof(SettingsProvider), false);
+            RegisterTypeIfMissing(typeof(IMediaTaskFactory), typeof(MediaTaskFactory), false);
+            RegisterTypeIfMissing(typeof(IMediaService), typeof(MediaService), true);            
         }
 
         protected override DependencyObject CreateShell()

@@ -4,15 +4,15 @@ using System.Linq;
 
 namespace AmeCommon.MediaTasks
 {
-    public class MediaService
+    public class MediaService : IMediaService
     {
         private object sync = new object();
         private List<Media> allMedias;
-        private MediaTaskFactory factory;
+        private IMediaTaskFactory factory;
 
-        public MediaService()
+        public MediaService(IMediaTaskFactory factory)
         {
-            factory = new MediaTaskFactory();
+            this.factory = factory;
         }
 
         public List<Media> GetAllMedias()
