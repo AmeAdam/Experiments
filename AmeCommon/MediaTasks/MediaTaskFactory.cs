@@ -28,10 +28,10 @@ namespace AmeCommon.MediaTasks
             try
             {
                 var doc = XDocument.Load(ameFilePath);
-                XmlSerializer xs = new XmlSerializer(typeof (AmeCardSettings));
+                XmlSerializer xs = new XmlSerializer(typeof(AmeCardSettings));
                 using (var xr = doc.CreateReader())
                 {
-                    var acs = (AmeCardSettings) xs.Deserialize(xr);
+                    var acs = (AmeCardSettings)xs.Deserialize(xr);
                     return acs;
                 }
             }
@@ -40,7 +40,7 @@ namespace AmeCommon.MediaTasks
                 return null;
             }
         }
-        
+
         public Media CreateMedia(DriveInfo drive)
         {
             var cardSettings = ReadCardSettings(drive);
@@ -70,13 +70,13 @@ namespace AmeCommon.MediaTasks
             switch (taskSettings.Name)
             {
                 case "move-avchd":
-                    return new MoveAvchd(parent, taskSettings);
+                    return new MoveAvchd(parent.DestinationFolder, parent.SourceDisk, taskSettings.GetParamValue("target"));
                 case "move-dcim":
-                    return new MoveDcim(parent, taskSettings);
+                    return new MoveDcim(parent.DestinationFolder, parent.SourceDisk, taskSettings.GetParamValue("target"));
                 case "move-dcim-canon":
-                    return new MoveDcimCanon(parent, taskSettings);
+                    return new MoveDcimCanon(parent.DestinationFolder, parent.SourceDisk, taskSettings.GetParamValue("target-mov"), taskSettings.GetParamValue("target-cr2"), taskSettings.GetParamValue("target-jpg"));
                 case "move-zoom":
-                    return new MoveZoom(parent, taskSettings);
+                    return new MoveZoom(parent.DestinationFolder, parent.SourceDisk, taskSettings.GetParamValue("target"));
                 default:
                     throw new ApplicationException("Not supported task: " + taskSettings.Name);
             }

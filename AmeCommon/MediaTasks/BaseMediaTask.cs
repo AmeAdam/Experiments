@@ -5,8 +5,34 @@ using System;
 
 namespace AmeCommon.MediaTasks
 {
+
     public abstract class BaseMediaTask : IMediaTask
     {
+        DirectoryInfo rootDestinationDirectory;
+        DriveInfo sourceDisk;
+        private string rootSourceDirectory;
+
+        protected BaseMediaTask(DirectoryInfo rootDestinationDirectory, DriveInfo sourceDisk, string sourceFolderName)
+        {
+            this.rootDestinationDirectory = rootDestinationDirectory;
+            rootSourceDirectory = Path.Combine(sourceDisk.Name, sourceFolderName);
+        }
+
+        protected string GetTargetPath(string targetFolderName)
+        {
+            return Path.Combine(rootDestinationDirectory.FullName, targetFolderName);
+        }
+
+        protected string RootSourceDirectory
+        {
+            get { return rootSourceDirectory; }
+        }
+
+        protected string GetSourcePath(string sourceSubFolderName)
+        {
+            return Path.Combine(rootSourceDirectory, sourceSubFolderName);
+        }
+
         public abstract void Execute();
 
         protected void MoveAllDirectoryContent(string absoluteSource, string absoluteTarget, bool deleteSourcDir)

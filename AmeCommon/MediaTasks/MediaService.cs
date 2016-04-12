@@ -7,7 +7,6 @@ namespace AmeCommon.MediaTasks
     public class MediaService : IMediaService
     {
         private object sync = new object();
-        private List<Media> allMedias;
         private IMediaTaskFactory factory;
 
         public MediaService(IMediaTaskFactory factory)

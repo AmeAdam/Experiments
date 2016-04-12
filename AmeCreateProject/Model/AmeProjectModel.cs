@@ -18,7 +18,7 @@ namespace AmeCreateProject.Model
         public List<Media> MediaList { get; private set; }
         public DriveInfo Drive => new DriveInfo(Path.GetPathRoot(projectDir));
 
-        public AmeProjectModel(MediaService mediaUtils)
+        public AmeProjectModel(IMediaService mediaUtils)
         {
             MediaList = mediaUtils.GetAllMedias();
             ProjectDir = @"E:\Projekty";

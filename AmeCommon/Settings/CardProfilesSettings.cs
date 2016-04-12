@@ -13,9 +13,6 @@ namespace AmeCommon.MediaTasks.Settings
         [XmlElement("svn-settings")]
         public SvnSettings SvnSettings { get; set; }
 
-        [XmlElement("target-folder")]
-        public List<TargetFolder> TargetFolders { get; set; }
-
         [XmlElement("media")]
         public List<MediaSettings> Medias { get; set; }
     }

@@ -7,6 +7,5 @@ namespace AmeCommon.Settings
     {
         List<MediaSettings> Medias { get; }
         SvnSettings SvnSettings { get; }
-        List<TargetFolder> TargetFolders { get; }
     }
 }

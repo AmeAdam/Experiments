@@ -39,12 +39,12 @@
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PresentationCore" />
-    <Reference Include="SharpSvn, Version=1.9003.3799.86, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
-      <HintPath>..\packages\SharpSvn.1.9-x64.1.9003.3799.86\lib\net40\SharpSvn.dll</HintPath>
+    <Reference Include="SharpSvn, Version=1.9003.3845.110, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
+      <HintPath>..\packages\SharpSvn.1.9-x64.1.9003.3845.110\lib\net40\SharpSvn.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SharpSvn.UI, Version=1.9003.3799.86, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpSvn.1.9-x64.1.9003.3799.86\lib\net40\SharpSvn.UI.dll</HintPath>
+    <Reference Include="SharpSvn.UI, Version=1.9003.3845.110, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpSvn.1.9-x64.1.9003.3845.110\lib\net40\SharpSvn.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

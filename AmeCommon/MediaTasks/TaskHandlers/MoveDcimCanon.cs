@@ -1,38 +1,30 @@
 using System;
 using System.IO;
 using System.Windows.Media.Imaging;
-using AmeCommon.MediaTasks.Settings;
 
 namespace AmeCommon.MediaTasks.TaskHandlers
 {
     public class MoveDcimCanon : BaseMediaTask
     {
-        private readonly Media parent;
-        private const string RelativeSource = @"DCIM";
-        private readonly string relativeTargetMov;
-        private readonly string relativeTargetCr2;
-        private readonly string relativeTargetJpg;
+        private readonly string absoluteTargetMov;
+        private readonly string absoluteTargetCr2;
+        private readonly string absoluteTargetJpg;
 
-        public MoveDcimCanon(Media parent, TaskSettings settings)
+        public MoveDcimCanon(DirectoryInfo destinationDirectory, DriveInfo sourceDisk, string movTarget, string cr2Target, string jpgTarget)
+            : base(destinationDirectory, sourceDisk, "DCIM")
         {
-            this.parent = parent;
-            relativeTargetMov = settings.GetParamValue("target-mov");
-            relativeTargetCr2 = settings.GetParamValue("target-cr2");
-            relativeTargetJpg = settings.GetParamValue("target-jpg");
+            absoluteTargetMov = GetTargetPath(movTarget);
+            absoluteTargetCr2 = GetTargetPath(cr2Target);
+            absoluteTargetJpg = GetTargetPath(jpgTarget);
         }
 
         public override void Execute()
         {
-            var absoluteSourceRoot = Path.Combine(parent.SourceDisk.Name, RelativeSource);
-            var absoluteTargetMov = Path.Combine(parent.DestinationFolder.FullName, relativeTargetMov);
-            var absoluteTargetCr2 = Path.Combine(parent.DestinationFolder.FullName, relativeTargetCr2);
-            var absoluteTargetJpg = Path.Combine(parent.DestinationFolder.FullName, relativeTargetJpg);
-
             Directory.CreateDirectory(absoluteTargetMov);
             Directory.CreateDirectory(absoluteTargetCr2);
             Directory.CreateDirectory(absoluteTargetJpg);
 
-            foreach (var absoluteSource in Directory.GetDirectories(absoluteSourceRoot, "*CANON"))
+            foreach (var absoluteSource in Directory.GetDirectories(RootSourceDirectory, "*CANON"))
             {
                 MoveAllFiles(absoluteSource, absoluteTargetJpg, "*.jpg");
                 MoveAllFiles(absoluteSource, absoluteTargetJpg, "*.jpeg");

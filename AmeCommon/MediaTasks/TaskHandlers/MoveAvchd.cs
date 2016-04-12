@@ -1,27 +1,21 @@
 using System.IO;
-using AmeCommon.MediaTasks.Settings;
 
 namespace AmeCommon.MediaTasks.TaskHandlers
 {
     public class MoveAvchd : BaseMediaTask
     {
-        private readonly Media parent;
-        private const string RelativeSource = @"PRIVATE\AVCHD";
-        private readonly string relativeTarget;
+        private readonly string absoluteTargetPath;
 
-
-        public MoveAvchd(Media parent, TaskSettings settings)
+        public MoveAvchd(DirectoryInfo destinationDirectory, DriveInfo sourceDisk, string targetFolderName)
+            : base(destinationDirectory, sourceDisk, "PRIVATE\\AVCHD")
         {
-            this.parent = parent;
-            relativeTarget = settings.GetParamValue("target");
+            absoluteTargetPath = GetTargetPath(targetFolderName);
         }
 
         public override void Execute()
         {
-            var absoluteTarget = Path.Combine(parent.DestinationFolder.FullName, relativeTarget);
-            var absoluteSource = Path.Combine(parent.SourceDisk.Name, RelativeSource);
-            Directory.CreateDirectory(absoluteTarget);
-            MoveAllDirectoryContent(absoluteSource, absoluteTarget, false);
+            Directory.CreateDirectory(absoluteTargetPath);
+            MoveAllDirectoryContent(RootSourceDirectory, absoluteTargetPath, false);
         }
     }
 }

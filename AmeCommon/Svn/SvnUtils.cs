@@ -1,15 +1,11 @@
 ﻿using AmeCommon.Settings;
 using SharpSvn;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AmeCommon.Svn
 {
-    internal class SvnUtils : IDisposable
+    public class SvnUtils : ISvnUtils, IDisposable
     {
         ISettingsProvider settings;
         SvnClient svn;
@@ -27,56 +23,53 @@ namespace AmeCommon.Svn
         }
 
 
-        private void CreateSvn(string dir)
+        public void CreateSvn(string dir)
         {
-            SvnClient svn = new SvnClient();
+            var parentDir = Path.GetDirectoryName(dir);
+            if (!IsDirAlreadyInSvn(parentDir))
+                AddDirToSvn(dir);
 
-            if (IsDirAlreadyInSvn(dir))
-                return;
+            if (!IsDirAlreadyInSvn(dir))
+                svn.Add(dir, new SvnAddArgs { Depth = SvnDepth.Empty });
 
-            if (IsDirAlreadyInSvn(Path.GetDirectoryName(dir)))
-            {
-                CommitDirectory(dir);
-                return;
-            }
+            ApplySvnProperties(dir);
 
-            AddDirToSvn(dir);
+            foreach (var file in Directory.GetFiles(dir, "*.prproj"))
+                svn.Add(file);
+
+            svn.Commit(dir, new SvnCommitArgs { LogMessage = "Nowy projekt", Depth = SvnDepth.Children });
         }
 
         private void AddDirToSvn(string dir)
         { 
-            var path = settings.SvnSettings.RootPath + Path.GetFileName(dir);
-            Uri uri; Guid id;
-            if (svn.TryGetRepository(dir, out uri, out id))
+            if (IsDirAlreadyInSvn(dir))
                 return;
 
+            var svnUri = settings.SvnSettings.RootPath + Path.GetFileName(dir);
+            CreateDirectoryOnSvnServer(svnUri);
+            svn.CheckOut(new SvnUriTarget(svnUri), dir);
+        }
 
-            svn.RemoteCreateDirectories(new[] { new Uri(path), }, new SvnCreateDirectoryArgs
+        private void CreateDirectoryOnSvnServer(string uri)
+        {
+            svn.RemoteCreateDirectories(new[] { new Uri(uri), }, new SvnCreateDirectoryArgs
             {
                 LogMessage = "Nowy projekt"
             });
-            svn.CheckOut(new SvnUriTarget(path), dir);
-            svn.SetProperty(dir, "svn:ignore", "A\nB\nC\nCanon\nZdjecia");
-
-            var rawPath = Path.Combine(dir, "ZdjeciaRaw");
-            Directory.CreateDirectory(rawPath);
-
-            svn.Add(rawPath);
-            svn.SetProperty(rawPath, "svn:ignore", "*.CR2");
-
-            svn.Commit(dir, new SvnCommitArgs { LogMessage = "add ignores", Depth = SvnDepth.Children });
-            Console.WriteLine("SVN created");
         }
 
-        private void CommitDirectory(string dir)
+        private void ApplySvnProperties(string dir)
         {
-            svn.Add(dir, new SvnAddArgs
+            foreach(var svnProperty in settings.SvnSettings.SvnProperties)
             {
-                Depth = SvnDepth.Empty
-            });
-            svn.SetProperty(dir, "svn:ignore", "A\nB\nC\nCanon\nZdjecia\nZdjeciaRaw");
-            svn.Commit(dir, new SvnCommitArgs { Depth = SvnDepth.Empty, LogMessage = "Nowy projekt" });
-            Console.WriteLine("SVN created");
+                var path = Path.Combine(dir, svnProperty.Path);
+                if (Directory.Exists(path))
+                {
+                    if (!IsDirAlreadyInSvn(dir))
+                        svn.Add(dir);
+                    svn.SetProperty(path, svnProperty.Name, svnProperty.Value);
+                }
+            }
         }
 
         public void Dispose()

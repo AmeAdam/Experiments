@@ -4,98 +4,51 @@
     <rootPath>svn://video-bydgoszcz.pl/video/</rootPath>
     <user>adam</user>
     <password>Video1@</password>
+    <svn-property>
+      <name>svn:ignore</name>
+      <value>A&#13;&#10;B&#13;&#10;B1&#13;&#10;B2&#13;&#10;C&#13;&#10;Canon&#13;&#10;Sound&#13;&#10;Zdjecia&#13;&#10;pluraleyes&#13;&#10;*.prproj.bak</value>
+      <path></path>
+    </svn-property>
+    <svn-property>
+      <name>svn:ignore</name>
+      <value>*.CR2</value>
+      <path>ZdjeciaRaw</path>
+    </svn-property>
   </svn-settings>
-  <target-folder>
-    <name>A</name>
-    <svn-ignore />
-  </target-folder>
-  <target-folder>
-    <name>B</name>
-    <svn-ignore />
-  </target-folder>
-  <target-folder>
-    <name>B1</name>
-    <svn-ignore />
-  </target-folder>
-  <target-folder>
-    <name>B2</name>
-    <svn-ignore />
-  </target-folder>
-  <target-folder>
-    <name>C</name>
-    <svn-ignore />
-  </target-folder>
-  <target-folder>
-    <name>Canon</name>
-    <svn-ignore />
-  </target-folder>
-  <target-folder>
-    <name>Zdjecia</name>
-    <svn-ignore />
-  </target-folder>
-  <target-folder>
-    <name>ZdjeciaRaw</name>
-    <svn-ignore>*.CR2</svn-ignore>
-  </target-folder>
-
+  
   <media id="AME-HDD-E">
-    <name>E</name>
   </media>
 
   <media id="AME-HDD-D">
-    <name>D</name>
   </media>
 
   <media id="AG AC90">
-    <name>A</name>
-    <task name="move-avchd">
-      <param name="target" value="A" />
-    </task>
-    <task name="move-dcim">
-      <param name="target" value="Zdjecia" />
-    </task>
+    <move-directory-content source="PRIVATE\AVCHD" target="A" />
+    <move-directory-content-flat source="DCIM" target="Zdjecia" />
   </media>
 
   <media id="HMC 151">
-    <name>B</name>
-    <task name="move-avchd">
-      <param name="target" value="B" />
-    </task>
+    <move-directory-content source="PRIVATE\AVCHD" target="B" />
   </media>
 
   <media id="HDC SD90">
-    <name>C</name>
-    <task name="move-avchd">
-      <param name="target" value="C" />
-    </task>
-    <task name="move-dcim">
-      <param name="target" value="Zdjecia" />
-    </task>
+    <move-directory-content source="PRIVATE\AVCHD" target="C" />
+    <move-directory-content-flat source="DCIM" target="Zdjecia" />
   </media>
 
   <media id="Canon 650d">
-    <name>Canon</name>
-    <task name="move-dcim-canon">
-      <param name="target-mov" value="Canon" />
-      <param name="target-cr2" value="ZdjeciaRaw" />
-      <param name="target-jpg" value="Zdjecia" />
-    </task>
+    <move-files source="*Canon\*.cr2" target="ZdjeciaRaw" />
+    <move-files source="*Canon\*.jpg" target="Zdjecia" />
+    <move-files source="*Canon\*.jpeg" target="Zdjecia" />
+    <move-files source="*Canon\*.mov" target="Canon" />
   </media>
 
   <media id="Sony DSC-HX7V">
-    <name>Sony</name>
-    <task name="move-avchd">
-      <param name="target" value="D" />
-    </task>
-    <task name="move-dcim">
-      <param name="target" value="Zdjecia" />
-    </task>
+    <move-directory-content source="PRIVATE\AVCHD" target="D" />
+    <move-directory-content-flat source="DCIM" target="Zdjecia" />
   </media>
 
   <media id="Zoom H4n">
-    <name>Sound</name>
-    <task name="move-zoom">
-      <param name="target" value="Sound" />
-    </task>
+    <move-files source="STEREO" target="Sound" />
   </media>
 </card-profiles>

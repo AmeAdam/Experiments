@@ -5,6 +5,7 @@ using Prism.Unity;
 using AmeCommon.MediaTasks;
 using AmeCreateProject.Model;
 using AmeCommon.Settings;
+using AmeCommon.Svn;
 
 namespace AmeCreateProject
 {
@@ -18,7 +19,8 @@ namespace AmeCreateProject
 
             RegisterTypeIfMissing(typeof(ISettingsProvider), typeof(SettingsProvider), false);
             RegisterTypeIfMissing(typeof(IMediaTaskFactory), typeof(MediaTaskFactory), false);
-            RegisterTypeIfMissing(typeof(IMediaService), typeof(MediaService), true);            
+            RegisterTypeIfMissing(typeof(IMediaService), typeof(MediaService), true);
+            RegisterTypeIfMissing(typeof(ISvnUtils), typeof(SvnUtils), true);
         }
 
         protected override DependencyObject CreateShell()

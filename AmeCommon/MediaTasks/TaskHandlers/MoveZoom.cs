@@ -1,27 +1,21 @@
 using System.IO;
-using AmeCommon.MediaTasks.Settings;
 
 namespace AmeCommon.MediaTasks.TaskHandlers
 {
     public class MoveZoom : BaseMediaTask
     {
-        private readonly Media parent;
-        private const string RelativeSource = @"STEREO";
-        private readonly string relativeTarget;
+        private readonly string absoluteTargetPath;
 
-        public MoveZoom(Media parent, TaskSettings settings)
+        public MoveZoom(DirectoryInfo destinationDirectory, DriveInfo sourceDisk, string targetFolderName)
+            : base(destinationDirectory, sourceDisk, "STEREO")
         {
-            this.parent = parent;
-            relativeTarget = settings.GetParamValue("target");
+            absoluteTargetPath = GetTargetPath(targetFolderName);
         }
 
         public override void Execute()
         {
-            var absoluteTarget = Path.Combine(parent.DestinationFolder.FullName, relativeTarget);
-            var absoluteSource = Path.Combine(parent.SourceDisk.Name, RelativeSource);
-
-            foreach (var chilSourcedDir in Directory.GetDirectories(absoluteSource))
-                MoveAllFiles(chilSourcedDir, absoluteTarget);
+            foreach (var chilSourcedDir in Directory.GetDirectories(RootSourceDirectory))
+                MoveAllFiles(chilSourcedDir, absoluteTargetPath);
         }
     }
 }

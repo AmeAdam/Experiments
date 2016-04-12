@@ -32,6 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="SharpSvn, Version=1.9003.3845.110, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
       <HintPath>..\packages\SharpSvn.1.9-x64.1.9003.3845.110\lib\net40\SharpSvn.dll</HintPath>
@@ -54,6 +58,7 @@
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MediaTasks\BaseMediaTask.cs" />
+    <Compile Include="MediaTasks\FileOperation.cs" />
     <Compile Include="MediaTasks\IMediaService.cs" />
     <Compile Include="MediaTasks\IMediaTaskFactory.cs" />
     <Compile Include="MediaTasks\Media.cs" />
@@ -65,7 +70,6 @@
     <Compile Include="Settings\MediaSettings.cs" />
     <Compile Include="Settings\SettingsProvider.cs" />
     <Compile Include="Settings\SvnSettings.cs" />
-    <Compile Include="Settings\TargetFolder.cs" />
     <Compile Include="Settings\TaskParam.cs" />
     <Compile Include="Settings\TaskSettings.cs" />
     <Compile Include="MediaTasks\TaskHandlers\IMediaTask.cs" />
@@ -74,6 +78,7 @@
     <Compile Include="MediaTasks\TaskHandlers\MoveDcim.cs" />
     <Compile Include="MediaTasks\TaskHandlers\MoveDcimCanon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Svn\ISvnUtils.cs" />
     <Compile Include="Svn\SvnUtils.cs" />
   </ItemGroup>
   <ItemGroup>

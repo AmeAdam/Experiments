@@ -8,12 +8,14 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using AmeCommon.Svn;
 
 namespace AmeCreateProject.ViewModel
 {
     public class AmeProjectViewModel : BindableBase
     {
         private AmeProjectModel Model { get; set; }
+        private ISvnUtils svn;
         public string ProjectDir => Model.ProjectDir + " | " + Model.Drive.AvailableFreeSpace / (1024 * 1024 * 1024) + "GB wolnego miejsca";
 
         public DelegateCommand NextDayCommand { get; private set; }
@@ -23,9 +25,10 @@ namespace AmeCreateProject.ViewModel
         public ObservableCollection<MediaViewModel> MediasList { get; private set; }
         private volatile bool inProgress;
       
-        public AmeProjectViewModel(AmeProjectModel model)
+        public AmeProjectViewModel(AmeProjectModel model, ISvnUtils svn)
         {
             Model = model;
+            this.svn = svn;
             NextDayCommand = new DelegateCommand(NextDay, () => !inProgress);
             PrevDayCommand = new DelegateCommand(PrevDay, () => !inProgress);
             CreateProjectCommand = new DelegateCommand(CreateProject, () => !inProgress);
@@ -57,7 +60,8 @@ namespace AmeCreateProject.ViewModel
 
         private void ExecuteSelectedTasks()
         {
-            try {
+            try
+            {
                 var destDir = new DirectoryInfo(Model.DestinationDir);
                 var taskHandlers = MediasList
                     .Where(m => m.IsActive)
@@ -67,6 +71,11 @@ namespace AmeCreateProject.ViewModel
                         return m.Tag.ExecuteAllTasksAsync();
                     });
                 Task.WaitAll(taskHandlers.ToArray());
+                svn.CreateSvn(Model.DestinationDir);
+            }
+            catch (Exception)
+            {
+
             }
             finally
             {
