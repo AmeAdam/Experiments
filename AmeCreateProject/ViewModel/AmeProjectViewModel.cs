@@ -9,6 +9,7 @@ using Microsoft.Practices.Prism.Mvvm;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using AmeCommon.Svn;
+using AmeCommon.MediaTasks;
 
 namespace AmeCreateProject.ViewModel
 {
@@ -62,13 +63,13 @@ namespace AmeCreateProject.ViewModel
         {
             try
             {
-                var destDir = new DirectoryInfo(Model.DestinationDir);
+                var destDir = new DestinationDirectoryHandler(Model.DestinationDir);
+
                 var taskHandlers = MediasList
                     .Where(m => m.IsActive)
                     .Select(m =>
                     {
-                        m.Tag.DestinationFolder = destDir;
-                        return m.Tag.ExecuteAllTasksAsync();
+                        return m.Tag.ExecuteAllTasksAsync(destDir);
                     });
                 Task.WaitAll(taskHandlers.ToArray());
                 svn.CreateSvn(Model.DestinationDir);

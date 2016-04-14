@@ -5,8 +5,8 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using AmeCommon.MediaTasks.Settings;
-using AmeCommon.MediaTasks.TaskHandlers;
 using AmeCommon.Settings;
+using AmeCommon.MediaTasks.TaskHandlers;
 
 namespace AmeCommon.MediaTasks
 {
@@ -58,27 +58,25 @@ namespace AmeCommon.MediaTasks
                 Index = cardSettings.Index,
                 SourceDisk = drive,
                 Status = EnumMediaStatus.None,
-                //DestinationFolder = "?"
+                Operations = profile.Tasks.Select(t => CreateTaskHandler(t, drive)).ToList()
             };
-
-            media.TaskHandlers = profile.Tasks.Select(t => CreateTaskHandler(t, media)).ToList();
             return media;
         }
 
-        public IMediaTask CreateTaskHandler(TaskSettings taskSettings, Media parent)
+        private IIOCommand CreateTaskHandler(CommandSettings taskSettings, DriveInfo sourceDrive)
         {
+            var sourcePath = Path.Combine(sourceDrive.Name, taskSettings.Source);
+
             switch (taskSettings.Name)
             {
-                case "move-avchd":
-                    return new MoveAvchd(parent.DestinationFolder, parent.SourceDisk, taskSettings.GetParamValue("target"));
-                case "move-dcim":
-                    return new MoveDcim(parent.DestinationFolder, parent.SourceDisk, taskSettings.GetParamValue("target"));
-                case "move-dcim-canon":
-                    return new MoveDcimCanon(parent.DestinationFolder, parent.SourceDisk, taskSettings.GetParamValue("target-mov"), taskSettings.GetParamValue("target-cr2"), taskSettings.GetParamValue("target-jpg"));
-                case "move-zoom":
-                    return new MoveZoom(parent.DestinationFolder, parent.SourceDisk, taskSettings.GetParamValue("target"));
+                case "move-directory-content":
+                    return new MoveDirectoryContent(sourcePath, taskSettings.Target);
+                case "move-directory-content-flat":
+                    return new MoveDirectoryContentFlat(sourcePath, taskSettings.Target);
+                case "move-files":
+                    return new MoveFiles(sourcePath, taskSettings.Target);
                 default:
-                    throw new ApplicationException("Not supported task: " + taskSettings.Name);
+                    throw new ApplicationException("Not supported command: " + taskSettings.Name);
             }
         }
     }

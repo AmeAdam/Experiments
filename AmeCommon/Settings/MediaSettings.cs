@@ -10,10 +10,7 @@ namespace AmeCommon.MediaTasks.Settings
         [XmlAttribute("id")]
         public string Id { get; set; }
 
-        [XmlElement("name")]
-        public string Name { get; set; }
-
-        [XmlElement("task")]
-        public List<TaskSettings> Tasks { get; set; }
+        [XmlElement("command")]
+        public List<CommandSettings> Tasks { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using AmeCommon.MediaTasks.TaskHandlers;
 using System;
 using System.Threading.Tasks;
 
@@ -12,14 +11,13 @@ namespace AmeCommon.MediaTasks
         public string Name { get; set; }
         public string Index { get; set; }
         public DriveInfo SourceDisk { get; set; }
-        public DirectoryInfo DestinationFolder { get; set; }
-        public List<IMediaTask> TaskHandlers { get; set; }
+        public List<IIOCommand> Operations { get; set; }
         public EnumMediaStatus Status { get; set; } = EnumMediaStatus.None;
         public event Action<Media, EnumMediaStatus, string> StatusChanged;
 
-        public Task ExecuteAllTasksAsync()
+        public Task ExecuteAllTasksAsync(DestinationDirectoryHandler destDir)
         {
-            return Task.Factory.StartNew(ExecuteAllTasksInternal);
+            return Task.Factory.StartNew(() => ExecuteAllTasksInternal(destDir));
         }
 
         public override bool Equals(object obj)
@@ -64,20 +62,20 @@ namespace AmeCommon.MediaTasks
             }
         }
 
-        private void ExecuteAllTasksInternal()
+        private void ExecuteAllTasksInternal(DestinationDirectoryHandler destDir)
         {
             SetStatus(EnumMediaStatus.InProgress, "przetwarzanie", StatusChanged);
             try
             {
-                foreach (var handler in TaskHandlers)
-                    handler.Execute();
+                foreach (var handler in Operations)
+                    handler.Execute(destDir);
                 SetStatus(EnumMediaStatus.Completed, "zakończono", StatusChanged);
             }
             catch(ApplicationException ex)
             {
                 SetStatus(EnumMediaStatus.Failed, ex.Message, StatusChanged);
             }
-        }        
+        }
     }
 
     public enum EnumMediaStatus

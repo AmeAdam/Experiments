@@ -57,26 +57,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="MediaTasks\BaseMediaTask.cs" />
-    <Compile Include="MediaTasks\FileOperation.cs" />
+    <Compile Include="MediaTasks\DestinationDirectoryHandler.cs" />
+    <Compile Include="MediaTasks\IIOCommand.cs" />
     <Compile Include="MediaTasks\IMediaService.cs" />
     <Compile Include="MediaTasks\IMediaTaskFactory.cs" />
     <Compile Include="MediaTasks\Media.cs" />
     <Compile Include="MediaTasks\MediaService.cs" />
     <Compile Include="MediaTasks\MediaTaskFactory.cs" />
+    <Compile Include="MediaTasks\TaskHandlers\MoveDirectoryContent.cs" />
+    <Compile Include="MediaTasks\TaskHandlers\MoveDirectoryContentFlat.cs" />
+    <Compile Include="MediaTasks\TaskHandlers\MoveFiles.cs" />
     <Compile Include="Settings\AmeCardSettings.cs" />
     <Compile Include="Settings\CardProfilesSettings.cs" />
     <Compile Include="Settings\ISettingsProvider.cs" />
     <Compile Include="Settings\MediaSettings.cs" />
     <Compile Include="Settings\SettingsProvider.cs" />
     <Compile Include="Settings\SvnSettings.cs" />
-    <Compile Include="Settings\TaskParam.cs" />
-    <Compile Include="Settings\TaskSettings.cs" />
-    <Compile Include="MediaTasks\TaskHandlers\IMediaTask.cs" />
-    <Compile Include="MediaTasks\TaskHandlers\MoveAvchd.cs" />
-    <Compile Include="MediaTasks\TaskHandlers\MoveZoom.cs" />
-    <Compile Include="MediaTasks\TaskHandlers\MoveDcim.cs" />
-    <Compile Include="MediaTasks\TaskHandlers\MoveDcimCanon.cs" />
+    <Compile Include="Settings\CommandSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Svn\ISvnUtils.cs" />
     <Compile Include="Svn\SvnUtils.cs" />

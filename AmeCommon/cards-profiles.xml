@@ -23,32 +23,32 @@
   </media>
 
   <media id="AG AC90">
-    <move-directory-content source="PRIVATE\AVCHD" target="A" />
-    <move-directory-content-flat source="DCIM" target="Zdjecia" />
+    <command name="move-directory-content" source="PRIVATE\AVCHD" target="A" />
+    <command name="move-directory-content-flat" source="DCIM" target="Zdjecia" />
   </media>
 
   <media id="HMC 151">
-    <move-directory-content source="PRIVATE\AVCHD" target="B" />
+    <command name="move-directory-content" source="PRIVATE\AVCHD" target="B" />
   </media>
 
   <media id="HDC SD90">
-    <move-directory-content source="PRIVATE\AVCHD" target="C" />
-    <move-directory-content-flat source="DCIM" target="Zdjecia" />
+    <command name="move-directory-content" source="PRIVATE\AVCHD" target="C" />
+    <command name="move-directory-content-flat" source="DCIM" target="Zdjecia" />
   </media>
 
   <media id="Canon 650d">
-    <move-files source="*Canon\*.cr2" target="ZdjeciaRaw" />
-    <move-files source="*Canon\*.jpg" target="Zdjecia" />
-    <move-files source="*Canon\*.jpeg" target="Zdjecia" />
-    <move-files source="*Canon\*.mov" target="Canon" />
+    <command name="move-files" source="*Canon\*.cr2" target="ZdjeciaRaw" />
+    <command name="move-files" source="*Canon\*.jpg" target="Zdjecia" />
+    <command name="move-files" source="*Canon\*.jpeg" target="Zdjecia" />
+    <command name="move-files" source="*Canon\*.mov" target="Canon" />
   </media>
 
   <media id="Sony DSC-HX7V">
-    <move-directory-content source="PRIVATE\AVCHD" target="D" />
-    <move-directory-content-flat source="DCIM" target="Zdjecia" />
+    <command name="move-directory-content" source="PRIVATE\AVCHD" target="D" />
+    <command name="move-directory-content-flat" source="DCIM" target="Zdjecia" />
   </media>
 
   <media id="Zoom H4n">
-    <move-files source="STEREO" target="Sound" />
+    <command name="move-files" source="STEREO" target="Sound" />
   </media>
 </card-profiles>
