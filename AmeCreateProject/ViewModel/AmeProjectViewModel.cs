@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using AmeCommon.Svn;
 using AmeCommon.MediaTasks;
+using AmeCommon.MediaTasks.MoveFilesCommands;
 
 namespace AmeCreateProject.ViewModel
 {
@@ -63,7 +64,7 @@ namespace AmeCreateProject.ViewModel
         {
             try
             {
-                var destDir = new DestinationDirectoryHandler(Model.DestinationDir);
+                var destDir = new DestinationDirectory(Model.DestinationDir);
 
                 var taskHandlers = MediasList
                     .Where(m => m.IsActive)

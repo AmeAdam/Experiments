@@ -4,9 +4,9 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using AmeCommon.MediaTasks.MoveFilesCommands;
 using AmeCommon.MediaTasks.Settings;
 using AmeCommon.Settings;
-using AmeCommon.MediaTasks.TaskHandlers;
 
 namespace AmeCommon.MediaTasks
 {
@@ -70,11 +70,11 @@ namespace AmeCommon.MediaTasks
             switch (taskSettings.Name)
             {
                 case "move-directory-content":
-                    return new MoveDirectoryContent(sourcePath, taskSettings.Target);
+                    return new MoveDirectoryContent(SourceDirectory.Create(sourcePath), taskSettings.Target);
                 case "move-directory-content-flat":
-                    return new MoveDirectoryContentFlat(sourcePath, taskSettings.Target);
+                    return new MoveDirectoryContentFlat(SourceDirectory.Create(sourcePath), taskSettings.Target);
                 case "move-files":
-                    return new MoveFiles(sourcePath, taskSettings.Target);
+                    return new MoveFiles(SourceDirectory.GetFilesList(sourcePath), taskSettings.Target);
                 default:
                     throw new ApplicationException("Not supported command: " + taskSettings.Name);
             }

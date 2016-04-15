@@ -2,6 +2,7 @@
 using System.IO;
 using System;
 using System.Threading.Tasks;
+using AmeCommon.MediaTasks.MoveFilesCommands;
 
 namespace AmeCommon.MediaTasks
 {
@@ -15,7 +16,7 @@ namespace AmeCommon.MediaTasks
         public EnumMediaStatus Status { get; set; } = EnumMediaStatus.None;
         public event Action<Media, EnumMediaStatus, string> StatusChanged;
 
-        public Task ExecuteAllTasksAsync(DestinationDirectoryHandler destDir)
+        public Task ExecuteAllTasksAsync(DestinationDirectory destDir)
         {
             return Task.Factory.StartNew(() => ExecuteAllTasksInternal(destDir));
         }
@@ -62,7 +63,7 @@ namespace AmeCommon.MediaTasks
             }
         }
 
-        private void ExecuteAllTasksInternal(DestinationDirectoryHandler destDir)
+        private void ExecuteAllTasksInternal(DestinationDirectory destDir)
         {
             SetStatus(EnumMediaStatus.InProgress, "przetwarzanie", StatusChanged);
             try

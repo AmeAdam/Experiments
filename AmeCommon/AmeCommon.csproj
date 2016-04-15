@@ -57,16 +57,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="MediaTasks\DestinationDirectoryHandler.cs" />
+    <Compile Include="MediaTasks\MoveFilesCommands\DestinationDirectory.cs" />
     <Compile Include="MediaTasks\IIOCommand.cs" />
     <Compile Include="MediaTasks\IMediaService.cs" />
     <Compile Include="MediaTasks\IMediaTaskFactory.cs" />
     <Compile Include="MediaTasks\Media.cs" />
     <Compile Include="MediaTasks\MediaService.cs" />
     <Compile Include="MediaTasks\MediaTaskFactory.cs" />
-    <Compile Include="MediaTasks\TaskHandlers\MoveDirectoryContent.cs" />
-    <Compile Include="MediaTasks\TaskHandlers\MoveDirectoryContentFlat.cs" />
-    <Compile Include="MediaTasks\TaskHandlers\MoveFiles.cs" />
+    <Compile Include="MediaTasks\MoveFilesCommands\MoveDirectoryContent.cs" />
+    <Compile Include="MediaTasks\MoveFilesCommands\MoveDirectoryContentFlat.cs" />
+    <Compile Include="MediaTasks\MoveFilesCommands\MoveFiles.cs" />
+    <Compile Include="MediaTasks\MoveFilesCommands\SourceDirectory.cs" />
     <Compile Include="Settings\AmeCardSettings.cs" />
     <Compile Include="Settings\CardProfilesSettings.cs" />
     <Compile Include="Settings\ISettingsProvider.cs" />

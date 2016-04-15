@@ -1,35 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
-namespace AmeCommon.MediaTasks
+namespace AmeCommon.MediaTasks.MoveFilesCommands
 {
-    public class DestinationDirectoryHandler
+    public class DestinationDirectory
     {
         private readonly string destinationDirectory;
 
-        public DestinationDirectoryHandler(string destinationDirectory)
+        public DestinationDirectory(string destinationDirectory)
         {
             this.destinationDirectory = destinationDirectory;
             Directory.CreateDirectory(destinationDirectory);
         }
 
-        public DestinationDirectoryHandler GetChildDirectory(string childDirectoryName)
+        public DestinationDirectory GetChildDirectory(string childDirectoryName)
         {
-            return new DestinationDirectoryHandler(Path.Combine(destinationDirectory, childDirectoryName));
+            return new DestinationDirectory(Path.Combine(destinationDirectory, childDirectoryName));
         }
 
-        public void MoveAllFiles(string sourceDirectory, string searchPattern = null)
+        public void MoveAllFiles(IEnumerable<string> sourceFiles)
         {
-            if (!Directory.Exists(sourceDirectory))
-                return;
-
-            Directory.CreateDirectory(destinationDirectory);
-
-            var sourceFiles = searchPattern != null
-                ? Directory.GetFiles(sourceDirectory, searchPattern)
-                : Directory.GetFiles(sourceDirectory);
-
-
             foreach (var sourceFile in sourceFiles)
             {
                 var destFileName = Path.GetFileName(sourceFile); 

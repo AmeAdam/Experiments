@@ -1,7 +1,9 @@
-﻿namespace AmeCommon.MediaTasks
+﻿using AmeCommon.MediaTasks.MoveFilesCommands;
+
+namespace AmeCommon.MediaTasks
 {
     public interface IIOCommand
     {
-        void Execute(DestinationDirectoryHandler destinationDirectory);
+        void Execute(DestinationDirectory destinationDirectory);
     }
 }
