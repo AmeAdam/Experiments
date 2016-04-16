@@ -6,7 +6,7 @@ namespace AmeCommon.MediaTasks.Settings
 {
     [XmlRoot("card-profiles", Namespace = AmeNamespace)]
     [Serializable]
-    public class CardProfilesSettings
+    public class AmeSettings
     {
         public const string AmeNamespace = "http://kamerzysta.bydgoszcz.pl";
 

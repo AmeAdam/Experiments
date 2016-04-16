@@ -7,8 +7,8 @@ namespace AmeCommon.Svn
 {
     public class SvnUtils : ISvnUtils, IDisposable
     {
-        ISettingsProvider settings;
-        SvnClient svn;
+        private readonly ISettingsProvider settings;
+        private readonly SvnClient svn;
 
         public SvnUtils(ISettingsProvider settings)
         {

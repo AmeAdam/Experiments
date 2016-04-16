@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <card-profiles xmlns="http://kamerzysta.bydgoszcz.pl">
+  <default-project-dir>e:\projekty</default-project-dir>
   <svn-settings>
     <rootPath>svn://video-bydgoszcz.pl/video/</rootPath>
     <user>adam</user>

@@ -21,11 +21,11 @@ namespace AmeTests
         public void LoadDocument()
         {
             var doc = XDocument.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cards-profiles.xml"));
-            XmlSerializer xs = new XmlSerializer(typeof(CardProfilesSettings));
-            CardProfilesSettings temp;
+            XmlSerializer xs = new XmlSerializer(typeof(AmeSettings));
+            AmeSettings temp;
             using (var xr = doc.CreateReader())
             {
-                temp = (CardProfilesSettings) xs.Deserialize(xr);
+                temp = (AmeSettings) xs.Deserialize(xr);
             }
             
         }

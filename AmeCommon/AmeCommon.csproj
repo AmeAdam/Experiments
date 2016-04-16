@@ -69,7 +69,7 @@
     <Compile Include="MediaTasks\MoveFilesCommands\MoveFiles.cs" />
     <Compile Include="MediaTasks\MoveFilesCommands\SourceDirectory.cs" />
     <Compile Include="Settings\AmeCardSettings.cs" />
-    <Compile Include="Settings\CardProfilesSettings.cs" />
+    <Compile Include="Settings\AmeSettings.cs" />
     <Compile Include="Settings\ISettingsProvider.cs" />
     <Compile Include="Settings\MediaSettings.cs" />
     <Compile Include="Settings\SettingsProvider.cs" />
@@ -81,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ame-card-template.xml" />
-    <Content Include="cards-profiles.xml">
+    <Content Include="settings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

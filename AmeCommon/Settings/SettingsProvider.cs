@@ -10,19 +10,19 @@ namespace AmeCommon.Settings
 {
     public class SettingsProvider : ISettingsProvider
     {
-        CardProfilesSettings profiles;
+        AmeSettings profiles;
 
         public SettingsProvider()
         {
-            var doc = XDocument.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cards-profiles.xml"));
-            XmlSerializer xs = new XmlSerializer(typeof(CardProfilesSettings));
+            var doc = XDocument.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml"));
+            XmlSerializer xs = new XmlSerializer(typeof(AmeSettings));
             using (var xr = doc.CreateReader())
             {
-                profiles = (CardProfilesSettings)xs.Deserialize(xr);
+                profiles = (AmeSettings)xs.Deserialize(xr);
             }
 
             var str = JsonConvert.SerializeObject(profiles, Formatting.Indented);
-            JsonConvert.DeserializeObject<CardProfilesSettings>(str);
+            JsonConvert.DeserializeObject<AmeSettings>(str);
             File.WriteAllText("d:\\json.test", str);
         }
 

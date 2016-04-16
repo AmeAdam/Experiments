@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace AmeCommon.MediaTasks.Settings
 {
-    [XmlRoot("ame-card", Namespace = CardProfilesSettings.AmeNamespace)]
+    [XmlRoot("ame-card", Namespace = AmeSettings.AmeNamespace)]
     [Serializable]
     public class AmeCardSettings
     {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using AmeCreateProject.Model;
@@ -9,7 +8,6 @@ using Microsoft.Practices.Prism.Mvvm;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using AmeCommon.Svn;
-using AmeCommon.MediaTasks;
 using AmeCommon.MediaTasks.MoveFilesCommands;
 
 namespace AmeCreateProject.ViewModel

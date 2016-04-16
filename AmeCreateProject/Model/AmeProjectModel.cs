@@ -16,7 +16,7 @@ namespace AmeCreateProject.Model
         private string projectDir;
         private List<string> allDirectories;
         public List<Media> MediaList { get; private set; }
-        public DriveInfo Drive => new DriveInfo(Path.GetPathRoot(projectDir));
+        public DriveInfo Drive => new DriveInfo(Path.GetPathRoot(projectDir) ?? "c:\\");
 
         public AmeProjectModel(IMediaService mediaUtils)
         {
@@ -32,7 +32,6 @@ namespace AmeCreateProject.Model
             {
                 projectDir = value;
                 UpdateDirectoriesList();
-                var drive = new DriveInfo(Path.GetPathRoot(projectDir));
             }
         }
 
@@ -88,10 +87,7 @@ namespace AmeCreateProject.Model
             }
         }
 
-        public string DestinationDir
-        {
-            get { return Path.Combine(ProjectDir, DirName); }
-        }
+        public string DestinationDir => Path.Combine(ProjectDir, DirName);
 
         public string ProjectDate
         {
