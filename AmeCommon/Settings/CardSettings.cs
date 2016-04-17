@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace AmeCommon.MediaTasks.Settings
 {
     [Serializable]
-    public class MediaSettings
+    public class CardSettings
     {
         [XmlAttribute("id")]
         public string Id { get; set; }

@@ -14,6 +14,6 @@ namespace AmeCommon.MediaTasks.Settings
         public SvnSettings SvnSettings { get; set; }
 
         [XmlElement("media")]
-        public List<MediaSettings> Medias { get; set; }
+        public List<CardSettings> Medias { get; set; }
     }
 }

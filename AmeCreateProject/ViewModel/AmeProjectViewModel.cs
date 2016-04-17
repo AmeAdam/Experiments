@@ -46,6 +46,7 @@ namespace AmeCreateProject.ViewModel
                 Model.ProjectDir = dialog.SelectedPath;
                 OnPropertyChanged(() => ProjectDir);
                 OnPropertyChanged(() => DiskSize);
+                Model.SaveSettings();
             }
         }
 

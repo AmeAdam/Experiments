@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Google.GData.Client;
 using Google.GData.Spreadsheets;
-using NUnit.Framework.Internal;
 using NUnit.Framework;
 
 namespace AmeTests
@@ -13,7 +8,8 @@ namespace AmeTests
     [TestFixture]
     public class GoogleSheetTest
     {
-        [Test, Ignore("Próby odczytu danych z dokumentów google")]
+        [Test]
+        [Ignore("Próby odczytu danych z dokumentów google")]
         public void Test()
         {
             ////////////////////////////////////////////////////////////////////////////
@@ -70,11 +66,12 @@ namespace AmeTests
             // browser-based application, you can redirect the user to the authorization
             // url.
             string authorizationUrl = OAuthUtil.CreateOAuth2AuthorizationUrl(parameters);
+
             Console.WriteLine(authorizationUrl);
             Console.WriteLine("Please visit the URL above to authorize your OAuth "
               + "request token.  Once that is complete, type in your access code to "
               + "continue...");
-            parameters.AccessCode = "4/TfgzBofnyVFMQ3oSbfMUNcDFvrzH28jBiWOBkgbSuJw";
+            parameters.AccessCode = "4/JmYH1_zzjqVFQgenS0yiP3KJVdlP1oze9pmSoO-peCo";
 
             ////////////////////////////////////////////////////////////////////////////
             // STEP 4: Get the Access Token

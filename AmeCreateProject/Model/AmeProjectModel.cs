@@ -4,33 +4,35 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using AmeCommon.Settings;
 
 namespace AmeCreateProject.Model
 {
     public class AmeProjectModel
     {
+        private readonly ISettingsProvider settings;
         public const string DefaultName = "[Nazwa Wydarzenia]";
         public DateTime Date { get; set; } = DateTime.Now.Date;
         public string Name { get; set; } = DefaultName;
         public string DirName => Date.ToString("yyyy-MM-dd") + " " + Name;
-        private string projectDir;
         private List<string> allDirectories;
         public List<Media> MediaList { get; private set; }
-        public DriveInfo Drive => new DriveInfo(Path.GetPathRoot(projectDir) ?? "c:\\");
+        public DriveInfo Drive => new DriveInfo(Path.GetPathRoot(settings.UserSettings.RootProjectsPath) ?? "c:\\");
 
-        public AmeProjectModel(IMediaService mediaUtils)
+        public AmeProjectModel(IMediaService mediaUtils, ISettingsProvider settings)
         {
+            this.settings = settings;
             MediaList = mediaUtils.GetAllMedias();
-            ProjectDir = @"E:\Projekty";
+            UpdateDirectoriesList();
             SetDirectory(allDirectories.FirstOrDefault());
         }
 
         public string ProjectDir
         {
-            get { return projectDir; }
+            get { return settings.UserSettings.RootProjectsPath; }
             set
             {
-                projectDir = value;
+                settings.UserSettings.RootProjectsPath = value;
                 UpdateDirectoriesList();
             }
         }
@@ -63,7 +65,7 @@ namespace AmeCreateProject.Model
 
         private void MoveInternal(int shift)
         {
-            var pos = allDirectories.IndexOf(Path.Combine(projectDir, DirName));
+            var pos = allDirectories.IndexOf(Path.Combine(settings.UserSettings.RootProjectsPath, DirName));
         
             if (!TrySetDirectoryByIndex(pos, shift))
             {
@@ -98,6 +100,11 @@ namespace AmeCreateProject.Model
                 if (DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
                     Date = date;
             }
+        }
+
+        public void SaveSettings()
+        {
+            settings.SaveUserSettings();
         }
     }
 }

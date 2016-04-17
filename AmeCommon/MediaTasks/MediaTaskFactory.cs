@@ -47,7 +47,7 @@ namespace AmeCommon.MediaTasks
             if (cardSettings == null)
                 return null;
 
-            var profile = settings.Medias.FirstOrDefault(m => m.Id == cardSettings.Id);
+            var profile = settings.CardSettings.FirstOrDefault(m => m.Id == cardSettings.Id);
             if (profile == null)
                 throw new ApplicationException("Could not found profile settings for: " + cardSettings.Id);
 

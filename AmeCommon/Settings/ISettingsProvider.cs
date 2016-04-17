@@ -5,7 +5,9 @@ namespace AmeCommon.Settings
 {
     public interface ISettingsProvider
     {
-        List<MediaSettings> Medias { get; }
+        List<CardSettings> CardSettings { get; }
         SvnSettings SvnSettings { get; }
+        UserSettings UserSettings { get; }
+        void SaveUserSettings();
     }
 }
