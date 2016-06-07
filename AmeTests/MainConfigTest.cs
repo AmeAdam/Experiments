@@ -9,7 +9,7 @@ namespace AmeTests
         [Test]
         public void LoadConfig()
         {
-            MainConfig config = new MainConfig();
+            SettingsProvider config = new SettingsProvider();
             Assert.IsNotNull(config.Root);
         }
     }

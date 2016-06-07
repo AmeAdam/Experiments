@@ -1,0 +1,129 @@
+{
+  "SvnSettings": {
+    "RootPath": "svn://video-bydgoszcz.pl/video/",
+    "User": "adam",
+    "Password": "Video1@",
+    "SvnProperties": [
+      {
+        "Name": "svn:ignore",
+        "Value": "A\r\nB\r\nB1\r\nB2\r\nC\r\nCanon\r\nSound\r\nZdjecia\r\npluraleyes\r\n*.prproj.bak",
+        "Path": ""
+      },
+      {
+        "Name": "svn:ignore",
+        "Value": "*.CR2",
+        "Path": "ZdjeciaRaw"
+      }
+    ]
+  },
+  "Medias": [
+    {
+      "Id": "AME-HDD-E",
+      "Tasks": []
+    },
+    {
+      "Id": "AME-HDD-D",
+      "Tasks": []
+    },
+    {
+      "Id": "AG AC90",
+      "Tasks": [
+        {
+          "Name": "move-directory-content",
+          "Source": "PRIVATE\\AVCHD",
+          "Target": "A"
+        },
+        {
+          "Name": "move-directory-content-flat",
+          "Source": "DCIM",
+          "Target": "Zdjecia"
+        }
+      ]
+    },
+    {
+      "Id": "HMC 151 B1",
+      "Tasks": [
+        {
+          "Name": "move-directory-content",
+          "Source": "PRIVATE\\AVCHD",
+          "Target": "B1"
+        }
+      ]
+    },
+    {
+      "Id": "HMC 151 B2",
+      "Tasks": [
+        {
+          "Name": "move-directory-content",
+          "Source": "PRIVATE\\AVCHD",
+          "Target": "B2"
+        }
+      ]
+    },
+    {
+      "Id": "HDC SD90",
+      "Tasks": [
+        {
+          "Name": "move-directory-content",
+          "Source": "PRIVATE\\AVCHD",
+          "Target": "C"
+        },
+        {
+          "Name": "move-directory-content-flat",
+          "Source": "DCIM",
+          "Target": "Zdjecia"
+        }
+      ]
+    },
+    {
+      "Id": "Canon 650d",
+      "Tasks": [
+        {
+          "Name": "move-files",
+          "Source": "DCIM\\*Canon\\*.cr2",
+          "Target": "ZdjeciaRaw"
+        },
+        {
+          "Name": "move-files",
+          "Source": "DCIM\\*Canon\\*.jpg",
+          "Target": "Zdjecia"
+        },
+        {
+          "Name": "move-files",
+          "Source": "DCIM\\*Canon\\*.jpeg",
+          "Target": "Zdjecia"
+        },
+        {
+          "Name": "move-files",
+          "Source": "DCIM\\*Canon\\*.mov",
+          "Target": "Canon"
+        }
+      ]
+    },
+    {
+      "Id": "Sony DSC-HX7V",
+      "Tasks": [
+        {
+          "Name": "move-directory-content",
+          "Source": "PRIVATE\\AVCHD",
+          "Target": "D"
+        },
+        {
+          "Name": "move-directory-content-flat",
+          "Source": "DCIM",
+          "Target": "Zdjecia"
+        }
+      ]
+    },
+    {
+      "Id": "Zoom H4n",
+      "Tasks": [
+        {
+          "Name": "move-files",
+          "Source": "STEREO\\*\\*",
+          "Target": "Sound"
+        }
+      ]
+    }
+  ]
+}

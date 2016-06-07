@@ -18,6 +18,7 @@ namespace AmeCreateProject.ViewModel
         private ISvnUtils svn;
         public string ProjectDir => Model.ProjectDir + " | " + Model.Drive.AvailableFreeSpace / (1024 * 1024 * 1024) + "GB wolnego miejsca";
 
+        public DelegateCommand RefreshCommand { get; private set; }
         public DelegateCommand NextDayCommand { get; private set; }
         public DelegateCommand PrevDayCommand { get; private set; }
         public DelegateCommand CreateProjectCommand { get; private set; }
@@ -29,11 +30,21 @@ namespace AmeCreateProject.ViewModel
         {
             Model = model;
             this.svn = svn;
+            RefreshCommand = new DelegateCommand(Refresh, () => !inProgress);
             NextDayCommand = new DelegateCommand(NextDay, () => !inProgress);
             PrevDayCommand = new DelegateCommand(PrevDay, () => !inProgress);
             CreateProjectCommand = new DelegateCommand(CreateProject, () => !inProgress);
             ChangeProjectDirCommand = new DelegateCommand(ChangeProjectDir, () => !inProgress);
             MediasList = new ObservableCollection<MediaViewModel>(Model.MediaList.Select(m => new MediaViewModel(m)));
+        }
+
+        private void Refresh()
+        {
+            Model.Refresh();
+
+            MediasList.Clear();
+            MediasList.AddRange(Model.MediaList.Select(m => new MediaViewModel(m)));
+            OnPropertyChanged(nameof(MediasList));
         }
 
         private void ChangeProjectDir()

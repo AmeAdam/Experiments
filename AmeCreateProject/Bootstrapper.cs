@@ -17,10 +17,11 @@ namespace AmeCreateProject
             RegisterTypeIfMissing(typeof(AmeProjectViewModel), typeof(AmeProjectViewModel), false);
             RegisterTypeIfMissing(typeof(AmeProjectModel), typeof(AmeProjectModel), false);
 
-            RegisterTypeIfMissing(typeof(ISettingsProvider), typeof(SettingsProvider), false);
-            RegisterTypeIfMissing(typeof(IMediaTaskFactory), typeof(MediaTaskFactory), false);
+            RegisterTypeIfMissing(typeof(ISettingsProvider), typeof(SettingsProvider), true);
+            RegisterTypeIfMissing(typeof(IMediaTaskFactory), typeof(MediaTaskFactory), true);
             RegisterTypeIfMissing(typeof(IMediaService), typeof(MediaService), true);
             RegisterTypeIfMissing(typeof(ISvnUtils), typeof(SvnUtils), true);
+            RegisterTypeIfMissing(typeof(ICommonSettingsProvider), typeof(CommonSettingsProvider), true);
         }
 
         protected override DependencyObject CreateShell()

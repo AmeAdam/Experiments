@@ -90,8 +90,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\MainConfig.cs" />
-    <Compile Include="Config\SvnAutoConfig.cs" />
+    <Compile Include="Settings\SettingsProvider.cs" />
+    <Compile Include="Settings\SvnAutoConfig.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>

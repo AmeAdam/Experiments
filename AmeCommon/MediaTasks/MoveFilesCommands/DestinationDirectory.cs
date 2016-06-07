@@ -7,11 +7,24 @@ namespace AmeCommon.MediaTasks.MoveFilesCommands
     public class DestinationDirectory
     {
         private readonly string destinationDirectory;
+        private const int FileBufferSize = 8 * 1024 * 1024;
 
         public DestinationDirectory(string destinationDirectory)
         {
             this.destinationDirectory = destinationDirectory;
             Directory.CreateDirectory(destinationDirectory);
+        }
+
+        public string GetAbsolutePath(string fileRelativePath)
+        {
+            return Path.Combine(destinationDirectory, fileRelativePath);
+        }
+
+        public string GetRelativePath(string fileAbsolutePath)
+        {
+            if (!fileAbsolutePath.StartsWith(destinationDirectory, StringComparison.InvariantCulture))
+                throw new ApplicationException($"The absolute file path {fileAbsolutePath} is not in target directory {destinationDirectory}");
+            return fileAbsolutePath.Substring(destinationDirectory.Length);
         }
 
         public DestinationDirectory GetChildDirectory(string childDirectoryName)
@@ -76,6 +89,17 @@ namespace AmeCommon.MediaTasks.MoveFilesCommands
                     return newName;
             }
             throw new ApplicationException("Unable to find alternative name for file "+destFile);
+        }
+
+        public FileStream GetWriteFileStream(string relativeSourcePath)
+        {
+            var absoluteFilePath = Path.Combine(destinationDirectory, relativeSourcePath);
+            return File.OpenRead(absoluteFilePath);
+        }
+
+        public bool FileExist(string relativeSourcePath)
+        {
+            return File.Exists(Path.Combine(destinationDirectory, relativeSourcePath));
         }
     }
 }

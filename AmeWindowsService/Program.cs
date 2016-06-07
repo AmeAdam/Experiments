@@ -1,8 +1,9 @@
 ﻿using Microsoft.Practices.Unity;
+using System.ServiceProcess;
 
 namespace AmeWindowsService
 {
-    static class Program
+    static class Program 
     {
         /// <summary>
         /// The main entry point for the application.

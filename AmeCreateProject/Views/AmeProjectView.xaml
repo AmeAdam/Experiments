@@ -36,6 +36,7 @@
                 <Button x:Name="bNextDate" Content="&gt;" VerticalAlignment="Top" Width="42" Command="{Binding NextDayCommand}" Height="32" />
             </StackPanel>
             <Button DockPanel.Dock="Right" x:Name="button" Content="Create" VerticalAlignment="Top" HorizontalAlignment="Left"  Command="{Binding CreateProjectCommand}" Height="32" Width="50"/>
+            <Button DockPanel.Dock="Right" x:Name="bRefresh" Content="Refresh" VerticalAlignment="Top" HorizontalAlignment="Left"  Command="{Binding RefreshCommand}" Height="32" Width="50"/>
             <TextBox x:Name="textBox" Height="32" Text="{Binding Path=ProjectName}" VerticalAlignment="Top" MinWidth="200" />
         </DockPanel>
 

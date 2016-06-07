@@ -18,10 +18,19 @@ namespace AmeCreateProject.Model
         private List<string> allDirectories;
         public List<Media> MediaList { get; private set; }
         public DriveInfo Drive => new DriveInfo(Path.GetPathRoot(settings.UserSettings.RootProjectsPath) ?? "c:\\");
+        IMediaService mediaUtils;
 
         public AmeProjectModel(IMediaService mediaUtils, ISettingsProvider settings)
         {
             this.settings = settings;
+            this.mediaUtils = mediaUtils;
+            MediaList = mediaUtils.GetAllMedias();
+            UpdateDirectoriesList();
+            SetDirectory(allDirectories.FirstOrDefault());
+        }
+
+        internal void Refresh()
+        {
             MediaList = mediaUtils.GetAllMedias();
             UpdateDirectoriesList();
             SetDirectory(allDirectories.FirstOrDefault());
@@ -62,6 +71,7 @@ namespace AmeCreateProject.Model
             SetDirectory(allDirectories[index]);
             return true;
         }
+
 
         private void MoveInternal(int shift)
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -8,10 +9,12 @@ namespace AmeCommon.MediaTasks.MoveFilesCommands
     public class SourceDirectory
     {
         private readonly string sourceDirectory;
+        private readonly string rootPath;
 
         public SourceDirectory(string sourceDirectory)
         {
             this.sourceDirectory = sourceDirectory;
+            rootPath = (Path.GetPathRoot(sourceDirectory) ?? "").ToLower(CultureInfo.InvariantCulture);
         }
 
         public string Name => Path.GetFileName(sourceDirectory);
@@ -62,6 +65,26 @@ namespace AmeCommon.MediaTasks.MoveFilesCommands
             foreach (var dir in sourceDirectories)
                 result.AddRange(Directory.GetDirectories(dir, pattern));
             return result;
+        }
+
+        public FileStream GetReadFileStream(string relativeSourcePath)
+        {
+            return File.OpenRead(GetAbsolutePath(relativeSourcePath));
+        }
+
+        public string GetSourceDrive()
+        {
+            return rootPath;
+        }
+
+        private string GetAbsolutePath(string relativeSourcePath)
+        {
+            return Path.Combine(sourceDirectory, relativeSourcePath);
+        }
+
+        public void DeleteFile(string relativeSourcePath)
+        {
+            File.Delete(GetAbsolutePath(relativeSourcePath));
         }
     }
 }

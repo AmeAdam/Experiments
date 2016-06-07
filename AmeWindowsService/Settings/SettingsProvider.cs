@@ -4,19 +4,19 @@ using System.Xml.Linq;
 
 namespace AmeWindowsService.Config
 {
-    internal interface IMainConfig
+    internal interface ISettingsProvider
     {
         XElement Root { get; }
         void Save();
     }
 
-    internal class MainConfig : IMainConfig
+    internal class SettingsProvider : ISettingsProvider
     {
         private readonly object sync = new object();
         private readonly XDocument doc;
         private readonly string settingsPath;
 
-        public MainConfig(string settingsPath = null)
+        public SettingsProvider(string settingsPath = null)
         {
             this.settingsPath = settingsPath ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
             doc = XDocument.Load(this.settingsPath);
