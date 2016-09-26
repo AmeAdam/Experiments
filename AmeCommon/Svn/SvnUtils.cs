@@ -1,5 +1,4 @@
-﻿using AmeCommon.Settings;
-using SharpSvn;
+﻿using SharpSvn;
 using System;
 using System.IO;
 
@@ -7,12 +6,10 @@ namespace AmeCommon.Svn
 {
     public class SvnUtils : ISvnUtils, IDisposable
     {
-        private readonly ISettingsProvider settings;
         private readonly SvnClient svn;
 
-        public SvnUtils(ISettingsProvider settings)
+        public SvnUtils()
         {
-            this.settings = settings;
             svn = new SvnClient();
         }
 
@@ -42,10 +39,12 @@ namespace AmeCommon.Svn
 
         private void AddDirToSvn(string dir)
         { 
+            throw new NotImplementedException();
             if (IsDirAlreadyInSvn(dir))
                 return;
 
-            var svnUri = settings.SvnSettings.RootPath + Path.GetFileName(dir);
+
+            var svnUri = "";//settings.SvnSettings.RootPath + Path.GetFileName(dir);
             CreateDirectoryOnSvnServer(svnUri);
             svn.CheckOut(new SvnUriTarget(svnUri), dir);
         }
@@ -60,16 +59,18 @@ namespace AmeCommon.Svn
 
         private void ApplySvnProperties(string dir)
         {
-            foreach(var svnProperty in settings.SvnSettings.SvnProperties)
-            {
-                var path = Path.Combine(dir, svnProperty.Path);
-                if (Directory.Exists(path))
-                {
-                    if (!IsDirAlreadyInSvn(dir))
-                        svn.Add(dir);
-                    svn.SetProperty(path, svnProperty.Name, svnProperty.Value);
-                }
-            }
+            throw new NotImplementedException();
+
+            //foreach (var svnProperty in settings.SvnSettings.SvnProperties)
+            //{
+            //    var path = Path.Combine(dir, svnProperty.Path);
+            //    if (Directory.Exists(path))
+            //    {
+            //        if (!IsDirAlreadyInSvn(dir))
+            //            svn.Add(dir);
+            //        svn.SetProperty(path, svnProperty.Name, svnProperty.Value);
+            //    }
+            //}
         }
 
         public void Dispose()

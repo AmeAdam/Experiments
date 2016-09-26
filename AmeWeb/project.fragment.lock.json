@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "exports": {
+    "AmeCommon/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.6.1",
+      "compile": {
+        "bin/Debug/AmeCommon.dll": {}
+      },
+      "runtime": {
+        "../../../Users/am/.nuget/packages/Microsoft.AspNetCore.Hosting.Abstractions/1.0.0/lib/net451/Microsoft.AspNetCore.Hosting.Abstractions.dll": {},
+        "../../../Users/am/.nuget/packages/Microsoft.Extensions.Options/1.0.0/lib/netstandard1.0/Microsoft.Extensions.Options.dll": {},
+        "../packages/LiteDB.2.0.2/lib/net35/LiteDB.dll": {},
+        "../packages/Newtonsoft.Json.9.0.1/lib/net45/Newtonsoft.Json.dll": {},
+        "../packages/SharpSvn.1.9-x64.1.9004.3891.133/lib/net40/SharpSvn.UI.dll": {},
+        "../packages/SharpSvn.1.9-x64.1.9004.3891.133/lib/net40/SharpSvn.dll": {},
+        "bin/Debug/AmeCommon.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/AmeCommon.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        },
+        "bin/Debug/cardgrabbersettings.json": {
+          "buildAction": "Content",
+          "codeLanguage": "any",
+          "copyToOutput": true,
+          "outputPath": "cardgrabbersettings.json"
+        },
+        "bin/Debug/devices.json": {
+          "buildAction": "Content",
+          "codeLanguage": "any",
+          "copyToOutput": true,
+          "outputPath": "devices.json"
+        },
+        "bin/Debug/settings.xml": {
+          "buildAction": "Content",
+          "codeLanguage": "any",
+          "copyToOutput": true,
+          "outputPath": "settings.xml"
+        }
+      }
+    }
+  }
+}

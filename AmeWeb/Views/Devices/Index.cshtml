@@ -1,0 +1,66 @@
+﻿@using System.Threading.Tasks
+@using AmeCommon.CardsCapture
+@using AmeWeb.Model
+@model List<CardInfoViewModel>
+@{
+    ViewData["Title"] = "AME Home - Lista urządzeń";
+}
+
+<div class="row">
+    <table class="table table-condensed table-bordered">
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Urządzenie</th>
+            <th>Dysk</th>
+            <th>Opis operacji</th>
+            <th>Akcja</th>
+        </tr>
+        @foreach (var device in Model)
+        {
+            var trClass = device.InsertedInDrive!=null ? "bg-success" : "bg-normal";
+            var imagePath = $"/images/{device.Device.UniqueName}.jpg";
+            <tr class="@trClass">
+                <td></td>
+                <td><img src="@imagePath" style="height: 75px"/></td>
+                <td>
+                    @if (device.Device.Id != 0)
+                    {
+                        @Html.ActionLink(device.Device.UniqueName, "DeviceEdit", new {deviceId = device.Device.Id, drive = device.InsertedInDrive})
+                    }
+                    else if (!string.IsNullOrEmpty(device.InsertedInDrive))
+                    {
+                        @Html.ActionLink("Dodaj nowe urządzenie", "DeviceEdit", new { deviceId = device.Device.Id, drive = device.InsertedInDrive })<br/>
+                        <span>Przypisz</span>
+                        <form asp-action="AssignDevice">
+                            @Html.Hidden("drive", device.InsertedInDrive)
+                            @Html.DropDownList("deviceId", Model.Where(d => d.Device.Id != 0).Select(d => new SelectListItem {Text = d.Device.UniqueName, Value = d.Device.Id.ToString()}), "", new {onchange = "$(this).parent('form:first').submit();"})
+                        </form>
+                    }
+                </td>
+                <td>
+                    @device.InsertedInDrive
+                    @if (!string.IsNullOrEmpty(device.InsertedInDrive))
+                    {
+                        @Html.ActionLink("Usuń przypisanie do urządzenia", "DeleteDeviceAssociation", new {drive = device.InsertedInDrive})
+                    }
+                </td>
+                <td>
+                    @foreach (var cmd in device.Device.Captures)
+                    {
+                        <div>@cmd.ToString()</div>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Usuń urządzenie", "DeleteDevice", new {id = device.Device.Id})
+                </td>
+            </tr>
+        }
+        <tr>
+            <td style="text-align: center" colspan="6">
+                @Html.ActionLink("Dodaj nowe urządzenie", "DeviceEdit", new { deviceId = 0 })
+            </td>
+        </tr>
+    </table>
+
+</div>

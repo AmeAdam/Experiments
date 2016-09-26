@@ -1,0 +1,42 @@
+﻿@using System.Threading.Tasks
+@model AmeCommon.Model.AmeFotoVideoProject
+@{
+    ViewData["Title"] = "AME Home Page";
+}
+
+<div class="row">
+    <form asp-action="StartCapture" asp-controller="Home">
+        @Html.Hidden("projectId", @Model.Id)
+        <table class="table table-bordered table-condensed">
+            <tr>
+                <th>Projekt</th>
+                <td>@Model.UniqueName</td>
+            </tr>
+            <tr>
+                <th>Lokalizacja projektu</th>
+                <td>@Model.LocalPathRoot</td>
+            </tr>
+       </table>
+       
+       <table class="table table-bordered table-condensed">
+           <tr>
+               <th colspan="4">Lista plików:</th>
+           </tr>
+           <tr>
+               <th>Żródło</th>
+               <th>Lokacja</th>
+               <th>Suma kontrolna</th>
+               <th>Wielkość pliku</th>
+           </tr>
+                @foreach (var fileInfo in Model.MediaFiles)
+            {
+                    <tr>
+                        <td>@fileInfo.Source</td>
+                        <td>@fileInfo.RelativePath</td>
+                        <td>@fileInfo.CheckSum</td>
+                        <td>@(fileInfo.Size / 1024 / 1024) MB</td>
+                    </tr>
+                }
+            </table>
+    </form>
+</div>

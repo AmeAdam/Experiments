@@ -1,0 +1,92 @@
+﻿[
+  {
+    "UniqueName": "AG AC90",
+    "Captures": [
+      {
+        "TargetFolder": "A",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM",
+        "Command": "move-directory-content-flat"
+      }
+    ]
+  },
+  {
+    "UniqueName": "HMC 151 B1",
+    "Captures": [
+      {
+        "TargetFolder": "B1",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      }
+    ]
+  },
+  {
+    "UniqueName": "HMC 151 B2",
+    "Captures": [
+      {
+        "TargetFolder": "B2",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      }
+    ]
+  },
+  {
+    "UniqueName": "HDC SD90",
+    "Captures": [
+      {
+        "TargetFolder": "C",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM",
+        "Command": "move-directory-content-flat"
+      }
+    ]
+  },
+  {
+    "UniqueName": "Canon 650d",
+    "Captures": [
+      {
+        "TargetFolder": "ZdjeciaRaw",
+        "SourceMask": "DCIM\\*Canon\\*.cr2",
+        "Command": "move-files"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM\\*Canon\\*.jpg",
+        "Command": "move-files"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM\\*Canon\\*.jpeg",
+        "Command": "move-files"
+      },
+      {
+        "TargetFolder": "Canon",
+        "SourceMask": "DCIM\\*Canon\\*.mov",
+        "Command": "move-files"
+      }
+    ]
+  },
+  {
+    "UniqueName": "Sony DSC-HX7V",
+    "Captures": [
+      {
+        "TargetFolder": "D",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM",
+        "Command": "move-directory-content-flat"
+      }
+    ]
+  }
+]

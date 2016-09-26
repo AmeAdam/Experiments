@@ -1,0 +1,78 @@
+﻿@using System.Threading.Tasks
+@using AmeCommon.CardsCapture
+@using AmeWeb.Model
+@model CaptureProjectCommand
+@{
+    ViewData["Title"] = "AME Home Page";
+}
+
+<div class="row">
+    <h2>Projekt: @Model.Project.UniqueName</h2>
+    <h4>@Model.Project.LocalPathRoot</h4>
+    @if (Model.DestinationDrive.AvailableFreeSpace <= Model.DeviceCommands.Sum(cmd => cmd.FilesSize))
+    {
+        var avaliable = Model.DestinationDrive.AvailableFreeSpace.DisplayFileSize();
+        var required = Model.DeviceCommands.Sum(cmd => cmd.FilesSize).DisplayFileSize();
+        <h4 class="bg-danger">Uwaga niewystarczająca ilość wolnego miejsca! Wolne miejsce: @avaliable Wymagane: @required</h4>
+    }
+
+    <form asp-action="StartCapture">
+        @Html.Hidden("projectId", Model.Project.Id)
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Device</th>
+                <th>Info</th>
+                <th>Stan</th>
+            </tr>
+            @for (var i = 0; i < Model.DeviceCommands.Count; i++)
+            {
+                var device = Model.DeviceCommands[i];
+                var hasConflict = device.GetAllConflictWithStoredFiles().Any();
+                var trClass = hasConflict ? "bg-danger" : "";
+                var imagePath = $"/images/{device.Device.UniqueName}.jpg";
+                <tr class="@trClass">
+                    <td>
+                        @Html.CheckBox($"devices[{i}].Selected", device.FilesCount > 0)
+                        @Html.Hidden($"devices[{i}].Drive", device.SourceDrive.Name)
+                    </td>
+                    <td><img src="@imagePath" style="height: 75px"/></td>
+                    <td>@device.Device.UniqueName</td>
+                    <td class="DeviceInfo">
+                        Pliki: @device.FilesCount<br/>
+                        Rozmiar: @device.FilesSizeGb GB<br/>
+                        Ukończono: @device.PercentCompleted %<br/>
+                        @if (hasConflict)
+                        {
+                            @Html.ActionLink("Uwaga! Wykryto konflikt istniejących plików.", "ShowConflicts", new {projectId = Model.Project.Id, device.SourceDrive}, new {style = "font-weight: bold"})
+                        }
+                    </td>
+                    <td class="DeviceState">
+                        @if (device.State == DeviceMoveFileCommands.DeviceCommandState.InProgress)
+                        {
+                            <img src="~/images/loader.gif" style="height: 75px"/>
+                            @Html.ActionLink("Przerwij", "AbortCaptureDevice", new {projectId = Model.Project.Id, deviceId = device.Device.Id})
+                        }
+                        else if (device.State == DeviceMoveFileCommands.DeviceCommandState.Completed)
+                        {
+                            <img src="~/images/done.png" style="height: 75px"/>
+                        }
+                        else if (device.State == DeviceMoveFileCommands.DeviceCommandState.Error)
+                        {
+                            <img src="~/images/error.png" style="height: 75px"/>
+                            <span class="text-danger">@device.Message</span>
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Kopiuj do projektu", "StartCaptureSingleDevice", new {projectId = Model.Project.Id, sourceDrive = device.SourceDrive})
+                        }
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="5"><input type="submit" value="Kopiuj wybrane"/></td>
+            </tr>
+        </table>
+    </form>
+</div>

@@ -31,18 +31,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LiteDB, Version=2.0.2.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.2.0.2\lib\net35\LiteDB.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions">
+      <HintPath>..\..\..\Users\am\.nuget\packages\Microsoft.AspNetCore.Hosting.Abstractions\1.0.0\lib\net451\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options">
+      <HintPath>..\..\..\Users\am\.nuget\packages\Microsoft.Extensions.Options\1.0.0\lib\netstandard1.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="SharpSvn, Version=1.9003.3845.110, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
-      <HintPath>..\packages\SharpSvn.1.9-x64.1.9003.3845.110\lib\net40\SharpSvn.dll</HintPath>
+    <Reference Include="SharpSvn, Version=1.9004.3891.133, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
+      <HintPath>..\packages\SharpSvn.1.9-x64.1.9004.3891.133\lib\net40\SharpSvn.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SharpSvn.UI, Version=1.9003.3845.110, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpSvn.1.9-x64.1.9003.3845.110\lib\net40\SharpSvn.UI.dll</HintPath>
+    <Reference Include="SharpSvn.UI, Version=1.9004.3891.133, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpSvn.1.9-x64.1.9004.3891.133\lib\net40\SharpSvn.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -57,30 +67,27 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardsCapture\CaptureProjectCommand.cs" />
+    <Compile Include="CardsCapture\ICaptureCooridinator.cs" />
+    <Compile Include="Database\AmeLocalSettings.cs" />
+    <Compile Include="Model\AmeFotoVideoProject.cs" />
+    <Compile Include="CardsCapture\CaptureCooridinator.cs" />
+    <Compile Include="CardsCapture\ChecksumFileCalculator.cs" />
+    <Compile Include="Model\Device.cs" />
+    <Compile Include="CardsCapture\DeviceCaptureFactory.cs" />
+    <Compile Include="Model\DeviceCaptureInfo.cs" />
+    <Compile Include="CardsCapture\DeviceMoveFileCommands.cs" />
+    <Compile Include="CardsCapture\IAmeProjectRepository.cs" />
+    <Compile Include="CardsCapture\IDeviceRepository.cs" />
+    <Compile Include="Model\MediaFile.cs" />
+    <Compile Include="CardsCapture\MoveFileCommand.cs" />
+    <Compile Include="Database\AmeConfig.cs" />
+    <Compile Include="Database\KnownAmeProjects.cs" />
+    <Compile Include="Database\Repository.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="MediaTasks\MoveFilesCommands\DestinationDirectory.cs" />
-    <Compile Include="MediaTasks\IIOCommand.cs" />
-    <Compile Include="MediaTasks\IMediaService.cs" />
-    <Compile Include="MediaTasks\IMediaTaskFactory.cs" />
-    <Compile Include="MediaTasks\Media.cs" />
-    <Compile Include="MediaTasks\MediaService.cs" />
-    <Compile Include="MediaTasks\MediaTaskFactory.cs" />
-    <Compile Include="MediaTasks\MoveFilesCommands\MoveDirectoryContent.cs" />
-    <Compile Include="MediaTasks\MoveFilesCommands\MoveDirectoryContentFlat.cs" />
-    <Compile Include="MediaTasks\MoveFilesCommands\MoveFile.cs" />
-    <Compile Include="MediaTasks\MoveFilesCommands\MoveFiles.cs" />
-    <Compile Include="MediaTasks\MoveFilesCommands\SourceDirectory.cs" />
-    <Compile Include="Settings\AmeCardSettings.cs" />
-    <Compile Include="Settings\AmeProjectSetting.cs" />
-    <Compile Include="Settings\CardGrabberSettings.cs" />
-    <Compile Include="Settings\CommonSettingsProvider.cs" />
-    <Compile Include="Settings\ISettingsProvider.cs" />
-    <Compile Include="Settings\CardSettings.cs" />
-    <Compile Include="Settings\SettingsProvider.cs" />
+    <Compile Include="CardsCapture\AmeCardSettings.cs" />
     <Compile Include="Settings\SvnSettings.cs" />
-    <Compile Include="Settings\CommandSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\UserSettings.cs" />
     <Compile Include="Svn\ISvnUtils.cs" />
     <Compile Include="Svn\SvnUtils.cs" />
   </ItemGroup>
@@ -95,6 +102,9 @@
   <ItemGroup>
     <Content Include="CardGrabberSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="devices.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
   </ItemGroup>

@@ -1,0 +1,38 @@
+﻿@using System.Threading.Tasks
+@using AmeWeb.Model
+@model HomeViewModel
+@{
+    ViewData["Title"] = "AME Home Page";
+}
+
+<div class="row">
+    <a asp-controller="Devices" asp-action="Index">Pokaż urządzenia</a>
+
+    <form asp-action="CreateProject" asp-controller="Home">
+        <table class="table table-bordered table-condensed">
+            <tr>
+                <th colspan="3">
+                    Projekty
+                </th>
+            </tr>
+            @foreach (var project in Model.KnownProjects.OrderBy(p => p.EventDate))
+            {
+                <tr>
+                    <td>@Html.ActionLink(project.UniqueName, "ShowAmeProject", new {projectId = project.Id})</td>
+                    <td>@project.LocalPathRoot</td>
+                    <td>
+                        @Html.ActionLink("Kopiuj karty", "Index", "CaptureCards", new { projectId = project.Id }) | 
+                        @Html.ActionLink("Usuń", "RemoveProject", new {projectId = project.Id})
+                    </td>
+                </tr>
+            }
+
+            <tr>
+                <td colspan="3">
+                    katalog docelowy: @Html.ActionLink(Model.DestiantionRoot + "\\", "ChangeRootDirectory")
+                    <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="ProjectDate"/>
+                    <input type="text" value="Nazwa" name="ProjectName"/><input type="submit" value="utwórz nowy"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
