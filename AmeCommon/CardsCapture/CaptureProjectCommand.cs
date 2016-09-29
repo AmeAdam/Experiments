@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using AmeCommon.Model;
+using AmeCommon.Tasks;
 using Newtonsoft.Json;
 
 namespace AmeCommon.CardsCapture
@@ -32,11 +33,13 @@ namespace AmeCommon.CardsCapture
             var mediaFiles = new List<MediaFile>(Project.MediaFiles);
             mediaFiles.AddRange(cmd.Commands.Select(c => c.File));
             Project.MediaFiles = mediaFiles;
-            cmd.ExecuteAsync(DeviceCompleted);
+            cmd.OnComplete += DeviceCompleted;
+            cmd.ExecuteAsync();
         }
 
-        private void DeviceCompleted(DeviceMoveFileCommands command)
+        private void DeviceCompleted(BackgroundTask task)
         {
+            var command = (DeviceMoveFileCommands) task;
             SaveProject();
             command.DeleteCopiedFiles();
         }
@@ -52,8 +55,9 @@ namespace AmeCommon.CardsCapture
             SaveProject();
             foreach (var cmd in DeviceCommands)
             {
+                cmd.OnComplete += DeviceCompleted;
                 cmd.SetDestinationRootPath(destinatioDir);
-                cmd.ExecuteAsync(DeviceCompleted);
+                cmd.ExecuteAsync();
             }
         }
 
@@ -74,7 +78,7 @@ namespace AmeCommon.CardsCapture
 
         public void AbortCapture(string uniqueName)
         {
-            DeviceCommands.FirstOrDefault(cmd => cmd.Device.UniqueName == uniqueName)?.Abort();
+            DeviceCommands.FirstOrDefault(cmd => cmd.Device.UniqueName == uniqueName)?.Cancel();
         }
     }
 }

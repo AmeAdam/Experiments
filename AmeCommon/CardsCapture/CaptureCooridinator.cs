@@ -15,12 +15,14 @@ namespace AmeCommon.CardsCapture
         private readonly IDeviceCaptureFactory factory;
         private readonly IDeviceRepository devices;
         private readonly IAmeProjectRepository repository;
+        private readonly IDriveManager driveManager;
 
-        public CaptureCooridinator(IDeviceCaptureFactory factory, IDeviceRepository devices, IAmeProjectRepository repository)
+        public CaptureCooridinator(IDeviceCaptureFactory factory, IDeviceRepository devices, IAmeProjectRepository repository, IDriveManager driveManager)
         {
             this.factory = factory;
             this.devices = devices;
             this.repository = repository;
+            this.driveManager = driveManager;
         }
 
         public IEnumerable<DeviceMoveFileCommands> GetAllDevicesCommand(IEnumerable<DriveInfo> drives)
@@ -74,7 +76,7 @@ namespace AmeCommon.CardsCapture
             var device = GetDevice(sourceDrive);
             if (device == null)
                 return null;
-            return new DeviceMoveFileCommands
+            return new DeviceMoveFileCommands(driveManager)
             {
                 SourceDrive = sourceDrive,
                 Device = device,

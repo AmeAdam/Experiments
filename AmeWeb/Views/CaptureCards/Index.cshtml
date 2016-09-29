@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using AmeCommon.CardsCapture
+@using AmeCommon.Tasks
 @using AmeWeb.Model
 @model CaptureProjectCommand
 @{
@@ -49,19 +50,19 @@
                         }
                     </td>
                     <td class="DeviceState">
-                        @if (device.State == DeviceMoveFileCommands.DeviceCommandState.InProgress)
+                        @if (device.State == TaskState.InProgress)
                         {
                             <img src="~/images/loader.gif" style="height: 75px"/>
                             @Html.ActionLink("Przerwij", "AbortCaptureDevice", new {projectId = Model.Project.Id, deviceId = device.Device.Id})
                         }
-                        else if (device.State == DeviceMoveFileCommands.DeviceCommandState.Completed)
+                        else if (device.State == TaskState.Completed)
                         {
                             <img src="~/images/done.png" style="height: 75px"/>
                         }
-                        else if (device.State == DeviceMoveFileCommands.DeviceCommandState.Error)
+                        else if (device.State == TaskState.Error)
                         {
                             <img src="~/images/error.png" style="height: 75px"/>
-                            <span class="text-danger">@device.Message</span>
+                            <span class="text-danger">@device.Error</span>
                         }
                         else
                         {

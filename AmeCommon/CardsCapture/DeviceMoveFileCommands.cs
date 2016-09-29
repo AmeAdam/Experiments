@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using AmeCommon.Model;
+using AmeCommon.Tasks;
 
 namespace AmeCommon.CardsCapture
 {
-    public class DeviceMoveFileCommands
+    public class DeviceMoveFileCommands : BackgroundTask
     {
+        private readonly IDriveManager driveManager;
         public Device Device { get; set; }
         public DriveInfo SourceDrive { get; set; }
         public List<MoveFileCommand> Commands { get; set; }
@@ -16,16 +16,11 @@ namespace AmeCommon.CardsCapture
         public int FilesCount => Commands.Count(cmd => !cmd.Completed);
         public long FilesSize => Commands.Where(cmd => !cmd.Completed).Sum(cmd => cmd.SourceFile.Length);
         public long FilesSizeGb => FilesSize/1024/1024/1024;
-        public DeviceCommandState State { get; set; } = DeviceCommandState.Waiting;
-        private readonly Task worker;
-        public string Message { get; set; }
-        private volatile bool abort;
-        private Action<DeviceMoveFileCommands> onCompleteAction;
-        private volatile MoveFileCommand pendingCommand;
 
-        public DeviceMoveFileCommands()
+        public DeviceMoveFileCommands(IDriveManager driveManager)
         {
-            worker = new Task(ExecuteInternal);
+            this.driveManager = driveManager;
+            Name = "Kopiowanie plików z " + SourceDrive;
         }
 
         public int PercentCompleted
@@ -48,62 +43,27 @@ namespace AmeCommon.CardsCapture
                 .Where(c => c.DestinationFile.Exists);
         }
 
-        public enum DeviceCommandState
-        {
-            Waiting,
-            InProgress,
-            Completed,
-            Error
-        }
-
         public void SetDestinationRootPath(DirectoryInfo projectLocalRoot)
         {
             Commands.ForEach(cmd => cmd.DestinationRoot = projectLocalRoot);
         }
 
-        public void ExecuteAsync(Action<DeviceMoveFileCommands> onComplete)
+        protected override void Execute()
         {
-            onCompleteAction = onComplete;
-            worker.Start();
-        }
-
-        private void ExecuteInternal()
-        {
-            State = DeviceCommandState.InProgress;
-            foreach (var cmd in Commands)
+            driveManager.LockDrive(SourceDrive);
+            try
             {
-                if (abort)
-                    return;
-                try
+                foreach (var cmd in Commands)
                 {
-                    pendingCommand = cmd;
-                    cmd.Execute();
-                    pendingCommand = null;
-                }
-                catch (Exception ex)
-                {
-                    Message = ex.ToString();
-                    State = DeviceCommandState.Error;
+                    if (CancellationToken.IsCancellationRequested)
+                        return;
+                    cmd.Execute(CancellationToken);
                 }
             }
-            if (State != DeviceCommandState.Error)
-                State = DeviceCommandState.Completed;
-            IsCompleted = true;
-            onCompleteAction?.Invoke(this);
-        }
-
-        public void Abort()
-        {
-            if (worker == null)
-                return;
-            abort = true;
-            var pending = pendingCommand;
-            if (pending != null)
-                pending.Abort();
-            worker.Wait();
-            abort = false;
-            State = DeviceCommandState.Error;
-            Message = "Operacja przerwana przez użytkownika";
+            finally
+            {
+                driveManager.UnlockDrive(SourceDrive);
+            }
         }
 
         public void DeleteCopiedFiles()

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AmeCommon.CardsCapture;
 using AmeCommon.Database;
+using AmeCommon.Tasks;
 using AmeWeb.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,8 @@ namespace AmeWeb
             services.AddSingleton<IDeviceRepository, Repository>();
             services.AddSingleton<IAmeProjectRepository, Repository>();
             services.AddSingleton<IDeviceCaptureFactory, DeviceCaptureFactory>();
+            services.AddSingleton<ITasksManager, TasksManager>();
+            services.AddSingleton<IDriveManager, DriveManager>();
             services.Configure<AmeConfig>(Configuration.GetSection("AmeConfig"));
         }
 

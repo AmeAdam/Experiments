@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using AmeCommon.Model;
 
 namespace AmeCommon.CardsCapture
@@ -12,9 +13,8 @@ namespace AmeCommon.CardsCapture
         public MediaFile File { get; set; }
         public bool Completed { get; set; }
         public FileInfo DestinationFile => File.GetDestinationFile(DestinationRoot);
-        private volatile bool abort;
 
-        public void Execute()
+        public void Execute(CancellationToken cancellationToken)
         {
             var buffer = new byte[128 * 1024];
             using (var sourceStream = SourceFile.OpenRead())
@@ -27,11 +27,8 @@ namespace AmeCommon.CardsCapture
                     int readCount;
                     while ((readCount = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        if (abort)
-                        {
-                            abort = false;
+                        if (cancellationToken.IsCancellationRequested)
                             throw new ApplicationException("Operacja przerwana przez użytkownika!");
-                        }
                         destinationStream.Write(buffer, 0, readCount);
                         checkSum.AppendBuffer(buffer, readCount);
                     }
@@ -39,11 +36,6 @@ namespace AmeCommon.CardsCapture
                 File.CheckSum = checkSum.GetChecksum();
             }
             Completed = true;
-        }
-
-        public void Abort()
-        {
-            abort = true;
         }
 
         public void DeleteSourceFile()
