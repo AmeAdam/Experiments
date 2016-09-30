@@ -42,7 +42,7 @@ namespace AmeWeb
             services.AddMvc();
 
             services.AddSingleton<IAmeMainService, AmeMainService>();
-            services.AddSingleton<ICaptureCooridinator, CaptureCooridinator>();
+            services.AddSingleton<ICaptureProjectCooridinator, CaptureProjectCooridinator>();
             services.AddSingleton<IDeviceRepository, Repository>();
             services.AddSingleton<IAmeProjectRepository, Repository>();
             services.AddSingleton<IDeviceCaptureFactory, DeviceCaptureFactory>();

@@ -26,6 +26,7 @@ namespace AmeCommon.Tasks
             WorkerTask = new Task(ExecuteInternal, CancellationToken);
         }
 
+        public bool IsCompleted => State == TaskState.Completed || State == TaskState.Error || State == TaskState.Aborted;
 
         private void ExecuteInternal()
         {

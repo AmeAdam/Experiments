@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace AmeCommon.Model
 {
@@ -19,6 +20,11 @@ namespace AmeCommon.Model
                 MediaFiles.RemoveAll(mf => mf.RelativePath == newFile.RelativePath);
                 MediaFiles.Add(newFile);
             }
+        }
+
+        public DirectoryInfo GetLocalPathRoot()
+        {
+            return new DirectoryInfo(LocalPathRoot);
         }
     }
 }

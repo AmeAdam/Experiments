@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using AmeCommon.CardsCapture;
 using AmeCommon.Model;
 using AmeWeb.Model;
 using Microsoft.AspNetCore.Mvc;
-using NUglify.JavaScript.Syntax;
 
 namespace AmeWeb.Controllers
 {
@@ -16,9 +13,9 @@ namespace AmeWeb.Controllers
     {
         private IAmeProjectRepository repository;
         private readonly IDeviceRepository deviceRepository;
-        private readonly ICaptureCooridinator captureCooridinator;
+        private readonly ICaptureProjectCooridinator captureCooridinator;
 
-        public DevicesController(IAmeProjectRepository repository, IDeviceRepository deviceRepository, ICaptureCooridinator captureCooridinator)
+        public DevicesController(IAmeProjectRepository repository, IDeviceRepository deviceRepository, ICaptureProjectCooridinator captureCooridinator)
         {
             this.repository = repository;
             this.deviceRepository = deviceRepository;

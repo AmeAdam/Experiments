@@ -6,72 +6,70 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using AmeCommon.Model;
+using AmeCommon.Tasks;
 
 namespace AmeCommon.CardsCapture
 {
-    public class CaptureCooridinator : ICaptureCooridinator
+    public class CaptureProjectCooridinator : ICaptureProjectCooridinator
     {
-        private CaptureProjectCommand currentWork;
         private readonly IDeviceCaptureFactory factory;
         private readonly IDeviceRepository devices;
         private readonly IAmeProjectRepository repository;
         private readonly IDriveManager driveManager;
+        private readonly ITasksManager taskManager;
 
-        public CaptureCooridinator(IDeviceCaptureFactory factory, IDeviceRepository devices, IAmeProjectRepository repository, IDriveManager driveManager)
+        public CaptureProjectCooridinator(IDeviceCaptureFactory factory, IDeviceRepository devices, IAmeProjectRepository repository, IDriveManager driveManager, ITasksManager taskManager)
         {
             this.factory = factory;
             this.devices = devices;
             this.repository = repository;
             this.driveManager = driveManager;
+            this.taskManager = taskManager;
         }
 
-        public IEnumerable<DeviceMoveFileCommands> GetAllDevicesCommand(IEnumerable<DriveInfo> drives)
+        public CaptureProjectCommand GetPendingCaptureProjectCommand()
         {
-            return drives.Select(GetDevicesCommand).Where(d => d != null);
+            return taskManager.GetPendingTasks().OfType<CaptureProjectCommand>().FirstOrDefault();
         }
 
-        public DeviceMoveFileCommands GetDevicesCommand(DriveInfo sourceDrive)
+        public List<DeviceMoveFileCommands> GetAllDevicesCommand(IEnumerable<DriveInfo> drives, DirectoryInfo destinationDirectory)
         {
-            var pending = currentWork?.FindCommand(sourceDrive);
-            return pending ?? CreateCommand(sourceDrive);
+            return drives.Select(d => GetDevicesCommand(d, destinationDirectory)).Where(d => d != null).ToList();
+        }
+
+        public DeviceMoveFileCommands GetDevicesCommand(DriveInfo sourceDrive, DirectoryInfo destinationDirectory)
+        {
+            return CreateCommand(sourceDrive, destinationDirectory);
         }
 
         public void Execute(CaptureProjectCommand command)
         {
-            if (currentWork != null && !currentWork.Completed)
+            if (GetPendingCaptureProjectCommand() != null)
                 throw new ApplicationException("Poprzednia operacja nie została jeszcze zakończona!");
-
-            currentWork = command;
-            currentWork.Execute();
+            taskManager.StartTask(command);
         }
 
         public void AppendCommand(AmeFotoVideoProject project, DeviceMoveFileCommands cmd)
         {
-            if (currentWork == null)
+            var pending = GetPendingCaptureProjectCommand();
+            if (pending != null)
             {
-                currentWork = new CaptureProjectCommand(repository)
-                {
-                    Project = project,
-                    DeviceCommands = new List<DeviceMoveFileCommands> {cmd}
-                };
-                currentWork.Execute();
+                if (pending.Project.Id != project.Id)
+                    throw new ApplicationException("Nie można dodać zadania kopiowania dopuki poprzednie zadanie nie zostanie zakończone");
+                if (pending.TryAppendTask(cmd))
+                    return;
             }
-            else if (currentWork.Project.UniqueName == project.UniqueName)
-            {
-                currentWork.AppendTask(cmd);
-            }
-            else
-            {
-                throw new ApplicationException("Nie można dodać zadania kopiowania, inne zadanie nie zostało jeszcze zakończone.");
-            }
+
+            var newCommand = new CaptureProjectCommand(repository, project, new List<DeviceMoveFileCommands> {cmd});
+            taskManager.StartTask(newCommand);
         }
 
         public void AbortCapture(string uniqueName)
         {
-            currentWork.AbortCapture(uniqueName);
+            GetPendingCaptureProjectCommand()?.AbortCapture(uniqueName);
         }
 
-        private DeviceMoveFileCommands CreateCommand(DriveInfo sourceDrive)
+        private DeviceMoveFileCommands CreateCommand(DriveInfo sourceDrive, DirectoryInfo destinationDirectory)
         {
             var device = GetDevice(sourceDrive);
             if (device == null)
@@ -80,7 +78,7 @@ namespace AmeCommon.CardsCapture
             {
                 SourceDrive = sourceDrive,
                 Device = device,
-                Commands = device.Captures.SelectMany(di => factory.Create(device.UniqueName, sourceDrive, di)).ToList()
+                Commands = device.Captures.SelectMany(di => factory.Create(device.UniqueName, sourceDrive, di, destinationDirectory)).ToList()
             };
         }
 

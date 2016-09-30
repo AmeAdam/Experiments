@@ -1,38 +1,61 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using AmeCommon.Model;
 using AmeCommon.Tasks;
 using Newtonsoft.Json;
 
 namespace AmeCommon.CardsCapture
 {
-    public class CaptureProjectCommand
+    public class CaptureProjectCommand : BackgroundTask
     {
-        private readonly object sync = new object();
-        public AmeFotoVideoProject Project { get; set; }
-        public List<DeviceMoveFileCommands> DeviceCommands { get; set; }
-        public bool Completed => DeviceCommands.All(cmd => cmd.IsCompleted);
+        private readonly object saveSync = new object();
+        private readonly object taskSync = new object();
+        public AmeFotoVideoProject Project { get; }
+        public List<DeviceMoveFileCommands> DeviceCommands { get; private set; }
+        public bool Completed => waitForComplete.WaitOne(0);
         private readonly IAmeProjectRepository repository;
-        public DriveInfo DestinationDrive { get; set; }
+        private readonly DirectoryInfo destinationDirectory;
+        private readonly ManualResetEvent waitForComplete = new ManualResetEvent(false);
 
-        public CaptureProjectCommand(IAmeProjectRepository repository)
+        public CaptureProjectCommand(IAmeProjectRepository repository, AmeFotoVideoProject project, List<DeviceMoveFileCommands> commands)
         {
             this.repository = repository;
+            Project = project;
+            destinationDirectory = new DirectoryInfo(Project.LocalPathRoot);
+            DeviceCommands = commands;
         }
 
-        public void SetDestinationRootPath(DirectoryInfo projectLocalRoot)
+        public bool TryAppendTask(DeviceMoveFileCommands cmd)
         {
-            DestinationDrive = new DriveInfo(projectLocalRoot.Root.FullName);
-            DeviceCommands.ForEach(cmd => cmd.SetDestinationRootPath(projectLocalRoot));
+            lock (taskSync)
+            {
+                if (waitForComplete.WaitOne(0))
+                    return false;
+                DeviceCommands = new List<DeviceMoveFileCommands>(DeviceCommands) {cmd};
+                ExecuteChildTask(cmd);
+                return true;
+            }
         }
 
-        public void AppendTask(DeviceMoveFileCommands cmd)
+        public List<DriveInfo> GetPendingDrives()
         {
-            DeviceCommands = new List<DeviceMoveFileCommands>(DeviceCommands){cmd};
+            lock (taskSync)
+            {
+                return DeviceCommands.Where(cmd => !cmd.IsCompleted).Select(cmd => cmd.SourceDrive).ToList();
+            }
+        }
+
+        private void ExecuteChildTask(DeviceMoveFileCommands cmd)
+        {
+            destinationDirectory.Create();
+            cmd.SetDestinationRootPath(destinationDirectory);
             var mediaFiles = new List<MediaFile>(Project.MediaFiles);
             mediaFiles.AddRange(cmd.Commands.Select(c => c.File));
             Project.MediaFiles = mediaFiles;
+            SaveProject();
             cmd.OnComplete += DeviceCompleted;
             cmd.ExecuteAsync();
         }
@@ -42,28 +65,24 @@ namespace AmeCommon.CardsCapture
             var command = (DeviceMoveFileCommands) task;
             SaveProject();
             command.DeleteCopiedFiles();
+
+            lock (taskSync)
+            {
+                if (DeviceCommands.All(d => d.IsCompleted))
+                    waitForComplete.Set();
+            }
         }
 
-        public void Execute()
+        protected override void Execute()
         {
-            Project.MediaFiles = DeviceCommands
-                .SelectMany(d => d.Commands)
-                .Select(cmd => cmd.File)
-                .ToList();
-            var destinatioDir = new DirectoryInfo(Project.LocalPathRoot);
-            destinatioDir.Create();
-            SaveProject();
             foreach (var cmd in DeviceCommands)
-            {
-                cmd.OnComplete += DeviceCompleted;
-                cmd.SetDestinationRootPath(destinatioDir);
-                cmd.ExecuteAsync();
-            }
+                ExecuteChildTask(cmd);
+            waitForComplete.WaitOne();
         }
 
         private void SaveProject()
         {
-            lock (sync)
+            lock (saveSync)
             {
                 repository.SaveProject(Project);
                 var projectFilePath = Path.Combine(Project.LocalPathRoot, "ame-project.json");

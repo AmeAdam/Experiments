@@ -4,13 +4,14 @@ using AmeCommon.Model;
 
 namespace AmeCommon.CardsCapture
 {
-    public interface ICaptureCooridinator
+    public interface ICaptureProjectCooridinator
     {
-        IEnumerable<DeviceMoveFileCommands> GetAllDevicesCommand(IEnumerable<DriveInfo> drives);
+        List<DeviceMoveFileCommands> GetAllDevicesCommand(IEnumerable<DriveInfo> drives, DirectoryInfo destinationDirectory);
         void Execute(CaptureProjectCommand command);
         void AppendCommand(AmeFotoVideoProject project, DeviceMoveFileCommands cmd);
         void AbortCapture(string uniqueName);
-        DeviceMoveFileCommands GetDevicesCommand(DriveInfo sourceDrive);
+        DeviceMoveFileCommands GetDevicesCommand(DriveInfo sourceDrive, DirectoryInfo destinationDirectory);
         Device GetDevice(DriveInfo sourceDrive);
+        CaptureProjectCommand GetPendingCaptureProjectCommand();
     }
 }

@@ -2,7 +2,7 @@
 @using AmeCommon.CardsCapture
 @using AmeCommon.Tasks
 @using AmeWeb.Model
-@model CaptureProjectCommand
+@model CaptureCardsViewModel
 @{
     ViewData["Title"] = "AME Home Page";
 }
@@ -10,10 +10,10 @@
 <div class="row">
     <h2>Projekt: @Model.Project.UniqueName</h2>
     <h4>@Model.Project.LocalPathRoot</h4>
-    @if (Model.DestinationDrive.AvailableFreeSpace <= Model.DeviceCommands.Sum(cmd => cmd.FilesSize))
+    @if (Model.AvailableFreeDiskSpace <= Model.RequiredDiskSpace)
     {
-        var avaliable = Model.DestinationDrive.AvailableFreeSpace.DisplayFileSize();
-        var required = Model.DeviceCommands.Sum(cmd => cmd.FilesSize).DisplayFileSize();
+        var avaliable = Model.AvailableFreeDiskSpace.DisplayFileSize();
+        var required = Model.RequiredDiskSpace.DisplayFileSize();
         <h4 class="bg-danger">Uwaga niewystarczająca ilość wolnego miejsca! Wolne miejsce: @avaliable Wymagane: @required</h4>
     }
 
@@ -27,9 +27,9 @@
                 <th>Info</th>
                 <th>Stan</th>
             </tr>
-            @for (var i = 0; i < Model.DeviceCommands.Count; i++)
+            @for (var i = 0; i < Model.AvaliableCommands.Count; i++)
             {
-                var device = Model.DeviceCommands[i];
+                var device = Model.AvaliableCommands[i];
                 var hasConflict = device.GetAllConflictWithStoredFiles().Any();
                 var trClass = hasConflict ? "bg-danger" : "";
                 var imagePath = $"/images/{device.Device.UniqueName}.jpg";
@@ -42,7 +42,7 @@
                     <td>@device.Device.UniqueName</td>
                     <td class="DeviceInfo">
                         Pliki: @device.FilesCount<br/>
-                        Rozmiar: @device.FilesSizeGb GB<br/>
+                        Rozmiar: @device.FilesSize.DisplayFileSize()<br/>
                         Ukończono: @device.PercentCompleted %<br/>
                         @if (hasConflict)
                         {
@@ -55,11 +55,11 @@
                             <img src="~/images/loader.gif" style="height: 75px"/>
                             @Html.ActionLink("Przerwij", "AbortCaptureDevice", new {projectId = Model.Project.Id, deviceId = device.Device.Id})
                         }
-                        else if (device.State == TaskState.Completed)
+                        else if (device.State == TaskState.Completed || device.Commands.Count == 0)
                         {
                             <img src="~/images/done.png" style="height: 75px"/>
                         }
-                        else if (device.State == TaskState.Error)
+                        else if (device.State == TaskState.Error || device.State == TaskState.Aborted)
                         {
                             <img src="~/images/error.png" style="height: 75px"/>
                             <span class="text-danger">@device.Error</span>

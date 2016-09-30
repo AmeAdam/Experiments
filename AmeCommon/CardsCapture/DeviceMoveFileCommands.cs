@@ -12,7 +12,6 @@ namespace AmeCommon.CardsCapture
         public Device Device { get; set; }
         public DriveInfo SourceDrive { get; set; }
         public List<MoveFileCommand> Commands { get; set; }
-        public bool IsCompleted { get; set; }
         public int FilesCount => Commands.Count(cmd => !cmd.Completed);
         public long FilesSize => Commands.Where(cmd => !cmd.Completed).Sum(cmd => cmd.SourceFile.Length);
         public long FilesSizeGb => FilesSize/1024/1024/1024;

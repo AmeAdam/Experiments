@@ -69,11 +69,11 @@
   <ItemGroup>
     <Compile Include="CardsCapture\CaptureProjectCommand.cs" />
     <Compile Include="CardsCapture\DriveManager.cs" />
-    <Compile Include="CardsCapture\ICaptureCooridinator.cs" />
+    <Compile Include="CardsCapture\ICaptureProjectCooridinator.cs" />
     <Compile Include="CardsCapture\IDriveManager.cs" />
     <Compile Include="Database\AmeLocalSettings.cs" />
     <Compile Include="Model\AmeFotoVideoProject.cs" />
-    <Compile Include="CardsCapture\CaptureCooridinator.cs" />
+    <Compile Include="CardsCapture\CaptureProjectCooridinator.cs" />
     <Compile Include="CardsCapture\ChecksumFileCalculator.cs" />
     <Compile Include="Model\Device.cs" />
     <Compile Include="CardsCapture\DeviceCaptureFactory.cs" />
