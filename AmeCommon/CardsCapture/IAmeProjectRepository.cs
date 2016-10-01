@@ -12,7 +12,7 @@ namespace AmeCommon.CardsCapture
         int CreateProject(DateTime projectDate, string projectName);
         void ChangeRootDirectory();
         AmeLocalSettings LocalSettings { get; set; }
-        AmeFotoVideoProject GetProject(int id);
+        AmeFotoVideoProject GetProject(string projectPath);
         void RemoveProject(int projectId);
     }
 }

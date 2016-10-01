@@ -22,6 +22,24 @@ namespace AmeCommon.CardsCapture
             Name = "Kopiowanie plików z " + SourceDrive;
         }
 
+        protected bool Equals(DeviceMoveFileCommands other)
+        {
+            return Equals(SourceDrive.Name.ToLower(), other.SourceDrive.Name.ToLower());
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((DeviceMoveFileCommands) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return SourceDrive?.Name.GetHashCode() ?? 0;
+        }
+
         public int PercentCompleted
         {
             get
@@ -38,8 +56,8 @@ namespace AmeCommon.CardsCapture
 
         public IEnumerable<MoveFileCommand> GetAllConflictWithStoredFiles()
         {
-            return Commands.Where(c => !c.Completed)
-                .Where(c => c.DestinationFile.Exists);
+            return Commands.Where(c => c.State == TaskState.Waiting)
+                .Where(c =>  c.DestinationFile.Exists);
         }
 
         public void SetDestinationRootPath(DirectoryInfo projectLocalRoot)

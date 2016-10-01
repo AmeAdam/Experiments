@@ -18,7 +18,7 @@
     }
 
     <form asp-action="StartCapture">
-        @Html.Hidden("projectId", Model.Project.Id)
+        @Html.Hidden("projectPath", Model.Project.LocalPathRoot)
         <table class="table table-condensed table-bordered">
             <tr>
                 <th></th>
@@ -46,14 +46,14 @@
                         Ukończono: @device.PercentCompleted %<br/>
                         @if (hasConflict)
                         {
-                            @Html.ActionLink("Uwaga! Wykryto konflikt istniejących plików.", "ShowConflicts", new {projectId = Model.Project.Id, device.SourceDrive}, new {style = "font-weight: bold"})
+                            @Html.ActionLink("Uwaga! Wykryto konflikt istniejących plików.", "ShowConflicts", new {projectPath = Model.Project.LocalPathRoot, device.SourceDrive}, new {style = "font-weight: bold"})
                         }
                     </td>
                     <td class="DeviceState">
                         @if (device.State == TaskState.InProgress)
                         {
                             <img src="~/images/loader.gif" style="height: 75px"/>
-                            @Html.ActionLink("Przerwij", "AbortCaptureDevice", new {projectId = Model.Project.Id, deviceId = device.Device.Id})
+                            @Html.ActionLink("Przerwij", "AbortCaptureDevice", new {projectPath = Model.Project.LocalPathRoot, deviceId = device.Device.Id})
                         }
                         else if (device.State == TaskState.Completed || device.Commands.Count == 0)
                         {
@@ -66,7 +66,7 @@
                         }
                         else
                         {
-                            @Html.ActionLink("Kopiuj do projektu", "StartCaptureSingleDevice", new {projectId = Model.Project.Id, sourceDrive = device.SourceDrive})
+                            @Html.ActionLink("Kopiuj do projektu", "StartCaptureSingleDevice", new { projectPath = Model.Project.LocalPathRoot, sourceDrive = device.SourceDrive})
                         }
                     </td>
                 </tr>

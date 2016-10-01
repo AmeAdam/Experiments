@@ -93,12 +93,20 @@ namespace AmeCommon.Database
 
         public List<AmeFotoVideoProject> AllProjects()
         {
-            return projects.FindAll().ToList();
+            var rootDir = new DirectoryInfo(LocalSettings.SelectedProjectsRootPath);
+            var projesct = rootDir.GetDirectories()
+                .SelectMany(d => d.GetFiles("ame-project.json"))
+                .Select(f => GetProject(f.FullName))
+                .ToList();
+            return projesct;
         }
 
-        public AmeFotoVideoProject GetProject(int id)
+        public AmeFotoVideoProject GetProject(string projectFilePath)
         {
-            return projects.FindById(id);
+            var json = File.ReadAllText(projectFilePath);
+            var project = JsonConvert.DeserializeObject<AmeFotoVideoProject>(json);
+            project.LocalPathRoot = Path.GetDirectoryName(projectFilePath);
+            return project;
         }
 
         public void RemoveProject(int projectId)

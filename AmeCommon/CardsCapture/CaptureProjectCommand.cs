@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -52,8 +51,11 @@ namespace AmeCommon.CardsCapture
         {
             destinationDirectory.Create();
             cmd.SetDestinationRootPath(destinationDirectory);
-            var mediaFiles = new List<MediaFile>(Project.MediaFiles);
-            mediaFiles.AddRange(cmd.Commands.Select(c => c.File));
+
+            var newMediaFiles = cmd.Commands.Select(c => c.File).ToList();
+            var mediaFiles = new List<MediaFile>(Project.MediaFiles.Except(newMediaFiles));
+            mediaFiles.AddRange(newMediaFiles);
+
             Project.MediaFiles = mediaFiles;
             SaveProject();
             cmd.OnComplete += DeviceCompleted;
@@ -62,14 +64,19 @@ namespace AmeCommon.CardsCapture
 
         private void DeviceCompleted(BackgroundTask task)
         {
-            var command = (DeviceMoveFileCommands) task;
-            SaveProject();
-            command.DeleteCopiedFiles();
-
-            lock (taskSync)
+            try
             {
-                if (DeviceCommands.All(d => d.IsCompleted))
-                    waitForComplete.Set();
+                var command = (DeviceMoveFileCommands) task;
+                SaveProject();
+                command.DeleteCopiedFiles();
+            }
+            finally
+            {
+                lock (taskSync)
+                {
+                    if (DeviceCommands.All(d => d.IsCompleted))
+                        waitForComplete.Set();
+                }
             }
         }
 

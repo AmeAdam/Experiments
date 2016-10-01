@@ -24,9 +24,9 @@ namespace AmeWeb.Controllers
             return View(model);
         }
 
-        public IActionResult ShowAmeProject(int projectId)
+        public IActionResult ShowAmeProject(string projectPath)
         {
-            var project = projectRepo.GetProject(projectId);
+            var project = projectRepo.GetProject(projectPath);
             return View(project);
         }
 

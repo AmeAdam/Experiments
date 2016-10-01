@@ -54,7 +54,7 @@ namespace AmeCommon.CardsCapture
             var pending = GetPendingCaptureProjectCommand();
             if (pending != null)
             {
-                if (pending.Project.Id != project.Id)
+                if (pending.Project.LocalPathRoot != project.LocalPathRoot)
                     throw new ApplicationException("Nie można dodać zadania kopiowania dopuki poprzednie zadanie nie zostanie zakończone");
                 if (pending.TryAppendTask(cmd))
                     return;

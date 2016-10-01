@@ -18,7 +18,7 @@ namespace AmeWeb.Controllers
             this.projectRepo = projectRepo;
         }
 
-        public IActionResult Index(int projectId)
+        public IActionResult Index(string projectPath)
         {
             var model = new CaptureCardsViewModel();
             var pendingTask = captureCooridinator.GetPendingCaptureProjectCommand();
@@ -26,13 +26,16 @@ namespace AmeWeb.Controllers
             {
                 model.PendingTask = pendingTask;
                 model.Project = pendingTask.Project;
+
                 var avaliableDrives = GetAvaliableDrives(pendingTask);
+                var avaliableToCapture = captureCooridinator.GetAllDevicesCommand(avaliableDrives, model.Project.GetLocalPathRoot());
+                avaliableToCapture.RemoveAll(d => d.Commands.Count == 0 && !pendingTask.DeviceCommands.Contains(d));
                 model.AvaliableCommands = new List<DeviceMoveFileCommands>(model.PendingTask.DeviceCommands);
-                model.AvaliableCommands.AddRange(captureCooridinator.GetAllDevicesCommand(avaliableDrives, model.Project.GetLocalPathRoot()));
+                model.AvaliableCommands.AddRange(avaliableToCapture);
             }
             else
             {
-                model.Project = projectRepo.GetProject(projectId);
+                model.Project = projectRepo.GetProject(projectPath);
                 model.AvaliableCommands = captureCooridinator.GetAllDevicesCommand(DriveInfo.GetDrives(), model.Project.GetLocalPathRoot());
             }
             return View(model);
@@ -47,23 +50,26 @@ namespace AmeWeb.Controllers
                 .ToList();
         }
 
-        public IActionResult StartCapture(int projectId, List<SelectedDevices> devices)
+        public IActionResult StartCapture(string projectPath, List<SelectedDevices> devices)
         {
-            var project = projectRepo.GetProject(projectId);
+            var project = projectRepo.GetProject(projectPath);
             var selectedDevices = captureCooridinator.GetAllDevicesCommand(
                 devices.Where(d => d.Selected).Select(d => new DriveInfo(d.Drive)), project.GetLocalPathRoot()).ToList();
 
-            var cmd = new CaptureProjectCommand(projectRepo, project, selectedDevices);
-            captureCooridinator.Execute(cmd);
-            return RedirectToAction(nameof(Index), new { projectId });
+            if (selectedDevices.Any())
+            {
+                var cmd = new CaptureProjectCommand(projectRepo, project, selectedDevices);
+                captureCooridinator.Execute(cmd);
+            }
+            return RedirectToAction(nameof(Index), new { projectPath });
         }
 
-        public IActionResult StartCaptureSingleDevice(int projectId, string sourceDrive)
+        public IActionResult StartCaptureSingleDevice(string projectPath, string sourceDrive)
         {
-            var project = projectRepo.GetProject(projectId);
+            var project = projectRepo.GetProject(projectPath);
             var command = captureCooridinator.GetDevicesCommand(new DriveInfo(sourceDrive), project.GetLocalPathRoot());
             captureCooridinator.AppendCommand(project, command);
-            return RedirectToAction(nameof(Index), new { projectId });
+            return RedirectToAction(nameof(Index), new { projectPath });
         }
 
         public IActionResult AbortCaptureDevice(int projectId, string deviceName)
@@ -72,9 +78,9 @@ namespace AmeWeb.Controllers
             return RedirectToAction(nameof(Index), new { projectId });
         }
 
-        public IActionResult ShowConflicts(int projectId, string sourceDrive)
+        public IActionResult ShowConflicts(string projectPath, string sourceDrive)
         {
-            var project = projectRepo.GetProject(projectId);
+            var project = projectRepo.GetProject(projectPath);
             var device = captureCooridinator.GetDevicesCommand(new DriveInfo(sourceDrive), project.GetLocalPathRoot());
             var destinationDir = new DirectoryInfo(project.LocalPathRoot);
             device.SetDestinationRootPath(destinationDir);

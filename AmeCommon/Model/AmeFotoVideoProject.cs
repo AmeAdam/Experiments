@@ -6,7 +6,6 @@ namespace AmeCommon.Model
 {
     public class AmeFotoVideoProject
     {
-        public int Id { get; set; }
         public string UniqueName => $"{EventDate:yyyy-MM-dd} {Name}";
         public DateTime EventDate { get; set; }
         public string Name { get; set; }
