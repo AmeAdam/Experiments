@@ -67,6 +67,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardsCapture\AddProjectToSvnCommand.cs" />
+    <Compile Include="CardsCapture\AddResourcesToProjectCommand.cs" />
     <Compile Include="CardsCapture\CaptureProjectCommand.cs" />
     <Compile Include="CardsCapture\DriveManager.cs" />
     <Compile Include="CardsCapture\ICaptureProjectCooridinator.cs" />

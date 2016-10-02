@@ -58,7 +58,7 @@ namespace AmeWeb.Controllers
 
             if (selectedDevices.Any())
             {
-                var cmd = new CaptureProjectCommand(projectRepo, project, selectedDevices);
+                var cmd = captureCooridinator.CreateCaptureProjectCommand(project, selectedDevices);
                 captureCooridinator.Execute(cmd);
             }
             return RedirectToAction(nameof(Index), new { projectPath });

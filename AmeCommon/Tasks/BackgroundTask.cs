@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AmeCommon.Tasks
 {
-    public abstract class BackgroundTask
+    public abstract class BackgroundTask : IDisposable
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -65,6 +65,11 @@ namespace AmeCommon.Tasks
         protected virtual void OnOnComplete()
         {
             OnComplete?.Invoke(this);
+        }
+
+        public virtual void Dispose()
+        {
+            CancelationSource.Dispose();
         }
     }
 

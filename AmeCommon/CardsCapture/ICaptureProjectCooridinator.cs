@@ -13,5 +13,6 @@ namespace AmeCommon.CardsCapture
         DeviceMoveFileCommands GetDevicesCommand(DriveInfo sourceDrive, DirectoryInfo destinationDirectory);
         Device GetDevice(DriveInfo sourceDrive);
         CaptureProjectCommand GetPendingCaptureProjectCommand();
+        CaptureProjectCommand CreateCaptureProjectCommand(AmeFotoVideoProject project, List<DeviceMoveFileCommands> commands);
     }
 }

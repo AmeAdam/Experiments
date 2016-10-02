@@ -18,11 +18,10 @@
             @foreach (var project in Model.KnownProjects.OrderBy(p => p.EventDate))
             {
                 <tr>
-                    <td>@Html.ActionLink(project.UniqueName, "ShowAmeProject", new {projectId = project.LocalPathRoot})</td>
+                    <td>@Html.ActionLink(project.UniqueName, "ShowAmeProject", new { projectPath = project.LocalPathRoot})</td>
                     <td>@project.LocalPathRoot</td>
                     <td>
-                        @Html.ActionLink("Kopiuj karty", "Index", "CaptureCards", new { projectId = project.LocalPathRoot }) | 
-                        @Html.ActionLink("Usuń", "RemoveProject", new {projectId = project.LocalPathRoot})
+                        @Html.ActionLink("Kopiuj karty", "Index", "CaptureCards", new { projectPath = project.LocalPathRoot })  
                     </td>
                 </tr>
             }

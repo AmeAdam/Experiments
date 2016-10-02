@@ -1,0 +1,109 @@
+﻿[
+  {
+    "Id": 2,
+    "UniqueName": "HMC 151 B1",
+    "Captures": [
+      {
+        "TargetFolder": "B1",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      }
+    ]
+  },
+  {
+    "Id": 3,
+    "UniqueName": "HMC 151 B2",
+    "Captures": [
+      {
+        "TargetFolder": "B2",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      }
+    ]
+  },
+  {
+    "Id": 4,
+    "UniqueName": "HDC SD90",
+    "Captures": [
+      {
+        "TargetFolder": "C",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM",
+        "Command": "move-directory-content-flat"
+      }
+    ]
+  },
+  {
+    "Id": 5,
+    "UniqueName": "Canon 650d",
+    "Captures": [
+      {
+        "TargetFolder": "ZdjeciaRaw",
+        "SourceMask": "DCIM\\*Canon\\*.cr2",
+        "Command": "move-files"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM\\*Canon\\*.jpg",
+        "Command": "move-files"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM\\*Canon\\*.jpeg",
+        "Command": "move-files"
+      },
+      {
+        "TargetFolder": "Canon",
+        "SourceMask": "DCIM\\*Canon\\*.mov",
+        "Command": "move-files"
+      }
+    ]
+  },
+  {
+    "Id": 6,
+    "UniqueName": "Sony DSC-HX7V",
+    "Captures": [
+      {
+        "TargetFolder": "D",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM",
+        "Command": "move-directory-content-flat"
+      }
+    ]
+  },
+  {
+    "Id": 7,
+    "UniqueName": "AG AC90",
+    "Captures": [
+      {
+        "TargetFolder": "A",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM",
+        "Command": "move-directory-content-flat"
+      }
+    ]
+  },
+  {
+    "Id": 8,
+    "UniqueName": "Zoom H4n",
+    "Captures": [
+      {
+        "TargetFolder": "Rejestrator",
+        "SourceMask": "zoom1",
+        "Command": "move-directory-content-flat"
+      }
+    ]
+  }
+]

@@ -8,7 +8,6 @@ namespace AmeCommon.CardsCapture
 {
     public class DeviceMoveFileCommands : BackgroundTask
     {
-        private readonly IDriveManager driveManager;
         public Device Device { get; set; }
         public DriveInfo SourceDrive { get; set; }
         public List<MoveFileCommand> Commands { get; set; }
@@ -16,9 +15,8 @@ namespace AmeCommon.CardsCapture
         public long FilesSize => Commands.Where(cmd => !cmd.Completed).Sum(cmd => cmd.SourceFile.Length);
         public long FilesSizeGb => FilesSize/1024/1024/1024;
 
-        public DeviceMoveFileCommands(IDriveManager driveManager)
+        public DeviceMoveFileCommands()
         {
-            this.driveManager = driveManager;
             Name = "Kopiowanie plików z " + SourceDrive;
         }
 
@@ -67,23 +65,15 @@ namespace AmeCommon.CardsCapture
 
         protected override void Execute()
         {
-            driveManager.LockDrive(SourceDrive);
-            try
+            foreach (var cmd in Commands)
             {
-                foreach (var cmd in Commands)
-                {
-                    if (CancellationToken.IsCancellationRequested)
-                        return;
-                    cmd.Execute(CancellationToken);
-                }
-            }
-            finally
-            {
-                driveManager.UnlockDrive(SourceDrive);
+                if (CancellationToken.IsCancellationRequested)
+                    return;
+                cmd.Execute(CancellationToken);
             }
         }
 
-        public void DeleteCopiedFiles()
+        public virtual void DeleteCopiedFiles()
         {
             foreach (var cmd in Commands.Where(cmd => cmd.Completed))
             {

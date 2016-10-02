@@ -20,6 +20,9 @@ namespace AmeTests
             var db = new LiteDatabase("C:\\Dysk Google\\ame-projekty.db");
             //var knownProjects = db.GetCollection<AmeFotoVideoProject>("projects");
             var devices = db.GetCollection<Device>("devices");
+            var ok = db.DropCollection("projects");
+
+            var devicesfff = JsonConvert.SerializeObject(devices.FindAll().ToList(), Formatting.Indented);
           
             foreach (var device in devices.FindAll())
             {

@@ -5,6 +5,7 @@ using System.Linq;
 using AmeCommon.CardsCapture;
 using AmeCommon.Model;
 using LiteDB;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -12,6 +13,7 @@ namespace AmeCommon.Database
 {
     public class Repository : IDeviceRepository, IAmeProjectRepository, IDisposable
     {
+        private readonly IHostingEnvironment environment;
         private object sync = new object();
         public const string AmeProjectFileName = "ame-project.json";
         private LiteDatabase db;
@@ -20,18 +22,32 @@ namespace AmeCommon.Database
         private readonly LiteCollection<AmeLocalSettings> localSettings;
         public AmeLocalSettings LocalSettings { get; set; }
 
-        public Repository(IOptions<AmeConfig> ameConfig)
+        public Repository(IOptions<AmeConfig> ameConfig, IHostingEnvironment environment)
         {
+            this.environment = environment;
             db = new LiteDatabase(ameConfig.Value.LiteDbDatabaseFilePath);
+
+            var isDbEmpty = !db.GetCollectionNames().Any();
+
             devices = db.GetCollection<Device>("devices");
             projects = db.GetCollection<AmeFotoVideoProject>("projects");
             localSettings = db.GetCollection<AmeLocalSettings>("localSettings");
+
+            if (isDbEmpty)
+                InitializeDatabase();
+
             LocalSettings = localSettings.FindById(1);
             if (LocalSettings == null)
             {
                 LocalSettings = new AmeLocalSettings {SelectedProjectsRootPath = ameConfig.Value.DefaultProjectPath, Id = 1};
                 localSettings.Insert(LocalSettings);
             }
+        }
+
+        private void InitializeDatabase()
+        {
+            var devicesFilePath = Path.Combine(environment.WebRootPath, "initial-database", "devices.json");
+            devices.Insert(JsonConvert.DeserializeObject<List<Device>>(File.ReadAllText(devicesFilePath)));
         }
 
         public Device GetDevice(string name)
@@ -62,15 +78,19 @@ namespace AmeCommon.Database
             devices.Delete(id);
         }
 
-        public int CreateProject(DateTime projectDate, string projectName)
+        public AmeFotoVideoProject CreateProject(DateTime projectDate, string projectName)
         {
             var proj = new AmeFotoVideoProject
             {
+                //Id = Guid.NewGuid().ToString(),
                 Name = projectName,
-                EventDate = projectDate,
+                EventDate = projectDate
             };
             proj.LocalPathRoot = Path.Combine(LocalSettings.SelectedProjectsRootPath, proj.UniqueName);
-            return projects.Insert(proj);
+            projects.Insert(proj);
+            Directory.CreateDirectory(proj.LocalPathRoot);
+            SaveProject(proj);
+            return proj;
         }
 
         public void ChangeRootDirectory()
@@ -95,28 +115,26 @@ namespace AmeCommon.Database
         {
             var rootDir = new DirectoryInfo(LocalSettings.SelectedProjectsRootPath);
             var projesct = rootDir.GetDirectories()
-                .SelectMany(d => d.GetFiles("ame-project.json"))
+                .Where(d => d.GetFiles("ame-project.json").Any())
                 .Select(f => GetProject(f.FullName))
                 .ToList();
             return projesct;
         }
 
-        public AmeFotoVideoProject GetProject(string projectFilePath)
+        public AmeFotoVideoProject GetProject(string projectPath)
         {
+            var projectFilePath = Path.Combine(projectPath, "ame-project.json");
             var json = File.ReadAllText(projectFilePath);
             var project = JsonConvert.DeserializeObject<AmeFotoVideoProject>(json);
-            project.LocalPathRoot = Path.GetDirectoryName(projectFilePath);
+            project.LocalPathRoot = projectPath;
             return project;
-        }
-
-        public void RemoveProject(int projectId)
-        {
-            projects.Delete(projectId);
         }
 
         public void SaveProject(AmeFotoVideoProject project)
         {
             projects.Update(project);
+            var projectFilePath = Path.Combine(project.LocalPathRoot, "ame-project.json");
+            File.WriteAllText(projectFilePath, JsonConvert.SerializeObject(project, Formatting.Indented));
         }
 
         public void Dispose()

@@ -30,12 +30,6 @@ namespace AmeWeb.Controllers
             return View(project);
         }
 
-        public IActionResult RemoveProject(int projectId)
-        {
-            projectRepo.RemoveProject(projectId);
-            return RedirectToAction(nameof(Index));
-        }
-
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -63,8 +57,8 @@ namespace AmeWeb.Controllers
 
         public IActionResult CreateProject(DateTime projectDate, string projectName)
         {
-            var id = projectRepo.CreateProject(projectDate, projectName);
-            return RedirectToAction(nameof(Index), "CaptureCards", new { projectId = id });
+            var proj = projectRepo.CreateProject(projectDate, projectName);
+            return RedirectToAction(nameof(Index), "CaptureCards", new { projectPath = proj.LocalPathRoot });
         }
     }
 }

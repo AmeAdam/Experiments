@@ -9,10 +9,9 @@ namespace AmeCommon.CardsCapture
     {
         void SaveProject(AmeFotoVideoProject project);
         List<AmeFotoVideoProject> AllProjects();
-        int CreateProject(DateTime projectDate, string projectName);
+        AmeFotoVideoProject CreateProject(DateTime projectDate, string projectName);
         void ChangeRootDirectory();
         AmeLocalSettings LocalSettings { get; set; }
         AmeFotoVideoProject GetProject(string projectPath);
-        void RemoveProject(int projectId);
     }
 }

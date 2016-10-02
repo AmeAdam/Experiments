@@ -5,31 +5,42 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using AmeCommon.Database;
 using AmeCommon.Model;
 using AmeCommon.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace AmeCommon.CardsCapture
 {
     public class CaptureProjectCooridinator : ICaptureProjectCooridinator
     {
+        private readonly IHostingEnvironment environment;
+        private readonly IOptions<AmeConfig> config;
         private readonly IDeviceCaptureFactory factory;
         private readonly IDeviceRepository devices;
         private readonly IAmeProjectRepository repository;
-        private readonly IDriveManager driveManager;
         private readonly ITasksManager taskManager;
 
-        public CaptureProjectCooridinator(IDeviceCaptureFactory factory, IDeviceRepository devices, IAmeProjectRepository repository, IDriveManager driveManager, ITasksManager taskManager)
+        public CaptureProjectCooridinator(IHostingEnvironment environment, IOptions<AmeConfig> config, IDeviceCaptureFactory factory, IDeviceRepository devices, IAmeProjectRepository repository, ITasksManager taskManager)
         {
+            this.environment = environment;
+            this.config = config;
             this.factory = factory;
             this.devices = devices;
             this.repository = repository;
-            this.driveManager = driveManager;
             this.taskManager = taskManager;
         }
 
         public CaptureProjectCommand GetPendingCaptureProjectCommand()
         {
             return taskManager.GetPendingTasks().OfType<CaptureProjectCommand>().FirstOrDefault();
+        }
+
+        public CaptureProjectCommand CreateCaptureProjectCommand(AmeFotoVideoProject project, List<DeviceMoveFileCommands> commands)
+        {
+            commands.Add(new AddResourcesToProjectCommand(environment, project));
+            return new CaptureProjectCommand(environment, config, repository, project, commands);
         }
 
         public List<DeviceMoveFileCommands> GetAllDevicesCommand(IEnumerable<DriveInfo> drives, DirectoryInfo destinationDirectory)
@@ -60,7 +71,7 @@ namespace AmeCommon.CardsCapture
                     return;
             }
 
-            var newCommand = new CaptureProjectCommand(repository, project, new List<DeviceMoveFileCommands> {cmd});
+            var newCommand = new CaptureProjectCommand(environment, config, repository, project, new List<DeviceMoveFileCommands> {cmd});
             taskManager.StartTask(newCommand);
         }
 
@@ -74,7 +85,7 @@ namespace AmeCommon.CardsCapture
             var device = GetDevice(sourceDrive);
             if (device == null)
                 return null;
-            return new DeviceMoveFileCommands(driveManager)
+            return new DeviceMoveFileCommands
             {
                 SourceDrive = sourceDrive,
                 Device = device,

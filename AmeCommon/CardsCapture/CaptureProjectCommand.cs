@@ -2,8 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Threading;
+using AmeCommon.Database;
 using AmeCommon.Model;
 using AmeCommon.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace AmeCommon.CardsCapture
@@ -14,17 +17,23 @@ namespace AmeCommon.CardsCapture
         private readonly object taskSync = new object();
         public AmeFotoVideoProject Project { get; }
         public List<DeviceMoveFileCommands> DeviceCommands { get; private set; }
+        public AddProjectToSvnCommand SvnCommand { get; private set; }
         public bool Completed => waitForComplete.WaitOne(0);
+        private readonly IHostingEnvironment environment;
+        private readonly IOptions<AmeConfig> config;
         private readonly IAmeProjectRepository repository;
         private readonly DirectoryInfo destinationDirectory;
         private readonly ManualResetEvent waitForComplete = new ManualResetEvent(false);
 
-        public CaptureProjectCommand(IAmeProjectRepository repository, AmeFotoVideoProject project, List<DeviceMoveFileCommands> commands)
+        public CaptureProjectCommand(IHostingEnvironment environment, IOptions<AmeConfig> config, IAmeProjectRepository repository, AmeFotoVideoProject project, List<DeviceMoveFileCommands> commands)
         {
+            this.environment = environment;
+            this.config = config;
             this.repository = repository;
             Project = project;
             destinationDirectory = new DirectoryInfo(Project.LocalPathRoot);
             DeviceCommands = commands;
+            SvnCommand = new AddProjectToSvnCommand(config, project);
         }
 
         public bool TryAppendTask(DeviceMoveFileCommands cmd)
@@ -69,6 +78,7 @@ namespace AmeCommon.CardsCapture
                 var command = (DeviceMoveFileCommands) task;
                 SaveProject();
                 command.DeleteCopiedFiles();
+                command.Dispose();
             }
             finally
             {
@@ -85,6 +95,7 @@ namespace AmeCommon.CardsCapture
             foreach (var cmd in DeviceCommands)
                 ExecuteChildTask(cmd);
             waitForComplete.WaitOne();
+            SvnCommand.ExecuteAsync().Wait();
         }
 
         private void SaveProject()
