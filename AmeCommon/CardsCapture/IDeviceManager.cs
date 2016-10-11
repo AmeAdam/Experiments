@@ -3,7 +3,7 @@ using AmeCommon.Model;
 
 namespace AmeCommon.CardsCapture
 {
-    public interface IDeviceRepository
+    public interface IDeviceManager
     {
         Device GetDevice(string name);
         Device GetDevice(int id);

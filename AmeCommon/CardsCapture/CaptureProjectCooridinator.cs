@@ -18,11 +18,11 @@ namespace AmeCommon.CardsCapture
         private readonly IHostingEnvironment environment;
         private readonly IOptions<AmeConfig> config;
         private readonly IDeviceCaptureFactory factory;
-        private readonly IDeviceRepository devices;
+        private readonly IDeviceManager devices;
         private readonly IAmeProjectRepository repository;
         private readonly ITasksManager taskManager;
 
-        public CaptureProjectCooridinator(IHostingEnvironment environment, IOptions<AmeConfig> config, IDeviceCaptureFactory factory, IDeviceRepository devices, IAmeProjectRepository repository, ITasksManager taskManager)
+        public CaptureProjectCooridinator(IHostingEnvironment environment, IOptions<AmeConfig> config, IDeviceCaptureFactory factory, IDeviceManager devices, IAmeProjectRepository repository, ITasksManager taskManager)
         {
             this.environment = environment;
             this.config = config;

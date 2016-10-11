@@ -12,13 +12,13 @@ namespace AmeWeb.Controllers
     public class DevicesController : Controller
     {
         private IAmeProjectRepository repository;
-        private readonly IDeviceRepository deviceRepository;
+        private readonly IDeviceManager deviceManager;
         private readonly ICaptureProjectCooridinator captureCooridinator;
 
-        public DevicesController(IAmeProjectRepository repository, IDeviceRepository deviceRepository, ICaptureProjectCooridinator captureCooridinator)
+        public DevicesController(IAmeProjectRepository repository, IDeviceManager deviceManager, ICaptureProjectCooridinator captureCooridinator)
         {
             this.repository = repository;
-            this.deviceRepository = deviceRepository;
+            this.deviceManager = deviceManager;
             this.captureCooridinator = captureCooridinator;
         }
 
@@ -40,7 +40,7 @@ namespace AmeWeb.Controllers
                 })
                 .ToList();
 
-            var allStoredDevices = deviceRepository.GetAllDevices();
+            var allStoredDevices = deviceManager.GetAllDevices();
             foreach (var d in allStoredDevices)
             {
                 if (model.All(modelDevice => modelDevice.Device.Id != d.Id))
@@ -52,7 +52,7 @@ namespace AmeWeb.Controllers
         public IActionResult DeviceEdit(int deviceId, string drive)
         {
             var device = string.IsNullOrEmpty(drive) ? 
-                deviceRepository.GetDevice(deviceId) :
+                deviceManager.GetDevice(deviceId) :
                 captureCooridinator.GetDevice(new DriveInfo(drive));
             var model = new CardInfoViewModel
             {
@@ -64,7 +64,7 @@ namespace AmeWeb.Controllers
 
         public IActionResult AssignDevice(int deviceId, string drive)
         {
-            var device = deviceRepository.GetDevice(deviceId);
+            var device = deviceManager.GetDevice(deviceId);
                 var doc = new XDocument(
                     new XElement(XName.Get("ame-card", "http://kamerzysta.bydgoszcz.pl"),
                         new XElement(XName.Get("id", "http://kamerzysta.bydgoszcz.pl"), device.UniqueName)
@@ -83,7 +83,7 @@ namespace AmeWeb.Controllers
         {
             var device = model.Device;
             device.Captures.RemoveAll(cmd => string.IsNullOrEmpty(cmd.SourceMask));
-            deviceRepository.UpdateDevice(device);
+            deviceManager.UpdateDevice(device);
             if (!string.IsNullOrEmpty(model.InsertedInDrive))
             {
                 var doc = new XDocument(
@@ -97,7 +97,7 @@ namespace AmeWeb.Controllers
 
         public IActionResult DeleteDevice(int id)
         {
-            deviceRepository.RemoveDevice(id);
+            deviceManager.RemoveDevice(id);
             return RedirectToAction(nameof(Index));
         }
     }

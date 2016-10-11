@@ -74,6 +74,8 @@
     <Compile Include="CardsCapture\ICaptureProjectCooridinator.cs" />
     <Compile Include="CardsCapture\IDriveManager.cs" />
     <Compile Include="Database\AmeLocalSettings.cs" />
+    <Compile Include="Database\Database.cs" />
+    <Compile Include="Database\DeviceManager.cs" />
     <Compile Include="Model\AmeFotoVideoProject.cs" />
     <Compile Include="CardsCapture\CaptureProjectCooridinator.cs" />
     <Compile Include="CardsCapture\ChecksumFileCalculator.cs" />
@@ -82,11 +84,10 @@
     <Compile Include="Model\DeviceCaptureInfo.cs" />
     <Compile Include="CardsCapture\DeviceMoveFileCommands.cs" />
     <Compile Include="CardsCapture\IAmeProjectRepository.cs" />
-    <Compile Include="CardsCapture\IDeviceRepository.cs" />
+    <Compile Include="CardsCapture\IDeviceManager.cs" />
     <Compile Include="Model\MediaFile.cs" />
     <Compile Include="CardsCapture\MoveFileCommand.cs" />
     <Compile Include="Database\AmeConfig.cs" />
-    <Compile Include="Database\KnownAmeProjects.cs" />
     <Compile Include="Database\Repository.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="CardsCapture\AmeCardSettings.cs" />
