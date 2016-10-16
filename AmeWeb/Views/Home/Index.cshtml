@@ -7,6 +7,18 @@
 
 <div class="row">
     <a asp-controller="Devices" asp-action="Index">Pokaż urządzenia</a>
+    
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <th colspan="3">
+                Zadania
+            </th>
+        </tr>
+        @foreach (var task in Model.Tasks)
+        {
+            @Html.Partial("_TaskState", task)
+        }
+    </table>
 
     <form asp-action="CreateProject" asp-controller="Home">
         <table class="table table-bordered table-condensed">
@@ -15,7 +27,7 @@
                     Projekty
                 </th>
             </tr>
-            @foreach (var project in Model.KnownProjects.OrderBy(p => p.EventDate))
+            @foreach (var project in Model.Projects.OrderBy(p => p.EventDate))
             {
                 <tr>
                     <td>@Html.ActionLink(project.UniqueName, "ShowAmeProject", new { projectPath = project.LocalPathRoot})</td>

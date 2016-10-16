@@ -8,9 +8,9 @@ namespace AmeCommon.Tasks
     public abstract class BackgroundTask : IDisposable
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
         public List<string> Logs { get; set; }
         public TaskState State { get; set; }
+        public long SyncPoint { get; set; }
         public Task WorkerTask { get; }
         public event Action<BackgroundTask> OnComplete;
         public Exception Error;
@@ -26,6 +26,18 @@ namespace AmeCommon.Tasks
             WorkerTask = new Task(ExecuteInternal, CancellationToken);
         }
 
+        public virtual string Name => GetType().Name;
+
+        protected void UpdateSyncPoint()
+        {
+            SyncPoint = DateTime.UtcNow.Ticks;
+        }
+
+        public virtual IEnumerable<BackgroundTask> ChildTasks
+        {
+            get { yield break; }
+        }
+
         public bool IsCompleted => State == TaskState.Completed || State == TaskState.Error || State == TaskState.Aborted;
 
         private void ExecuteInternal()
@@ -34,17 +46,21 @@ namespace AmeCommon.Tasks
             {
                 StarTime = DateTime.Now;
                 State = TaskState.InProgress;
+                UpdateSyncPoint();
                 Execute();
                 State = CancellationToken.IsCancellationRequested ? TaskState.Aborted : TaskState.Completed;
+                UpdateSyncPoint();
             }
             catch (Exception ex)
             {
                 Error = ex;
                 State = TaskState.Error;
+                UpdateSyncPoint();
             }
             finally
             {
                 EndTime = DateTime.Now;
+                UpdateSyncPoint();
                 OnOnComplete();
             }
         }

@@ -14,11 +14,7 @@ namespace AmeCommon.CardsCapture
         public int FilesCount => Commands.Count(cmd => !cmd.Completed);
         public long FilesSize => Commands.Where(cmd => !cmd.Completed).Sum(cmd => cmd.SourceFile.Length);
         public long FilesSizeGb => FilesSize/1024/1024/1024;
-
-        public DeviceMoveFileCommands()
-        {
-            Name = "Kopiowanie plików z " + SourceDrive;
-        }
+        public override string Name => "Kopiowanie plików z " + Device;
 
         protected bool Equals(DeviceMoveFileCommands other)
         {

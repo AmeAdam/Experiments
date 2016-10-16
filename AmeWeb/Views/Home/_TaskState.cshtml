@@ -1,0 +1,7 @@
+﻿@using AmeWeb.Model
+@model AmeCommon.Tasks.BackgroundTask
+<tr id="Task-@Model.Id" class="BackgroundTask">
+    <td>@Html.ActionLink(Model.Name, "ShowAmeTask", new { Model.Id })</td>
+    <td>message</td>
+    <td>@AmeHelper.TaskStateImage(Model.State)</td>
+</tr>

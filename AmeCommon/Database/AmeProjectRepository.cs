@@ -4,20 +4,19 @@ using System.IO;
 using System.Linq;
 using AmeCommon.CardsCapture;
 using AmeCommon.Model;
-using LiteDB;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace AmeCommon.Database
 {
-    public class Repository : IAmeProjectRepository
+    public class AmeProjectRepository : IAmeProjectRepository
     {
         private readonly IDatabase database;
         private object sync = new object();
         public const string AmeProjectFileName = "ame-project.json";
         public AmeLocalSettings LocalSettings { get; set; }
 
-        public Repository(IOptions<AmeConfig> ameConfig, IDatabase database)
+        public AmeProjectRepository(IOptions<AmeConfig> ameConfig, IDatabase database)
         {
             this.database = database;
             LocalSettings = database.LocalSettings.FindById(1);
@@ -32,12 +31,11 @@ namespace AmeCommon.Database
         {
             var proj = new AmeFotoVideoProject
             {
-                //Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid(),
                 Name = projectName,
                 EventDate = projectDate
             };
             proj.LocalPathRoot = Path.Combine(LocalSettings.SelectedProjectsRootPath, proj.UniqueName);
-            database.Projects.Insert(proj);
             Directory.CreateDirectory(proj.LocalPathRoot);
             SaveProject(proj);
             return proj;
@@ -82,9 +80,11 @@ namespace AmeCommon.Database
 
         public void SaveProject(AmeFotoVideoProject project)
         {
-            database.Projects.Update(project);
-            var projectFilePath = Path.Combine(project.LocalPathRoot, "ame-project.json");
-            File.WriteAllText(projectFilePath, JsonConvert.SerializeObject(project, Formatting.Indented));
+            lock (sync)
+            {
+                var projectFilePath = Path.Combine(project.LocalPathRoot, "ame-project.json");
+                File.WriteAllText(projectFilePath, JsonConvert.SerializeObject(project, Formatting.Indented));
+            }
         }
 
 

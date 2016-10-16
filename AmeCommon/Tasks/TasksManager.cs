@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AmeCommon.Tasks
@@ -31,6 +32,14 @@ namespace AmeCommon.Tasks
                 task.OnComplete += TaskCompleteHandler;
                 allTasks.Add(task);
                 task.ExecuteAsync();
+            }
+        }
+
+        public BackgroundTask GetTask(Guid id)
+        {
+            lock (sync)
+            {
+                return allTasks.FirstOrDefault(t => t.Id.Equals(id));
             }
         }
 

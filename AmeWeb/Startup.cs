@@ -1,7 +1,9 @@
 ﻿using AmeCommon.CardsCapture;
 using AmeCommon.Database;
 using AmeCommon.Tasks;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +40,7 @@ namespace AmeWeb
 
             services.AddSingleton<IAmeMainService, AmeMainService>();
             services.AddSingleton<ICaptureProjectCooridinator, CaptureProjectCooridinator>();
-            services.AddSingleton<IAmeProjectRepository, Repository>();
+            services.AddSingleton<IAmeProjectRepository, AmeProjectRepository>();
             services.AddSingleton<IDeviceCaptureFactory, DeviceCaptureFactory>();
             services.AddSingleton<ITasksManager, TasksManager>();
             services.AddSingleton<IDriveManager, DriveManager>();

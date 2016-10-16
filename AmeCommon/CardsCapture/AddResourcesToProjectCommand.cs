@@ -9,6 +9,7 @@ namespace AmeCommon.CardsCapture
     {
         private readonly IHostingEnvironment environment;
         private readonly AmeFotoVideoProject project;
+        public override string Name => "Tworzenie plików dodatkowych projektu";
 
         public AddResourcesToProjectCommand(IHostingEnvironment environment, AmeFotoVideoProject project)
         {

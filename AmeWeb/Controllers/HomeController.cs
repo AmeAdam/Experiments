@@ -1,5 +1,6 @@
 ﻿using System;
 using AmeCommon.CardsCapture;
+using AmeCommon.Tasks;
 using AmeWeb.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,18 +9,21 @@ namespace AmeWeb.Controllers
     public class HomeController : Controller
     {
         private readonly IAmeProjectRepository projectRepo;
+        private readonly ITasksManager tasksManager;
 
-        public HomeController(IAmeProjectRepository projectRepo)
+        public HomeController(IAmeProjectRepository projectRepo, ITasksManager tasksManager)
         {
             this.projectRepo = projectRepo;
+            this.tasksManager = tasksManager;
         }
 
         public IActionResult Index()
         {
             var model = new HomeViewModel
             {
-                KnownProjects = projectRepo.AllProjects(),
-                DestiantionRoot = projectRepo.LocalSettings.SelectedProjectsRootPath
+                Projects = projectRepo.AllProjects(),
+                DestiantionRoot = projectRepo.LocalSettings.SelectedProjectsRootPath,
+                Tasks = tasksManager.GetAllTasks(),
             };
             return View(model);
         }
@@ -59,6 +63,11 @@ namespace AmeWeb.Controllers
         {
             var proj = projectRepo.CreateProject(projectDate, projectName);
             return RedirectToAction(nameof(Index), "CaptureCards", new { projectPath = proj.LocalPathRoot });
+        }
+
+        public IActionResult ShowAmeTask(Guid id)
+        {
+            return View(tasksManager.GetTask(id));
         }
     }
 }

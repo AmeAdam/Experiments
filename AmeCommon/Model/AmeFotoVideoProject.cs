@@ -6,12 +6,13 @@ namespace AmeCommon.Model
 {
     public class AmeFotoVideoProject
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string UniqueName => $"{EventDate:yyyy-MM-dd} {Name}";
         public DateTime EventDate { get; set; }
         public string Name { get; set; }
         public List<MediaFile> MediaFiles { get; set; } = new List<MediaFile>();
         public string LocalPathRoot { get; set; }
+        public string SvnRepository { get; set; }
 
         public void AppendMediaFiles(IEnumerable<MediaFile> newFiles)
         {

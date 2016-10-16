@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AmeCommon.Database;
 using AmeCommon.Model;
 using AmeCommon.Tasks;
@@ -18,6 +16,7 @@ namespace AmeCommon.CardsCapture
         private readonly IOptions<AmeConfig> config;
         private readonly AmeFotoVideoProject project;
         private readonly SvnClient svn;
+        public override string Name => "Tworzenie repozytorium SVN " + config.Value.SvnRoot + project.UniqueName;
 
         public AddProjectToSvnCommand(IOptions<AmeConfig> config, AmeFotoVideoProject project)
         {
@@ -44,6 +43,7 @@ namespace AmeCommon.CardsCapture
             AddProjectFiles();
             AddPodklady();
             AddZdjeciaRaw();
+            project.SvnRepository = uri.ToString();
         }
 
         private void AddZdjeciaRaw()

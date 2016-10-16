@@ -24,6 +24,7 @@ namespace AmeCommon.CardsCapture
         private readonly IAmeProjectRepository repository;
         private readonly DirectoryInfo destinationDirectory;
         private readonly ManualResetEvent waitForComplete = new ManualResetEvent(false);
+        public override string Name => "Tworzenie projektu - " + Project?.UniqueName;
 
         public CaptureProjectCommand(IHostingEnvironment environment, IOptions<AmeConfig> config, IAmeProjectRepository repository, AmeFotoVideoProject project, List<DeviceMoveFileCommands> commands)
         {
@@ -34,6 +35,16 @@ namespace AmeCommon.CardsCapture
             destinationDirectory = new DirectoryInfo(Project.LocalPathRoot);
             DeviceCommands = commands;
             SvnCommand = new AddProjectToSvnCommand(config, project);
+        }
+
+        public override IEnumerable<BackgroundTask> ChildTasks
+        {
+            get
+            {
+                foreach (var cmd in DeviceCommands)
+                    yield return cmd;
+                yield return SvnCommand;
+            }
         }
 
         public bool TryAppendTask(DeviceMoveFileCommands cmd)
