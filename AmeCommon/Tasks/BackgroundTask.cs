@@ -7,7 +7,7 @@ namespace AmeCommon.Tasks
 {
     public abstract class BackgroundTask : IDisposable
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
         public List<string> Logs { get; set; }
         public TaskState State { get; set; }
         public long SyncPoint { get; set; }
@@ -21,6 +21,7 @@ namespace AmeCommon.Tasks
 
         protected BackgroundTask()
         {
+            Id = Guid.NewGuid();
             State = TaskState.Waiting;
             CancellationToken = CancelationSource.Token;
             WorkerTask = new Task(ExecuteInternal, CancellationToken);

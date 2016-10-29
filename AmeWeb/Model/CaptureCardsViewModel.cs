@@ -9,8 +9,6 @@ namespace AmeWeb.Model
     public class CaptureCardsViewModel
     {
         public AmeFotoVideoProject Project { get; set; }
-        public CaptureProjectCommand PendingTask { get; set; }
-        public List<DeviceMoveFileCommands> AvaliableCommands { get; set; }
 
         public long AvailableFreeDiskSpace
         {
@@ -25,5 +23,7 @@ namespace AmeWeb.Model
         {
             get { return AvaliableCommands.Sum(cmd => cmd.FilesSize); }
         }
+
+        public List<DeviceMoveFileCommands> AvaliableCommands { get; set; }
     }
 }

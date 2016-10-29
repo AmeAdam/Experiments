@@ -30,7 +30,7 @@ namespace AmeWeb.Controllers
         private List<CardInfoViewModel> ScanDevices()
         {
             var model = DriveInfo.GetDrives()
-                .Where(d => d.DriveType == DriveType.Removable)
+                .Where(d => d.IsReady && d.DriveType == DriveType.Removable)
                 .Select(d => new CardInfoViewModel
                 {
                     Device =

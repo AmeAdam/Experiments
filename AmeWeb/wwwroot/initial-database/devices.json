@@ -101,7 +101,33 @@
     "Captures": [
       {
         "TargetFolder": "Rejestrator",
-        "SourceMask": "zoom1",
+        "SourceMask": "STEREO",
+        "Command": "move-directory-content-flat"
+      },
+      {
+        "TargetFolder": "Rejestrator",
+        "SourceMask": "4CH",
+        "Command": "move-directory-content-flat"
+      },
+      {
+        "TargetFolder": "Rejestrator",
+        "SourceMask": "MTR",
+        "Command": "move-directory-content-flat"
+      }
+    ]
+  },
+  {
+    "Id":  9, 
+    "UniqueName": "HC V510",
+    "Captures": [
+      {
+        "TargetFolder": "E",
+        "SourceMask": "PRIVATE\\AVCHD",
+        "Command": "move-directory-content"
+      },
+      {
+        "TargetFolder": "Zdjecia",
+        "SourceMask": "DCIM",
         "Command": "move-directory-content-flat"
       }
     ]

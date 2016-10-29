@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AmeCommon.CardsCapture;
+using AmeCommon.Tasks;
 using AmeWeb.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,77 +13,59 @@ namespace AmeWeb.Controllers
     {
         private readonly ICaptureProjectCooridinator captureCooridinator;
         private readonly IAmeProjectRepository projectRepo;
+        private readonly ITasksManager taskManager;
 
-        public CaptureCardsController(ICaptureProjectCooridinator captureCooridinator, IAmeProjectRepository projectRepo)
+        public CaptureCardsController(ICaptureProjectCooridinator captureCooridinator, IAmeProjectRepository projectRepo, ITasksManager taskManager)
         {
             this.captureCooridinator = captureCooridinator;
             this.projectRepo = projectRepo;
+            this.taskManager = taskManager;
         }
 
         public IActionResult Index(string projectPath)
         {
             var model = new CaptureCardsViewModel();
-            var pendingTask = captureCooridinator.GetPendingCaptureProjectCommand();
-            if (pendingTask != null)
-            {
-                model.PendingTask = pendingTask;
-                model.Project = pendingTask.Project;
-
-                var avaliableDrives = GetAvaliableDrives(pendingTask);
-                var avaliableToCapture = captureCooridinator.GetAllDevicesCommand(avaliableDrives, model.Project.GetLocalPathRoot());
-                avaliableToCapture.RemoveAll(d => d.Commands.Count == 0 && !pendingTask.DeviceCommands.Contains(d));
-                model.AvaliableCommands = new List<DeviceMoveFileCommands>(model.PendingTask.DeviceCommands);
-                model.AvaliableCommands.AddRange(avaliableToCapture);
-            }
-            else
-            {
-                model.Project = projectRepo.GetProject(projectPath);
-                model.AvaliableCommands = captureCooridinator.GetAllDevicesCommand(DriveInfo.GetDrives(), model.Project.GetLocalPathRoot());
-            }
+            model.Project = projectRepo.GetProject(projectPath);
+            model.AvaliableCommands = captureCooridinator.GetAavaliableDevicesCommand(model.Project.GetLocalPathRoot());
             return View(model);
-        }
-
-        private List<DriveInfo> GetAvaliableDrives(CaptureProjectCommand pendingTask)
-        {
-            return DriveInfo.GetDrives()
-                .Select(d => d.Name)
-                .Except(pendingTask.GetPendingDrives().Select(d => d.Name))
-                .Select(n => new DriveInfo(n))
-                .ToList();
         }
 
         public IActionResult StartCapture(string projectPath, List<SelectedDevices> devices)
         {
             var project = projectRepo.GetProject(projectPath);
-            var selectedDevices = captureCooridinator.GetAllDevicesCommand(
-                devices.Where(d => d.Selected).Select(d => new DriveInfo(d.Drive)), project.GetLocalPathRoot()).ToList();
+            var selectedDrives = devices.Where(d => d.Selected).Select(d => new DriveInfo(d.Drive));
+            var commandId = captureCooridinator.StartCapture(project, selectedDrives);
+            return RedirectToAction(nameof(ViewCaptureCommand), new { commandId });
+        }
 
-            if (selectedDevices.Any())
-            {
-                var cmd = captureCooridinator.CreateCaptureProjectCommand(project, selectedDevices);
-                captureCooridinator.Execute(cmd);
-            }
-            return RedirectToAction(nameof(Index), new { projectPath });
+        public IActionResult ViewCaptureCommand(Guid commandId)
+        {
+            var task = (CaptureProjectCommand)taskManager.GetTask(commandId);
+            return View(task);
         }
 
         public IActionResult StartCaptureSingleDevice(string projectPath, string sourceDrive)
         {
-            var project = projectRepo.GetProject(projectPath);
-            var command = captureCooridinator.GetDevicesCommand(new DriveInfo(sourceDrive), project.GetLocalPathRoot());
-            captureCooridinator.AppendCommand(project, command);
-            return RedirectToAction(nameof(Index), new { projectPath });
+            return StartCapture(projectPath, new List<SelectedDevices>
+            {
+                new SelectedDevices
+                {
+                    Selected = true,
+                    Drive = sourceDrive
+                }
+            });
         }
 
         public IActionResult AbortCaptureDevice(int projectId, string deviceName)
         {
-            captureCooridinator.AbortCapture(deviceName);
+            //captureCooridinator.AbortCapture(deviceName);
             return RedirectToAction(nameof(Index), new { projectId });
         }
 
         public IActionResult ShowConflicts(string projectPath, string sourceDrive)
         {
             var project = projectRepo.GetProject(projectPath);
-            var device = captureCooridinator.GetDevicesCommand(new DriveInfo(sourceDrive), project.GetLocalPathRoot());
+            var device = captureCooridinator.CreateCommand(new DriveInfo(sourceDrive), project.GetLocalPathRoot());
             var destinationDir = new DirectoryInfo(project.LocalPathRoot);
             device.SetDestinationRootPath(destinationDir);
             return View(device);

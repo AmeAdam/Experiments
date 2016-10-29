@@ -9,15 +9,15 @@ namespace AmeCommon.CardsCapture
         private readonly object sync = new object();
         private readonly HashSet<string> lockedDrives = new HashSet<string>();
 
-        public void LockDrive(DriveInfo drive)
+        public bool TryLockDrive(DriveInfo drive)
         {
             lock (sync)
             {
-                lockedDrives.Add(drive.Name.ToLower());
+                return lockedDrives.Add(drive.Name.ToLower());
             }
         }
 
-        public void UnlockDrive(DriveInfo drive)
+        public void ReleaseLock(DriveInfo drive)
         {
             lock (sync)
             {
@@ -30,7 +30,7 @@ namespace AmeCommon.CardsCapture
             lock (sync)
             {
                 return DriveInfo.GetDrives()
-                    .Where(d => d.DriveType == DriveType.Removable)
+                    .Where(d => d.DriveType == DriveType.Removable && d.IsReady)
                     .Select(d => d.Name.ToLower())
                     .Except(lockedDrives)
                     .Select(name => new DriveInfo(name))

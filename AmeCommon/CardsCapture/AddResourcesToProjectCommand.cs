@@ -11,7 +11,7 @@ namespace AmeCommon.CardsCapture
         private readonly AmeFotoVideoProject project;
         public override string Name => "Tworzenie plików dodatkowych projektu";
 
-        public AddResourcesToProjectCommand(IHostingEnvironment environment, AmeFotoVideoProject project)
+        public AddResourcesToProjectCommand(IHostingEnvironment environment, AmeFotoVideoProject project, IDriveManager driveManager) : base(driveManager)
         {
             this.environment = environment;
             this.project = project;

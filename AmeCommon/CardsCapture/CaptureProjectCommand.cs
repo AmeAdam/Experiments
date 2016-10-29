@@ -5,7 +5,6 @@ using System.Threading;
 using AmeCommon.Database;
 using AmeCommon.Model;
 using AmeCommon.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -19,17 +18,13 @@ namespace AmeCommon.CardsCapture
         public List<DeviceMoveFileCommands> DeviceCommands { get; private set; }
         public AddProjectToSvnCommand SvnCommand { get; private set; }
         public bool Completed => waitForComplete.WaitOne(0);
-        private readonly IHostingEnvironment environment;
-        private readonly IOptions<AmeConfig> config;
         private readonly IAmeProjectRepository repository;
         private readonly DirectoryInfo destinationDirectory;
         private readonly ManualResetEvent waitForComplete = new ManualResetEvent(false);
         public override string Name => "Tworzenie projektu - " + Project?.UniqueName;
 
-        public CaptureProjectCommand(IHostingEnvironment environment, IOptions<AmeConfig> config, IAmeProjectRepository repository, AmeFotoVideoProject project, List<DeviceMoveFileCommands> commands)
+        public CaptureProjectCommand(IOptions<AmeConfig> config, IAmeProjectRepository repository, AmeFotoVideoProject project, List<DeviceMoveFileCommands> commands)
         {
-            this.environment = environment;
-            this.config = config;
             this.repository = repository;
             Project = project;
             destinationDirectory = new DirectoryInfo(Project.LocalPathRoot);

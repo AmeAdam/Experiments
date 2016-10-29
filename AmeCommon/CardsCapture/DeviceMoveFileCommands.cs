@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AmeCommon.Model;
@@ -15,6 +16,12 @@ namespace AmeCommon.CardsCapture
         public long FilesSize => Commands.Where(cmd => !cmd.Completed).Sum(cmd => cmd.SourceFile.Length);
         public long FilesSizeGb => FilesSize/1024/1024/1024;
         public override string Name => "Kopiowanie plików z " + Device;
+        private IDriveManager driveManager;
+
+        public DeviceMoveFileCommands(IDriveManager driveManager)
+        {
+            this.driveManager = driveManager;
+        }
 
         protected bool Equals(DeviceMoveFileCommands other)
         {
@@ -41,6 +48,8 @@ namespace AmeCommon.CardsCapture
                 if (Commands == null || Commands.Count == 0)
                     return 100;
                 var sumAll = Commands.Sum(c => c.File.Size);
+                if (sumAll == 0)
+                    return 100;
                 var sumCompleted = Commands.Where(c => c.Completed).Sum(c => c.File.Size);
                 var progress = (int) (sumCompleted*100/sumAll);
                 return progress;
@@ -61,11 +70,21 @@ namespace AmeCommon.CardsCapture
 
         protected override void Execute()
         {
-            foreach (var cmd in Commands)
+            if (!driveManager.TryLockDrive(SourceDrive))
+                throw new ApplicationException($"Drive {SourceDrive.Name} is locked by other command!");
+
+            try
             {
-                if (CancellationToken.IsCancellationRequested)
-                    return;
-                cmd.Execute(CancellationToken);
+                foreach (var cmd in Commands)
+                {
+                    if (CancellationToken.IsCancellationRequested)
+                        return;
+                    cmd.Execute(CancellationToken);
+                }
+            }
+            finally
+            {
+                driveManager.ReleaseLock(SourceDrive);
             }
         }
 

@@ -5,8 +5,8 @@ namespace AmeCommon.CardsCapture
 {
     public interface IDriveManager
     {
-        void LockDrive(DriveInfo drive);
-        void UnlockDrive(DriveInfo drive);
+        bool TryLockDrive(DriveInfo drive);
+        void ReleaseLock(DriveInfo drive);
         List<DriveInfo> GetAvaliableRemovableDrives();
         List<DriveInfo> GetAllRemovableDrives();
     }
