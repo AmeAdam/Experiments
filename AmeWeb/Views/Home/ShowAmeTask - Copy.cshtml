@@ -1,0 +1,57 @@
+﻿@using AmeWeb.Model
+@model AmeCommon.Tasks.BackgroundTask
+
+<div>
+    <h3>@Model.Name</h3>
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <th>Stan</th>
+            <td id="main-task-state">
+                @AmeHelper.TaskStateImage(Model.State)
+            </td>
+        </tr>
+        <tr>
+            <th>Czasy</th>
+            <td id="main-task-times">@Model.StarTime - @Model.EndTime</td>
+        </tr>
+        @if (Model.Error != null)
+        {
+            <tr>
+                <th>Bład</th>
+                <td>@Model.Error</td>
+            </tr>
+        }
+        @if (Model.Logs != null && Model.Logs.Count > 0)
+        {
+            <tr>
+                <th colspan="2">Log</th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @string.Join("</br>", Model.Logs)
+                </td>
+            </tr>
+        }
+    </table>
+    
+    @if (Model.ChildTasks.Any())
+    {
+        <table class="table table-bordered table-condensed">
+            <tr>
+                <th colspan="2">Zadania składowe</th>
+            </tr>
+            <tr>
+                <th>Nazwa</th>
+                <th>Stan</th>
+            </tr>
+
+            @foreach (var task in Model.ChildTasks)
+            {
+                <tr>
+                    <td>@task.Name</td>
+                    <td>@AmeHelper.TaskStateImage(task.State)</td>
+                </tr>
+            }
+        </table>
+    }
+</div>

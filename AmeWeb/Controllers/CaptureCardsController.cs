@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AmeCommon.CardsCapture;
-using AmeCommon.Tasks;
 using AmeWeb.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,13 +12,11 @@ namespace AmeWeb.Controllers
     {
         private readonly ICaptureProjectCooridinator captureCooridinator;
         private readonly IAmeProjectRepository projectRepo;
-        private readonly ITasksManager taskManager;
 
-        public CaptureCardsController(ICaptureProjectCooridinator captureCooridinator, IAmeProjectRepository projectRepo, ITasksManager taskManager)
+        public CaptureCardsController(ICaptureProjectCooridinator captureCooridinator, IAmeProjectRepository projectRepo)
         {
             this.captureCooridinator = captureCooridinator;
             this.projectRepo = projectRepo;
-            this.taskManager = taskManager;
         }
 
         public IActionResult Index(string projectPath)
@@ -35,13 +32,7 @@ namespace AmeWeb.Controllers
             var project = projectRepo.GetProject(projectPath);
             var selectedDrives = devices.Where(d => d.Selected).Select(d => new DriveInfo(d.Drive));
             var commandId = captureCooridinator.StartCapture(project, selectedDrives);
-            return RedirectToAction(nameof(ViewCaptureCommand), new { commandId });
-        }
-
-        public IActionResult ViewCaptureCommand(Guid commandId)
-        {
-            var task = (CaptureProjectCommand)taskManager.GetTask(commandId);
-            return View(task);
+            return RedirectToAction(nameof(HomeController.ShowAmeTask), "Home", new { id = commandId });
         }
 
         public IActionResult StartCaptureSingleDevice(string projectPath, string sourceDrive)
@@ -54,12 +45,6 @@ namespace AmeWeb.Controllers
                     Drive = sourceDrive
                 }
             });
-        }
-
-        public IActionResult AbortCaptureDevice(int projectId, string deviceName)
-        {
-            //captureCooridinator.AbortCapture(deviceName);
-            return RedirectToAction(nameof(Index), new { projectId });
         }
 
         public IActionResult ShowConflicts(string projectPath, string sourceDrive)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AmeCommon.CardsCapture;
 using AmeCommon.Tasks;
 using AmeWeb.Model;
@@ -68,6 +69,25 @@ namespace AmeWeb.Controllers
         public IActionResult ShowAmeTask(Guid id)
         {
             return View(tasksManager.GetTask(id));
+        }
+
+        public IActionResult GetAmeTaskState(Guid id)
+        {
+            var task = tasksManager.GetTask(id);
+            var model = new
+            {
+                State = task.State.ToString(),
+                Times = $"{task.StarTime} - {task.EndTime}",
+                ChildTasks = task.ChildTasks.Select(ct =>
+                        new
+                        {
+                            ct.Id,
+                            State = ct.State.ToString()
+                        }
+                ).ToList()
+            };
+
+            return Json(model);
         }
     }
 }

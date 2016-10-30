@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using AmeCommon.Model;
 using AmeCommon.Tasks;
 
@@ -16,7 +17,7 @@ namespace AmeCommon.CardsCapture
         public long FilesSize => Commands.Where(cmd => !cmd.Completed).Sum(cmd => cmd.SourceFile.Length);
         public long FilesSizeGb => FilesSize/1024/1024/1024;
         public override string Name => "Kopiowanie plików z " + Device;
-        private IDriveManager driveManager;
+        private readonly IDriveManager driveManager;
 
         public DeviceMoveFileCommands(IDriveManager driveManager)
         {
@@ -72,6 +73,8 @@ namespace AmeCommon.CardsCapture
         {
             if (!driveManager.TryLockDrive(SourceDrive))
                 throw new ApplicationException($"Drive {SourceDrive.Name} is locked by other command!");
+
+Thread.Sleep(60000);
 
             try
             {

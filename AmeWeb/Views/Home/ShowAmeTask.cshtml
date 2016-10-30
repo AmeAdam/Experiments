@@ -1,37 +1,29 @@
 ﻿@using AmeWeb.Model
 @model AmeCommon.Tasks.BackgroundTask
 
-<div>
+<div id="main-task">
     <h3>@Model.Name</h3>
     <table class="table table-bordered table-condensed">
         <tr>
             <th>Stan</th>
-            <td>
+            <td id="main-task-state">
                 @AmeHelper.TaskStateImage(Model.State)
             </td>
         </tr>
         <tr>
             <th>Czasy</th>
-            <td>@Model.StarTime - @Model.EndTime</td>
+            <td id="main-task-times">@Model.StarTime - @Model.EndTime</td>
         </tr>
-        @if (Model.Error != null)
-        {
-            <tr>
-                <th>Bład</th>
-                <td>@Model.Error</td>
-            </tr>
-        }
-        @if (Model.Logs != null && Model.Logs.Count > 0)
-        {
-            <tr>
-                <th colspan="2">Log</th>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    @string.Join("</br>", Model.Logs)
-                </td>
-            </tr>
-        }
+        <tr id="maint-task-error" style="display: none">
+            <th>Bład</th>
+            <td id="maint-task-error-text">@Model.Error</td>
+        </tr>
+        <tr>
+            <th colspan="2">Logs:</th>
+        </tr>
+        <tr>
+            <td id="maint-task-log-text" colspan="2"></td>
+        </tr>
     </table>
     
     @if (Model.ChildTasks.Any())
@@ -49,9 +41,29 @@
             {
                 <tr>
                     <td>@task.Name</td>
-                    <td>@AmeHelper.TaskStateImage(task.State)</td>
+                    <td id="child-task-@task.Id">@AmeHelper.TaskStateImage(task.State)</td>
                 </tr>
             }
         </table>
     }
 </div>
+@section scripts{
+    <script type="text/javascript">
+        function refreshTaskState(state) {
+            $('#main-task-state').html("<img height='20' src = '/images/task-state/" + state.state + ".gif' />");
+            $('#main-task-times').html(state.times);
+            for (var i = 0; i < state.childTasks.length; i++) {
+                var ct = state.childTasks[i];
+                $('#child-task-' + ct.id).html("<img height='20' src = '/images/task-state/" + ct.state + ".gif' />");
+            }
+        }
+
+        function refreshTaskStateTick() {
+            $.getJSON('@Url.Action("GetAmeTaskState", "Home")', { id: '@Model.Id' }, refreshTaskState);
+        }
+
+        $(function() {
+            setInterval(refreshTaskStateTick, 3000);
+        });
+    </script>
+}
