@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using AmeCommon.Model;
+using AmeCommon.Tasks;
 
 namespace AmeCommon.CardsCapture
 {
     public interface ICaptureProjectCooridinator
     {
-        List<DeviceMoveFileCommands> GetAavaliableDevicesCommand(DirectoryInfo destinationDirectory);
+        List<BackgroundTask> GetAavaliableCommands(AmeFotoVideoProject project);
      //   void Execute(CaptureProjectCommand command);
     //    void AppendCommand(AmeFotoVideoProject project, DeviceMoveFileCommands cmd);
    //     void AbortCapture(string uniqueName);

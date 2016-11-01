@@ -22,6 +22,8 @@ namespace AmeCommon.CardsCapture
         private readonly DirectoryInfo destinationDirectory;
         private readonly ManualResetEvent waitForComplete = new ManualResetEvent(false);
         public override string Name => "Tworzenie projektu - " + Project?.UniqueName;
+        public override string Label => "AME-Project";
+
 
         public CaptureProjectCommand(IOptions<AmeConfig> config, IAmeProjectRepository repository, AmeFotoVideoProject project, List<DeviceMoveFileCommands> commands)
         {

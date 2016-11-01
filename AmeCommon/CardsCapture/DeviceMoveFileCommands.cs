@@ -18,6 +18,9 @@ namespace AmeCommon.CardsCapture
         public long FilesSizeGb => FilesSize/1024/1024/1024;
         public override string Name => "Kopiowanie plików z " + Device;
         private readonly IDriveManager driveManager;
+        public override string Label => Device?.UniqueName;
+        public DirectoryInfo DestinationRoot { get; }
+
 
         public DeviceMoveFileCommands(IDriveManager driveManager)
         {

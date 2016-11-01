@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,6 +19,7 @@ namespace AmeCommon.Tasks
         public DateTime EndTime;
         protected CancellationTokenSource CancelationSource = new CancellationTokenSource();
         protected CancellationToken CancellationToken { get; }
+        public virtual string Label => "unknown"; 
 
         protected BackgroundTask()
         {

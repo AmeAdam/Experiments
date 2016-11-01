@@ -14,14 +14,16 @@ namespace AmeCommon.CardsCapture
     public class AddProjectToSvnCommand : BackgroundTask
     {
         private readonly IOptions<AmeConfig> config;
-        private readonly AmeFotoVideoProject project;
+        public readonly AmeFotoVideoProject Project;
         private readonly SvnClient svn;
-        public override string Name => "Tworzenie repozytorium SVN " + config.Value.SvnRoot + project.UniqueName;
+        public string SvnUri => config.Value.SvnRoot + Project.UniqueName;
+        public override string Name => $"Tworzenie repozytorium SVN {SvnUri}";
+        public override string Label => "svn";
 
         public AddProjectToSvnCommand(IOptions<AmeConfig> config, AmeFotoVideoProject project)
         {
             this.config = config;
-            this.project = project;
+            this.Project = project;
             svn = new SvnClient();
             svn.Authentication.UserNamePasswordHandlers += delegate(object sender, SvnUserNamePasswordEventArgs args)
             {
@@ -30,25 +32,29 @@ namespace AmeCommon.CardsCapture
             };
         }
 
+        public AddProjectToSvnCommand(IOptions<AmeConfig> config) : this(config, new AmeFotoVideoProject())
+        {
+        }
+
         protected override void Execute()
         {
-            var uri = new Uri(config.Value.SvnRoot + project.UniqueName);
-            if (!svn.RemoteCreateDirectory(uri, new SvnCreateDirectoryArgs {LogMessage = project.UniqueName}))
+            var uri = new Uri(config.Value.SvnRoot + Project.UniqueName);
+            if (!svn.RemoteCreateDirectory(uri, new SvnCreateDirectoryArgs {LogMessage = Project.UniqueName}))
                 throw new ApplicationException($"Nie można utworzyć repozytorium SVN {uri}");
-            if (!svn.CheckOut(uri, project.LocalPathRoot))
-                throw new ApplicationException($"Nie można przypisać katalogu {project.LocalPathRoot} do repozytorium SVN {uri}");
-            svn.SetProperty(project.LocalPathRoot, "svn:ignore", string.Join("\r\n", GetIgnores()));
-            svn.Commit(project.LocalPathRoot, new SvnCommitArgs {Depth = SvnDepth.Children, LogMessage = "Dodanie listy ignorowanych plików"});
+            if (!svn.CheckOut(uri, Project.LocalPathRoot))
+                throw new ApplicationException($"Nie można przypisać katalogu {Project.LocalPathRoot} do repozytorium SVN {uri}");
+            svn.SetProperty(Project.LocalPathRoot, "svn:ignore", string.Join("\r\n", GetIgnores()));
+            svn.Commit(Project.LocalPathRoot, new SvnCommitArgs {Depth = SvnDepth.Children, LogMessage = "Dodanie listy ignorowanych plików"});
 
             AddProjectFiles();
             AddPodklady();
             AddZdjeciaRaw();
-            project.SvnRepository = uri.ToString();
+            Project.SvnRepository = uri.ToString();
         }
 
         private void AddZdjeciaRaw()
         {
-            var zdjeciaRaw = Path.Combine(project.LocalPathRoot, "ZdjeciaRaw");
+            var zdjeciaRaw = Path.Combine(Project.LocalPathRoot, "ZdjeciaRaw");
             if (Directory.Exists(zdjeciaRaw))
             {
                 svn.SetProperty(zdjeciaRaw, "svn:ignore", "*.CR2\r\n*.NEF");
@@ -58,7 +64,7 @@ namespace AmeCommon.CardsCapture
 
         private void AddPodklady()
         {
-            string podklady = Path.Combine(project.LocalPathRoot, "Podkłady");
+            string podklady = Path.Combine(Project.LocalPathRoot, "Podkłady");
             svn.Add(podklady, SvnDepth.Infinity);
             svn.Commit(podklady, new SvnCommitArgs { Depth = SvnDepth.Infinity, LogMessage = "Dodanie startowych podkładów"});
         }
@@ -73,15 +79,15 @@ namespace AmeCommon.CardsCapture
 
         private IEnumerable<string> FilesToCommit()
         {
-            foreach (var prproj in Directory.GetFiles(project.LocalPathRoot, "*.prproj"))
+            foreach (var prproj in Directory.GetFiles(Project.LocalPathRoot, "*.prproj"))
                 yield return prproj;
-            foreach (var json in Directory.GetFiles(project.LocalPathRoot, "*.json"))
+            foreach (var json in Directory.GetFiles(Project.LocalPathRoot, "*.json"))
                 yield return json;
         }
 
         private List<string> GetIgnores()
         {
-            var ignoreList = Directory.GetDirectories(project.LocalPathRoot)
+            var ignoreList = Directory.GetDirectories(Project.LocalPathRoot)
                 .Select(Path.GetDirectoryName)
                 .ToList();
             ignoreList.Remove("ZdjeciaRaw");

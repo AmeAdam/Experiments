@@ -1,6 +1,4 @@
 ﻿@using System.Threading.Tasks
-@using AmeCommon.CardsCapture
-@using AmeCommon.Tasks
 @using AmeWeb.Model
 @model CaptureCardsViewModel
 @{
@@ -23,56 +21,42 @@
             <tr>
                 <th></th>
                 <th></th>
-                <th>Device</th>
+                <th>Urządzenie</th>
+                <th>Dysk</th>
                 <th>Info</th>
                 <th>Stan</th>
             </tr>
             @for (var i = 0; i < Model.AvaliableCommands.Count; i++)
             {
                 var device = Model.AvaliableCommands[i];
-                var hasConflict = device.GetAllConflictWithStoredFiles().Any();
-                var trClass = hasConflict ? "bg-danger" : "";
-                var imagePath = $"/images/{device.Device.UniqueName}.jpg";
+                var trClass = device.HasWarning ? "bg-danger" : "";
                 <tr class="@trClass">
                     <td>
-                        @Html.CheckBox($"devices[{i}].Selected", device.FilesCount > 0)
-                        @Html.Hidden($"devices[{i}].Drive", device.SourceDrive.Name)
+                        @Html.CheckBox($"devices[{i}].Selected", device.Selected)
+                        @Html.Hidden($"devices[{i}].Drive", device.SourceDrive)
+                        @Html.Hidden($"devices[{i}].Task", device.Label)
                     </td>
-                    <td><img src="@imagePath" style="height: 75px"/></td>
-                    <td>@device.Device.UniqueName</td>
-                    <td class="DeviceInfo">
-                        Pliki: @device.FilesCount<br/>
-                        Rozmiar: @device.FilesSize.DisplayFileSize()<br/>
-                        Ukończono: @device.PercentCompleted %<br/>
-                        @if (hasConflict)
+                    <td><img src="@device.CommandImagePath" style="height: 75px"/></td>
+                    <td>@device.Label</td>
+                    <td>@device.SourceDrive</td>
+                    <td class="DeviceInfo" style="white-space: pre">@device.Description
+                        @if (device.HasWarning)
                         {
-                            @Html.ActionLink("Uwaga! Wykryto konflikt istniejących plików.", "ShowConflicts", new {projectPath = Model.Project.LocalPathRoot, device.SourceDrive}, new {style = "font-weight: bold"})
+                            @Html.ActionLink("Uwaga! Wykryto potencjalne problemy.", "ShowConflicts", new {projectPath = Model.Project.LocalPathRoot, device.SourceDrive}, new {style = "font-weight: bold"})
                         }
                     </td>
                     <td class="DeviceState">
-                        @if (device.State == TaskState.InProgress)
+                        <img src="@device.StateImagePath" style="height: 75px" />
+
+                        @if (!string.IsNullOrEmpty(device.ExecuteActionLink))
                         {
-                            <img src="~/images/loader.gif" style="height: 75px"/>
-                            @Html.ActionLink("Przerwij", "AbortCaptureDevice", new {projectPath = Model.Project.LocalPathRoot, deviceId = device.Device.Id})
-                        }
-                        else if (device.State == TaskState.Completed || device.Commands.Count == 0)
-                        {
-                            <img src="~/images/done.png" style="height: 75px"/>
-                        }
-                        else if (device.State == TaskState.Error || device.State == TaskState.Aborted)
-                        {
-                            <img src="~/images/error.png" style="height: 75px"/>
-                            <span class="text-danger">@device.Error</span>
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Kopiuj do projektu", "StartCaptureSingleDevice", new { projectPath = Model.Project.LocalPathRoot, sourceDrive = device.SourceDrive})
+                            <a href="@device.ExecuteActionLink">Start</a>
                         }
                     </td>
                 </tr>
             }
             <tr>
-                <td colspan="5"><input type="submit" value="Kopiuj wybrane"/></td>
+                <td colspan="6"><input type="submit" value="Wykonaj wybrane"/></td>
             </tr>
         </table>
     </form>

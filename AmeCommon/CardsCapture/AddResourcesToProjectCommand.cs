@@ -8,13 +8,15 @@ namespace AmeCommon.CardsCapture
     public class AddResourcesToProjectCommand : DeviceMoveFileCommands
     {
         private readonly IHostingEnvironment environment;
-        private readonly AmeFotoVideoProject project;
+        private readonly DirectoryInfo destinationDirectory;
         public override string Name => "Tworzenie plików dodatkowych projektu";
+        public override string Label => "resources";
 
-        public AddResourcesToProjectCommand(IHostingEnvironment environment, AmeFotoVideoProject project, IDriveManager driveManager) : base(driveManager)
+
+        public AddResourcesToProjectCommand(IHostingEnvironment environment, DirectoryInfo destinationDirectory, IDriveManager driveManager) : base(driveManager)
         {
             this.environment = environment;
-            this.project = project;
+            this.destinationDirectory = destinationDirectory;
             Device = new Device {UniqueName = "Startup"};
             SourceDrive = new DriveInfo(Path.GetPathRoot(environment.WebRootPath) ?? "c:");
             Commands = new List<MoveFileCommand>();
@@ -26,7 +28,7 @@ namespace AmeCommon.CardsCapture
             CopyFile("nadruk_pudelko.psd");
             CopyFile("temp.prproj");
             var sourceFile = Path.Combine(environment.WebRootPath, "Resources", "Podkłady");
-            var podkladyDestPath = Path.Combine(project.LocalPathRoot, "Podkłady");
+            var podkladyDestPath = Path.Combine(destinationDirectory.FullName, "Podkłady");
             Directory.CreateDirectory(podkladyDestPath);
             foreach(var podklad in Directory.GetFiles(sourceFile))
                 File.Copy(podklad, Path.Combine(podkladyDestPath, Path.GetFileName(podklad) ?? ""));
@@ -35,7 +37,7 @@ namespace AmeCommon.CardsCapture
         private void CopyFile(string fileName)
         {
             var sourceFile = Path.Combine(environment.WebRootPath, "Resources", fileName);
-            var destFile = Path.Combine(project.LocalPathRoot, fileName);
+            var destFile = Path.Combine(destinationDirectory.FullName, fileName);
             File.Copy(sourceFile, destFile);
         }
 

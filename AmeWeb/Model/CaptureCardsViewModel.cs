@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using AmeCommon.CardsCapture;
 using AmeCommon.Model;
+using AmeCommon.Tasks;
 
 namespace AmeWeb.Model
 {
@@ -21,9 +22,22 @@ namespace AmeWeb.Model
 
         public long RequiredDiskSpace
         {
-            get { return AvaliableCommands.Sum(cmd => cmd.FilesSize); }
+            get { return AvaliableCommands.OfType<DeviceMoveFileCommands>().Sum(cmd => cmd.FilesSize); }
         }
 
-        public List<DeviceMoveFileCommands> AvaliableCommands { get; set; }
+        public List<TaskViewModel> AvaliableCommands { get; set; }
+    }
+
+    public class TaskViewModel
+    {
+        public bool Selected { get; set; }
+        public string CommandImagePath { get; set; }
+        public bool HasWarning { get; set; }
+        public string Label { get; set; }
+        public string SourceDrive { get; set; }
+        public string Description { get; set; }
+        public TaskState State { get; set; }
+        public string StateImagePath { get; set; }
+        public string ExecuteActionLink { get; set; }
     }
 }

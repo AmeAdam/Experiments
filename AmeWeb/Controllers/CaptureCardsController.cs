@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AmeCommon.CardsCapture;
+using AmeCommon.Tasks;
 using AmeWeb.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,9 +22,48 @@ namespace AmeWeb.Controllers
         public IActionResult Index(string projectPath)
         {
             var model = new CaptureCardsViewModel();
-            model.Project = projectRepo.GetProject(projectPath);
-            model.AvaliableCommands = captureCooridinator.GetAavaliableDevicesCommand(model.Project.GetLocalPathRoot());
+            var project = projectRepo.GetProject(projectPath);
+            model.Project = project;
+            model.AvaliableCommands = captureCooridinator.GetAavaliableCommands(project).Select(CreateViewModel).ToList();
             return View(model);
+        }
+
+        private TaskViewModel CreateViewModel(BackgroundTask cmd)
+        {
+            var vm = new TaskViewModel
+            {
+                State = cmd.State,
+                Label = cmd.Label,
+                CommandImagePath = $"images/{cmd.Label}.jpg",
+                StateImagePath = $"images/task-state/{cmd.State}.gif",
+            };
+            FillViewModel(vm, cmd as DeviceMoveFileCommands);
+            FillViewModel(vm, cmd as AddProjectToSvnCommand);
+            return vm;
+        }
+
+        private void FillViewModel(TaskViewModel vm, DeviceMoveFileCommands cmd)
+        {
+            if (cmd == null)
+                return;
+            vm.Selected = cmd.FilesCount > 0;
+            vm.SourceDrive = cmd.SourceDrive.Name;
+            vm.HasWarning = cmd.GetAllConflictWithStoredFiles().Any();
+            vm.Description = $"Pliki: {cmd.FilesCount}\r\nRozmiar: {cmd.FilesSize.DisplayFileSize()}";
+            if (cmd.FilesCount > 0 && cmd.State == TaskState.Waiting)
+                vm.ExecuteActionLink = Url.Action("StartCaptureSingleDevice", new { projectPath = cmd.DestinationRoot.FullName, sourceDrive = cmd.SourceDrive });
+        }
+
+        private void FillViewModel(TaskViewModel vm, AddProjectToSvnCommand cmd)
+        {
+            if (cmd == null)
+                return;
+            vm.Selected = true;
+            vm.SourceDrive = "[internal]";
+            vm.HasWarning = false;
+            vm.Description = $"svn path: {cmd.SvnUri}";
+            if (!string.IsNullOrEmpty(cmd.SvnUri) && cmd.State == TaskState.Waiting)
+                vm.ExecuteActionLink = Url.Action("StartCaptureSingleDevice", new { projectPath = cmd.Project.LocalPathRoot });
         }
 
         public IActionResult StartCapture(string projectPath, List<SelectedDevices> devices)
