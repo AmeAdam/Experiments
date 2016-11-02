@@ -33,11 +33,9 @@ namespace AmeWeb.Model
         public bool Selected { get; set; }
         public string CommandImagePath { get; set; }
         public bool HasWarning { get; set; }
-        public string Label { get; set; }
-        public string SourceDrive { get; set; }
+        public string CommandType { get; set; }
+        public string Param { get; set; }
         public string Description { get; set; }
-        public TaskState State { get; set; }
-        public string StateImagePath { get; set; }
-        public string ExecuteActionLink { get; set; }
+        public string Label { get; set; }
     }
 }

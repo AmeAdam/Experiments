@@ -19,7 +19,7 @@ namespace AmeCommon.CardsCapture
         public override string Name => "Kopiowanie plików z " + Device;
         private readonly IDriveManager driveManager;
         public override string Label => Device?.UniqueName;
-        public DirectoryInfo DestinationRoot { get; }
+        public DirectoryInfo DestinationRoot { get; set; }
 
 
         public DeviceMoveFileCommands(IDriveManager driveManager)
@@ -65,11 +65,6 @@ namespace AmeCommon.CardsCapture
         {
             return Commands.Where(c => c.State == TaskState.Waiting)
                 .Where(c =>  c.DestinationFile.Exists);
-        }
-
-        public void SetDestinationRootPath(DirectoryInfo projectLocalRoot)
-        {
-            Commands.ForEach(cmd => cmd.DestinationRoot = projectLocalRoot);
         }
 
         protected override void Execute()

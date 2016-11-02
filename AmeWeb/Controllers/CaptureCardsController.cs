@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using AmeCommon.CardsCapture;
 using AmeCommon.Tasks;
@@ -32,12 +31,11 @@ namespace AmeWeb.Controllers
         {
             var vm = new TaskViewModel
             {
-                State = cmd.State,
-                Label = cmd.Label,
                 CommandImagePath = $"images/{cmd.Label}.jpg",
-                StateImagePath = $"images/task-state/{cmd.State}.gif",
+                Label = cmd.Label
             };
             FillViewModel(vm, cmd as DeviceMoveFileCommands);
+            FillViewModel(vm, cmd as AddResourcesToProjectCommand);
             FillViewModel(vm, cmd as AddProjectToSvnCommand);
             return vm;
         }
@@ -47,11 +45,22 @@ namespace AmeWeb.Controllers
             if (cmd == null)
                 return;
             vm.Selected = cmd.FilesCount > 0;
-            vm.SourceDrive = cmd.SourceDrive.Name;
+            vm.CommandType = nameof(DeviceMoveFileCommands);
+            vm.Param = cmd.SourceDrive.Name;
             vm.HasWarning = cmd.GetAllConflictWithStoredFiles().Any();
             vm.Description = $"Pliki: {cmd.FilesCount}\r\nRozmiar: {cmd.FilesSize.DisplayFileSize()}";
-            if (cmd.FilesCount > 0 && cmd.State == TaskState.Waiting)
-                vm.ExecuteActionLink = Url.Action("StartCaptureSingleDevice", new { projectPath = cmd.DestinationRoot.FullName, sourceDrive = cmd.SourceDrive });
+        }
+
+        private void FillViewModel(TaskViewModel vm, AddResourcesToProjectCommand cmd)
+        {
+            if (cmd == null)
+                return;
+            vm.Selected = false;
+            vm.CommandType = nameof(AddResourcesToProjectCommand);
+            vm.Param = cmd.Mp3FolderName;
+            vm.HasWarning = cmd.GetAllConflictWithStoredFiles().Any();
+            vm.Description = $"szablon projektu {cmd.Mp3FolderName}";
+            vm.CommandImagePath = "images/resources.jpg";
         }
 
         private void FillViewModel(TaskViewModel vm, AddProjectToSvnCommand cmd)
@@ -59,39 +68,26 @@ namespace AmeWeb.Controllers
             if (cmd == null)
                 return;
             vm.Selected = true;
-            vm.SourceDrive = "[internal]";
+            vm.CommandType = nameof(AddProjectToSvnCommand);
+            vm.Param = "svn";
             vm.HasWarning = false;
             vm.Description = $"svn path: {cmd.SvnUri}";
-            if (!string.IsNullOrEmpty(cmd.SvnUri) && cmd.State == TaskState.Waiting)
-                vm.ExecuteActionLink = Url.Action("StartCaptureSingleDevice", new { projectPath = cmd.Project.LocalPathRoot });
         }
 
-        public IActionResult StartCapture(string projectPath, List<SelectedDevices> devices)
+        public IActionResult StartCapture(string projectPath, List<SelectedCommands> devices)
         {
             var project = projectRepo.GetProject(projectPath);
-            var selectedDrives = devices.Where(d => d.Selected).Select(d => new DriveInfo(d.Drive));
-            var commandId = captureCooridinator.StartCapture(project, selectedDrives);
+            var selectedCommands = devices
+                .Where(d => d.Selected).Select(d => captureCooridinator.CreateCommand(d.Task, d.Param, project))
+                .ToList();
+            var commandId = captureCooridinator.StartCapture(project, selectedCommands);
             return RedirectToAction(nameof(HomeController.ShowAmeTask), "Home", new { id = commandId });
         }
 
-        public IActionResult StartCaptureSingleDevice(string projectPath, string sourceDrive)
-        {
-            return StartCapture(projectPath, new List<SelectedDevices>
-            {
-                new SelectedDevices
-                {
-                    Selected = true,
-                    Drive = sourceDrive
-                }
-            });
-        }
-
-        public IActionResult ShowConflicts(string projectPath, string sourceDrive)
+        public IActionResult ShowConflicts(string projectPath, string commandType, string param)
         {
             var project = projectRepo.GetProject(projectPath);
-            var device = captureCooridinator.CreateCommand(new DriveInfo(sourceDrive), project.GetLocalPathRoot());
-            var destinationDir = new DirectoryInfo(project.LocalPathRoot);
-            device.SetDestinationRootPath(destinationDir);
+            var device = captureCooridinator.CreateCommand(commandType, param, project) as DeviceMoveFileCommands;
             return View(device);
         }
     }

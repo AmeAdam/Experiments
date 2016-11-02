@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
@@ -51,7 +52,12 @@ namespace AmeCommon.Tasks
                 State = TaskState.InProgress;
                 UpdateSyncPoint();
                 Execute();
-                State = CancellationToken.IsCancellationRequested ? TaskState.Aborted : TaskState.Completed;
+                if (CancellationToken.IsCancellationRequested)
+                    State = TaskState.Aborted;
+                else if (ChildTasks.Any(t => t.State == TaskState.Error))
+                    State = TaskState.Error;
+                else
+                    State = TaskState.Completed;
                 UpdateSyncPoint();
             }
             catch (Exception ex)

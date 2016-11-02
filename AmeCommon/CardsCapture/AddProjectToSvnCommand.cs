@@ -98,8 +98,6 @@ namespace AmeCommon.CardsCapture
             ignoreList.Add("Adobe Premiere Pro Auto-Save");
             ignoreList.Add("gotowe");
             ignoreList.Add("encore - dvd");
-            ignoreList.Add("pluraleyes");
-            ignoreList.Add("pluraleyes");
             return ignoreList;
         }
 

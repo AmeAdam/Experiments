@@ -22,7 +22,6 @@
                 <th></th>
                 <th></th>
                 <th>Urządzenie</th>
-                <th>Dysk</th>
                 <th>Info</th>
                 <th>Stan</th>
             </tr>
@@ -33,24 +32,15 @@
                 <tr class="@trClass">
                     <td>
                         @Html.CheckBox($"devices[{i}].Selected", device.Selected)
-                        @Html.Hidden($"devices[{i}].Drive", device.SourceDrive)
-                        @Html.Hidden($"devices[{i}].Task", device.Label)
+                        @Html.Hidden($"devices[{i}].Param", device.Param)
+                        @Html.Hidden($"devices[{i}].Task", device.CommandType)
                     </td>
                     <td><img src="@device.CommandImagePath" style="height: 75px"/></td>
                     <td>@device.Label</td>
-                    <td>@device.SourceDrive</td>
                     <td class="DeviceInfo" style="white-space: pre">@device.Description
                         @if (device.HasWarning)
                         {
-                            @Html.ActionLink("Uwaga! Wykryto potencjalne problemy.", "ShowConflicts", new {projectPath = Model.Project.LocalPathRoot, device.SourceDrive}, new {style = "font-weight: bold"})
-                        }
-                    </td>
-                    <td class="DeviceState">
-                        <img src="@device.StateImagePath" style="height: 75px" />
-
-                        @if (!string.IsNullOrEmpty(device.ExecuteActionLink))
-                        {
-                            <a href="@device.ExecuteActionLink">Start</a>
+                            @Html.ActionLink("Uwaga! Wykryto potencjalne problemy.", "ShowConflicts", new {projectPath = Model.Project.LocalPathRoot, device.CommandType, device.Param}, new {style = "font-weight: bold"})
                         }
                     </td>
                 </tr>

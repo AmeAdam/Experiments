@@ -40,16 +40,11 @@ namespace AmeCommon.CardsCapture
 //            return new CaptureProjectCommand(environment, config, repository, project, commands, driveManager);
 //        }
 
-        public Guid StartCapture(AmeFotoVideoProject project, IEnumerable<DriveInfo> drives)
+        public Guid StartCapture(AmeFotoVideoProject project, List<BackgroundTask> childCommands)
         {
-            var commands = drives
-                .Select(d => CreateCommand(d, project.GetLocalPathRoot()))
-                .Where(d => d != null)
-                .ToList();
-            if (commands.Any())
+            if (childCommands.Any())
             {
-                commands.Add(new AddResourcesToProjectCommand(environment, project.GetLocalPathRoot(), driveManager));
-                var command = new CaptureProjectCommand(config, repository, project, commands);
+                var command = new CaptureProjectCommand(repository, project, childCommands);
                 taskManager.StartTask(command);
                 return command.Id;
             }
@@ -64,7 +59,8 @@ namespace AmeCommon.CardsCapture
                 .Where(d => d != null)
                 .Cast<BackgroundTask>()
                 .ToList();
-            res.Add(new AddResourcesToProjectCommand(environment, project.GetLocalPathRoot(), driveManager));
+            res.Add(new AddResourcesToProjectCommand("Wesele", environment, project.GetLocalPathRoot(), driveManager));
+            res.Add(new AddResourcesToProjectCommand("Przedszkole", environment, project.GetLocalPathRoot(), driveManager));
             res.Add(new AddProjectToSvnCommand(config, project));
             return res;
         }
@@ -78,8 +74,24 @@ namespace AmeCommon.CardsCapture
             {
                 SourceDrive = sourceDrive,
                 Device = device,
+                DestinationRoot = destinationDirectory,
                 Commands = device.Captures.SelectMany(di => factory.Create(device.UniqueName, sourceDrive, di, destinationDirectory)).ToList(),
             };
+        }
+
+        public BackgroundTask CreateCommand(string commandType, string commandParam, AmeFotoVideoProject project)
+        {
+            switch (commandType)
+            {
+                case nameof(DeviceMoveFileCommands):
+                    return CreateCommand(new DriveInfo(commandParam), project.GetLocalPathRoot());
+                case nameof(AddResourcesToProjectCommand):
+                    return new AddResourcesToProjectCommand(commandParam, environment, project.GetLocalPathRoot(), driveManager);
+                case nameof(AddProjectToSvnCommand):
+                    return new AddProjectToSvnCommand(config, project);
+                default:
+                    return null;
+            }
         }
 
         public Device GetDevice(DriveInfo sourceDrive)

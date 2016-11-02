@@ -7,14 +7,16 @@ namespace AmeCommon.CardsCapture
 {
     public class AddResourcesToProjectCommand : DeviceMoveFileCommands
     {
+        public string Mp3FolderName { get; }
         private readonly IHostingEnvironment environment;
         private readonly DirectoryInfo destinationDirectory;
         public override string Name => "Tworzenie plików dodatkowych projektu";
-        public override string Label => "resources";
+        public override string Label => $"Template - {Mp3FolderName}";
 
 
-        public AddResourcesToProjectCommand(IHostingEnvironment environment, DirectoryInfo destinationDirectory, IDriveManager driveManager) : base(driveManager)
+        public AddResourcesToProjectCommand(string mp3FolderName, IHostingEnvironment environment, DirectoryInfo destinationDirectory, IDriveManager driveManager) : base(driveManager)
         {
+            Mp3FolderName = mp3FolderName;
             this.environment = environment;
             this.destinationDirectory = destinationDirectory;
             Device = new Device {UniqueName = "Startup"};
@@ -27,10 +29,11 @@ namespace AmeCommon.CardsCapture
             CopyFile("nadruk_plyta.psd");
             CopyFile("nadruk_pudelko.psd");
             CopyFile("temp.prproj");
-            var sourceFile = Path.Combine(environment.WebRootPath, "Resources", "Podkłady");
+
+            var mp3FilesDirPath = Path.Combine(environment.WebRootPath, "Resources", Mp3FolderName);
             var podkladyDestPath = Path.Combine(destinationDirectory.FullName, "Podkłady");
             Directory.CreateDirectory(podkladyDestPath);
-            foreach(var podklad in Directory.GetFiles(sourceFile))
+            foreach(var podklad in Directory.GetFiles(mp3FilesDirPath))
                 File.Copy(podklad, Path.Combine(podkladyDestPath, Path.GetFileName(podklad) ?? ""));
         }
 

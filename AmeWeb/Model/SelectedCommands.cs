@@ -1,8 +1,8 @@
 ﻿namespace AmeWeb.Model
 {
-    public class SelectedDevices
+    public class SelectedCommands
     {
-        public string Drive { get; set; }
+        public string Param { get; set; }
         public string Task { get; set; }
         public bool Selected { get; set; }
     }
