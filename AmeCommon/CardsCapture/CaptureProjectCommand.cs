@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using AmeCommon.Model;
 using AmeCommon.Tasks;
 using Newtonsoft.Json;
@@ -11,30 +11,40 @@ namespace AmeCommon.CardsCapture
     public class CaptureProjectCommand : BackgroundTask
     {
         private readonly object saveSync = new object();
-        private readonly object taskSync = new object();
         public AmeFotoVideoProject Project { get; }
-        public List<BackgroundTask> ChildCommands { get; }
-//        public AddProjectToSvnCommand SvnCommand { get; private set; }
-        public bool Completed => waitForComplete.WaitOne(0);
+        public List<DeviceMoveFileCommands> DeviceCommands { get; set; }
+        public AddResourcesToProjectCommand AddResourceCommand { get; set; }
+        public AddProjectToSvnCommand CreateSvnCommand { get; set; }
+
         private readonly IAmeProjectRepository repository;
         private readonly DirectoryInfo destinationDirectory;
-        private readonly ManualResetEvent waitForComplete = new ManualResetEvent(false);
         public override string Name => "Tworzenie projektu - " + Project?.UniqueName;
         public override string Label => "AME-Project";
 
 
-        public CaptureProjectCommand(IAmeProjectRepository repository, AmeFotoVideoProject project, List<BackgroundTask> commands)
+        public CaptureProjectCommand(IAmeProjectRepository repository, AmeFotoVideoProject project)
         {
             this.repository = repository;
             Project = project;
             destinationDirectory = new DirectoryInfo(Project.LocalPathRoot);
-            ChildCommands = commands;
-//            SvnCommand = new AddProjectToSvnCommand(config, project);
         }
 
-        public override IEnumerable<BackgroundTask> ChildTasks => ChildCommands;
+        public override IEnumerable<BackgroundTask> ChildTasks
+        {
+            get
+            {
+                foreach (var cmd in DeviceCommands ?? new List<DeviceMoveFileCommands>())
+                {
+                    yield return cmd;
+                }
+                if (AddResourceCommand != null)
+                    yield return AddResourceCommand;
+                if (CreateSvnCommand != null)
+                    yield return CreateSvnCommand;
+            }
+        }
 
-        private void ExecuteChildTask(DeviceMoveFileCommands cmd)
+        private Task ExecuteChildTask(DeviceMoveFileCommands cmd)
         {
             destinationDirectory.Create();
 
@@ -45,35 +55,23 @@ namespace AmeCommon.CardsCapture
             Project.MediaFiles = mediaFiles;
             SaveProject();
             cmd.OnComplete += DeviceCompleted;
-            cmd.ExecuteAsync();
+            return cmd.ExecuteAsync();
         }
 
         private void DeviceCompleted(BackgroundTask task)
         {
-            try
-            {
-                var command = (DeviceMoveFileCommands) task;
-                SaveProject();
-                command.DeleteCopiedFiles();
-                command.Dispose();
-            }
-            finally
-            {
-                lock (taskSync)
-                {
-                    if (ChildCommands.OfType<DeviceMoveFileCommands>().All(d => d.IsCompleted))
-                        waitForComplete.Set();
-                }
-            }
+            var command = (DeviceMoveFileCommands) task;
+            SaveProject();
+            command.DeleteCopiedFiles();
+            command.Dispose();
         }
 
         protected override void Execute()
         {
-            foreach (var cmd in ChildCommands.OfType<DeviceMoveFileCommands>())
-                ExecuteChildTask(cmd);
-            waitForComplete.WaitOne();
-            foreach (var cmd in ChildCommands.OfType<AddProjectToSvnCommand>())
-                cmd.ExecuteAsync().Wait();
+            var copyTask = DeviceCommands.Select(ExecuteChildTask).ToArray();
+            Task.WaitAll(copyTask);
+            AddResourceCommand?.ExecuteAsync().Wait();
+            CreateSvnCommand?.ExecuteAsync().Wait();
         }
 
         private void SaveProject()

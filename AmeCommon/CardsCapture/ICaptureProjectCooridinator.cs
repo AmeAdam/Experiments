@@ -8,7 +8,7 @@ namespace AmeCommon.CardsCapture
 {
     public interface ICaptureProjectCooridinator
     {
-        List<BackgroundTask> GetAavaliableCommands(AmeFotoVideoProject project);
+        List<DeviceMoveFileCommands> GetAavaliableDeviceCommands(AmeFotoVideoProject project);
      //   void Execute(CaptureProjectCommand command);
     //    void AppendCommand(AmeFotoVideoProject project, DeviceMoveFileCommands cmd);
    //     void AbortCapture(string uniqueName);
@@ -16,8 +16,7 @@ namespace AmeCommon.CardsCapture
         Device GetDevice(DriveInfo sourceDrive);
         //     CaptureProjectCommand GetPendingCaptureProjectCommand();
         //        CaptureProjectCommand CreateCaptureProjectCommand(AmeFotoVideoProject project, List<DeviceMoveFileCommands> commands);
-        Guid StartCapture(AmeFotoVideoProject project, List<BackgroundTask> childCommands);
+        Guid StartCapture(AmeFotoVideoProject project, string template, IEnumerable<DriveInfo> drivesToCopy, bool addToSvn);
         DeviceMoveFileCommands CreateCommand(DriveInfo sourceDrive, DirectoryInfo destinationDirectory);
-        BackgroundTask CreateCommand(string commandType, string commandParam, AmeFotoVideoProject project);
     }
 }

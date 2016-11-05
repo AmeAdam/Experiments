@@ -20,33 +20,54 @@
         <table class="table table-condensed table-bordered">
             <tr>
                 <th></th>
-                <th></th>
                 <th>Urządzenie</th>
+                <th>Dysk</th>
                 <th>Info</th>
-                <th>Stan</th>
             </tr>
             @for (var i = 0; i < Model.AvaliableCommands.Count; i++)
             {
                 var device = Model.AvaliableCommands[i];
-                var trClass = device.HasWarning ? "bg-danger" : "";
+                var hasWarning = device.GetAllConflictWithStoredFiles().Any();
+                var trClass = hasWarning ? "bg-danger" : "";
+                var deviceImagePath = $"images/{device.Label}.jpg";
                 <tr class="@trClass">
                     <td>
-                        @Html.CheckBox($"devices[{i}].Selected", device.Selected)
-                        @Html.Hidden($"devices[{i}].Param", device.Param)
-                        @Html.Hidden($"devices[{i}].Task", device.CommandType)
+                        @Html.CheckBox($"devices[{i}].Selected", device.FilesCount > 0)
+                        @Html.Hidden($"devices[{i}].Drive", device.SourceDrive)
                     </td>
-                    <td><img src="@device.CommandImagePath" style="height: 75px"/></td>
-                    <td>@device.Label</td>
-                    <td class="DeviceInfo" style="white-space: pre">@device.Description
-                        @if (device.HasWarning)
-                        {
-                            @Html.ActionLink("Uwaga! Wykryto potencjalne problemy.", "ShowConflicts", new {projectPath = Model.Project.LocalPathRoot, device.CommandType, device.Param}, new {style = "font-weight: bold"})
-                        }
+                    <td><img src="@deviceImagePath" style="height: 75px"/>@device.Label</td>
+                    <td>@device.SourceDrive</td>
+                    <td class="DeviceInfo">
+                        <div>Pliki: @device.FilesCount Rozmiar: @device.FilesSize.DisplayFileSize()</div>
+                        <div>
+                            @if (hasWarning)
+                            {
+                                @Html.ActionLink("Uwaga! Wykryto konflikt z istniejącymi plikami.", "ShowConflicts", new { projectPath = Model.Project.LocalPathRoot, device.SourceDrive }, new { style = "font-weight: bold" })
+                            }
+                        </div>
                     </td>
                 </tr>
             }
             <tr>
-                <td colspan="6"><input type="submit" value="Wykonaj wybrane"/></td>
+                <td colspan="4">
+                    <div>
+                        <img src="images/resources.jpg" style="height: 20px" />
+                        <label for="template">Szablon: </label>
+                        <select id="template" name="template">
+                            <option value="Wesele" selected>Wesele</option>
+                            <option value="Przedszkole">Przedszkole</option>
+                            <option value="">Inne</option>
+                        </select>
+                    </div>
+                    <div>
+                        <img src="images/svn.jpg" style="height: 20px" />
+                        <label for="svn">Utwórz repozytorium SVN</label>
+                        @Html.CheckBox("svn", true)
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4"><input type="submit" value="Rozpocznij kopiowanie"/></td>
             </tr>
         </table>
     </form>

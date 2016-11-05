@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,6 +18,7 @@ namespace AmeCommon.Tasks
         public DateTime StarTime;
         public DateTime EndTime;
         protected CancellationTokenSource CancelationSource = new CancellationTokenSource();
+        public ManualResetEvent WaitHandle { get; } = new ManualResetEvent(false);
         protected CancellationToken CancellationToken { get; }
         public virtual string Label => "unknown"; 
 
@@ -70,6 +70,7 @@ namespace AmeCommon.Tasks
             {
                 EndTime = DateTime.Now;
                 UpdateSyncPoint();
+                WaitHandle.Set();
                 OnOnComplete();
             }
         }

@@ -2,8 +2,7 @@
 {
     public class SelectedCommands
     {
-        public string Param { get; set; }
-        public string Task { get; set; }
         public bool Selected { get; set; }
+        public string Drive { get; set; }
     }
 }
