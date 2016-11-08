@@ -87,9 +87,7 @@ namespace AmeCommon.CardsCapture
 
         private List<string> GetIgnores()
         {
-            var ignoreList = Directory.GetDirectories(Project.LocalPathRoot)
-                .Select(Path.GetDirectoryName)
-                .ToList();
+            var ignoreList = Project.MediaFiles.Select(p => Path.GetDirectoryName(p.RelativePath)).Distinct().ToList();
             ignoreList.Remove("ZdjeciaRaw");
             ignoreList.Add("pluraleyes");
             ignoreList.Add("*.bak");
