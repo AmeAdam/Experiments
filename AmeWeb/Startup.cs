@@ -1,9 +1,8 @@
 ﻿using AmeCommon.CardsCapture;
 using AmeCommon.Database;
 using AmeCommon.Tasks;
-using Microsoft.AspNet.SignalR;
+using AmeCommon.VideoMonitoring;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,6 +45,7 @@ namespace AmeWeb
             services.AddSingleton<IDriveManager, DriveManager>();
             services.AddSingleton<IDatabase, Database>();
             services.AddSingleton<IDeviceManager, DeviceManager>();
+            services.AddSingleton<IVideoGrabber, VideoGrabber>();
             services.Configure<AmeConfig>(Configuration.GetSection("AmeConfig"));
         }
 

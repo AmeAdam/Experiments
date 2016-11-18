@@ -2,6 +2,7 @@
 using System.Linq;
 using AmeCommon.CardsCapture;
 using AmeCommon.Tasks;
+using AmeCommon.VideoMonitoring;
 using AmeWeb.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +12,13 @@ namespace AmeWeb.Controllers
     {
         private readonly IAmeProjectRepository projectRepo;
         private readonly ITasksManager tasksManager;
+        private readonly IVideoGrabber video;
 
-        public HomeController(IAmeProjectRepository projectRepo, ITasksManager tasksManager)
+        public HomeController(IAmeProjectRepository projectRepo, ITasksManager tasksManager, IVideoGrabber video)
         {
             this.projectRepo = projectRepo;
             this.tasksManager = tasksManager;
+            this.video = video;
         }
 
         public IActionResult Index()

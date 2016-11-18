@@ -1,0 +1,15 @@
+﻿@model dynamic
+
+<div>
+    <img id="webCam" />
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            setInterval(function () { $('#webCam').attr('src', '@Url.Action("Camera")'); }, 1000); // every 3 sec
+        });
+        //
+    </script>
+}
