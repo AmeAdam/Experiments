@@ -1,10 +1,17 @@
-﻿using AmeCommon.Alarm;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AmeCommon.Alarm;
 using AmeCommon.VideoMonitoring;
+using GiadaServer.Model;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Owin.Builder;
+using Owin;
 
 namespace GiadaServer
 {
@@ -36,7 +43,11 @@ namespace GiadaServer
             services.AddSingleton<IVideoGrabber, VideoGrabber>();
             services.AddSingleton<IGiadaMainService, GiadaMainService>();
             services.AddSingleton<IAlarmManager, AlarmManager>();
-            
+            services.AddSingleton<IAlarmProvider, AlarmProvider>();
+
+            services.Configure<GiadaSettings>(Configuration.GetSection(nameof(GiadaSettings)));
+
+
             services.AddMemoryCache();
             services.AddMvc();
         }
@@ -69,6 +80,19 @@ namespace GiadaServer
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseOwin(addToPipeline =>
+            {
+                addToPipeline(next =>
+                {
+                    var builder = new AppBuilder();
+                    var hubConfig = new HubConfiguration { EnableDetailedErrors = true };
+                    builder.MapSignalR(hubConfig);
+                    var appFunc = builder.Build(typeof(Func<IDictionary<string, object>, Task>)) as Func<IDictionary<string, object>, Task>;
+                    return appFunc;
+                });
+            });
+
         }
     }
 }

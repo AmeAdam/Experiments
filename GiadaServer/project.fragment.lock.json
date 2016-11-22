@@ -5,7 +5,7 @@
       "type": "project",
       "framework": ".NETFramework,Version=v4.6.1",
       "compile": {
-        "bin/Debug/AmeCommon.dll": {}
+        "bin/Release/AmeCommon.dll": {}
       },
       "runtime": {
         "../../../Program Files/Ozeki/Ozeki SDK/SDK/.NET4/OzekiSDK.dll": {},
@@ -32,27 +32,27 @@
         "../packages/System.Security.Cryptography.Primitives.4.3.0/lib/net46/System.Security.Cryptography.Primitives.dll": {},
         "../packages/System.Security.Cryptography.X509Certificates.4.3.0/lib/net461/System.Security.Cryptography.X509Certificates.dll": {},
         "../packages/System.Xml.ReaderWriter.4.3.0/lib/net46/System.Xml.ReaderWriter.dll": {},
-        "bin/Debug/AmeCommon.dll": {}
+        "bin/Release/AmeCommon.dll": {}
       },
       "contentFiles": {
-        "bin/Debug/AmeCommon.pdb": {
+        "bin/Release/AmeCommon.pdb": {
           "buildAction": "None",
           "codeLanguage": "any",
           "copyToOutput": true
         },
-        "bin/Debug/cardgrabbersettings.json": {
+        "bin/Release/cardgrabbersettings.json": {
           "buildAction": "Content",
           "codeLanguage": "any",
           "copyToOutput": true,
           "outputPath": "cardgrabbersettings.json"
         },
-        "bin/Debug/devices.json": {
+        "bin/Release/devices.json": {
           "buildAction": "Content",
           "codeLanguage": "any",
           "copyToOutput": true,
           "outputPath": "devices.json"
         },
-        "bin/Debug/settings.xml": {
+        "bin/Release/settings.xml": {
           "buildAction": "Content",
           "codeLanguage": "any",
           "copyToOutput": true,

@@ -3,6 +3,9 @@
   "version": 2,
   "targets": {
     ".NETFramework,Version=v4.6.1": {
+      "jQuery/1.6.4": {
+        "type": "package"
+      },
       "Libuv/1.9.1": {
         "type": "package",
         "dependencies": {
@@ -117,6 +120,66 @@
         },
         "runtime": {
           "lib/net45/Microsoft.AI.ServerTelemetryChannel.dll": {}
+        }
+      },
+      "Microsoft.AspNet.SignalR/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.SignalR.JS": "2.2.1",
+          "Microsoft.AspNet.SignalR.SystemWeb": "2.2.1"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.AspNet.SignalR.Core/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.1.0",
+          "Microsoft.Owin.Security": "2.1.0",
+          "Newtonsoft.Json": "6.0.4",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        }
+      },
+      "Microsoft.AspNet.SignalR.JS/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.6.4"
+        }
+      },
+      "Microsoft.AspNet.SignalR.Owin/1.2.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.SignalR.Core": "1.2.2",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.AspNet.SignalR.Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.AspNet.SignalR.Owin.dll": {}
+        }
+      },
+      "Microsoft.AspNet.SignalR.SystemWeb/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.SignalR.Core": "2.2.1",
+          "Microsoft.Owin.Host.SystemWeb": "2.1.0"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ],
+        "compile": {
+          "lib/net45/Microsoft.AspNet.SignalR.SystemWeb.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.AspNet.SignalR.SystemWeb.dll": {}
         }
       },
       "Microsoft.AspNetCore.Antiforgery/1.1.0": {
@@ -623,6 +686,19 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNetCore.Mvc.ViewFeatures.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Owin/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http": "1.1.0",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/net451/Microsoft.AspNetCore.Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNetCore.Owin.dll": {}
         }
       },
       "Microsoft.AspNetCore.Razor/1.1.0": {
@@ -1343,6 +1419,44 @@
           "lib/netstandard1.0/_._": {}
         }
       },
+      "Microsoft.Owin/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        }
+      },
+      "Microsoft.Owin.Host.SystemWeb/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.1.0",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.Host.SystemWeb.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.Host.SystemWeb.dll": {}
+        }
+      },
+      "Microsoft.Owin.Security/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.1.0",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        }
+      },
       "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.1.0": {
         "type": "package",
         "dependencies": {
@@ -1368,6 +1482,40 @@
         },
         "runtime": {
           "lib/net46/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "MongoDB.Bson/2.3.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/MongoDB.Bson.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MongoDB.Bson.dll": {}
+        }
+      },
+      "MongoDB.Driver/2.3.0": {
+        "type": "package",
+        "dependencies": {
+          "MongoDB.Bson": "2.3.0",
+          "MongoDB.Driver.Core": "2.3.0"
+        },
+        "compile": {
+          "lib/net45/MongoDB.Driver.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MongoDB.Driver.dll": {}
+        }
+      },
+      "MongoDB.Driver.Core/2.3.0": {
+        "type": "package",
+        "dependencies": {
+          "MongoDB.Bson": "2.3.0"
+        },
+        "compile": {
+          "lib/net45/MongoDB.Driver.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MongoDB.Driver.Core.dll": {}
         }
       },
       "NETStandard.Library/1.6.1": {
@@ -1631,6 +1779,15 @@
         },
         "runtime": {
           "lib/net45/NuGet.Versioning.dll": {}
+        }
+      },
+      "Owin/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Owin.dll": {}
         }
       },
       "System.AppContext/4.3.0": {
@@ -2467,6 +2624,21 @@
     }
   },
   "libraries": {
+    "jQuery/1.6.4": {
+      "sha512": "8RzoZQFeFYL/cINRXksLWyl8D5TKctZ/2G8hrlOLLM5OgFNI9h3t3l5tB+BBbsBUxaPUageVe0p9ruU5jrFeow==",
+      "type": "package",
+      "path": "jQuery/1.6.4",
+      "files": [
+        "Content/Scripts/jquery-1.6.4-vsdoc.js",
+        "Content/Scripts/jquery-1.6.4.js",
+        "Content/Scripts/jquery-1.6.4.min.js",
+        "Tools/install.ps1",
+        "Tools/jquery-1.6.4-vsdoc-para.js",
+        "Tools/uninstall.ps1",
+        "jQuery.1.6.4.nupkg.sha512",
+        "jQuery.nuspec"
+      ]
+    },
     "Libuv/1.9.1": {
       "sha512": "uqX2Frwf9PW8MaY7PRNY6HM5BpW1D8oj1EdqzrmbEFD5nH63Yat3aEjN/tws6Tw6Fk7LwmLBvtUh32tTeTaHiA==",
       "type": "package",
@@ -2573,6 +2745,62 @@
         "lib/net40/Microsoft.AI.ServerTelemetryChannel.dll",
         "lib/net45/Microsoft.AI.ServerTelemetryChannel.XML",
         "lib/net45/Microsoft.AI.ServerTelemetryChannel.dll"
+      ]
+    },
+    "Microsoft.AspNet.SignalR/2.2.1": {
+      "sha512": "tZVJyPKnSvZ1eOZW/SUuzokOmSUW36x56PGCWHAy5YtVfWWHkpMNxWjPruOKqWKFaB4Z4NQxflxhj1yEf6NEuQ==",
+      "type": "package",
+      "path": "Microsoft.AspNet.SignalR/2.2.1",
+      "files": [
+        "Microsoft.AspNet.SignalR.2.2.1.nupkg.sha512",
+        "Microsoft.AspNet.SignalR.nuspec",
+        "readme.txt"
+      ]
+    },
+    "Microsoft.AspNet.SignalR.Core/2.2.1": {
+      "sha512": "EUZlRTmUZ3di6hxCiyyhnUld/8AKTOuX1DAGhNLv+ocTfmnOJyS42AEzgxdIk1jRAlEpUEuoicVBBI07A2FU2g==",
+      "type": "package",
+      "path": "Microsoft.AspNet.SignalR.Core/2.2.1",
+      "files": [
+        "Microsoft.AspNet.SignalR.Core.2.2.1.nupkg.sha512",
+        "Microsoft.AspNet.SignalR.Core.nuspec",
+        "lib/net45/Microsoft.AspNet.SignalR.Core.dll",
+        "lib/net45/Microsoft.AspNet.SignalR.Core.xml"
+      ]
+    },
+    "Microsoft.AspNet.SignalR.JS/2.2.1": {
+      "sha512": "IKzTOfXjhN7kaGX47BATuTqP/mjVCDb9ivAVvBBrJoaomLT0Puj4f7fnHepByRkT7IGpm6hLbPO3afws5rlFdw==",
+      "type": "package",
+      "path": "Microsoft.AspNet.SignalR.JS/2.2.1",
+      "files": [
+        "Microsoft.AspNet.SignalR.JS.2.2.1.nupkg.sha512",
+        "Microsoft.AspNet.SignalR.JS.nuspec",
+        "content/Scripts/jquery.signalR-2.2.1.js",
+        "content/Scripts/jquery.signalR-2.2.1.min.js"
+      ]
+    },
+    "Microsoft.AspNet.SignalR.Owin/1.2.2": {
+      "sha512": "LmR0YFPkuBq9MG4NkyL9UR8rMaiBwrjgjc0L+ttsGoAKU5VXfPD+dBWhbZJedUZjvIDwgcEuKCePkNnvvqLetg==",
+      "type": "package",
+      "path": "Microsoft.AspNet.SignalR.Owin/1.2.2",
+      "files": [
+        "Microsoft.AspNet.SignalR.Owin.1.2.2.nupkg.sha512",
+        "Microsoft.AspNet.SignalR.Owin.nuspec",
+        "lib/net40/Microsoft.AspNet.SignalR.Owin.dll",
+        "lib/net40/Microsoft.AspNet.SignalR.Owin.xml",
+        "lib/net45/Microsoft.AspNet.SignalR.Owin.dll",
+        "lib/net45/Microsoft.AspNet.SignalR.Owin.xml"
+      ]
+    },
+    "Microsoft.AspNet.SignalR.SystemWeb/2.2.1": {
+      "sha512": "7R9oUxOjs3LOYqf2NslgGTEzsLWI5mzsPGWgjBP512Afde5qBhtlLxMO/gUIvVwGC+pvC6PNuYXMklkaPoP+/g==",
+      "type": "package",
+      "path": "Microsoft.AspNet.SignalR.SystemWeb/2.2.1",
+      "files": [
+        "Microsoft.AspNet.SignalR.SystemWeb.2.2.1.nupkg.sha512",
+        "Microsoft.AspNet.SignalR.SystemWeb.nuspec",
+        "lib/net45/Microsoft.AspNet.SignalR.SystemWeb.XML",
+        "lib/net45/Microsoft.AspNet.SignalR.SystemWeb.dll"
       ]
     },
     "Microsoft.AspNetCore.Antiforgery/1.1.0": {
@@ -2974,6 +3202,19 @@
         "lib/net451/Microsoft.AspNetCore.Mvc.ViewFeatures.xml",
         "lib/netstandard1.6/Microsoft.AspNetCore.Mvc.ViewFeatures.dll",
         "lib/netstandard1.6/Microsoft.AspNetCore.Mvc.ViewFeatures.xml"
+      ]
+    },
+    "Microsoft.AspNetCore.Owin/1.1.0": {
+      "sha512": "xcv+0jwWhhPOXpHoPh/UrvkT7rwOjlC5MOch8Q2QAMRcS8FFjIhcgs3bMvbL7UZHq+Aw18fIOPjAay2/ySKJBA==",
+      "type": "package",
+      "path": "Microsoft.AspNetCore.Owin/1.1.0",
+      "files": [
+        "lib/net451/Microsoft.AspNetCore.Owin.dll",
+        "lib/net451/Microsoft.AspNetCore.Owin.xml",
+        "lib/netstandard1.3/Microsoft.AspNetCore.Owin.dll",
+        "lib/netstandard1.3/Microsoft.AspNetCore.Owin.xml",
+        "microsoft.aspnetcore.owin.1.1.0.nupkg.sha512",
+        "microsoft.aspnetcore.owin.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Razor/1.1.0": {
@@ -3626,6 +3867,43 @@
         "runtime.json"
       ]
     },
+    "Microsoft.Owin/2.1.0": {
+      "sha512": "lk0kK64mlmcmtWX8YOYkZsnZKDoGEzMZhe8e1bcP+FFcgD4f2QfKwvu5Z8Bh8WS0VO7Rgk+DJ0hwW0k+S/UGMg==",
+      "type": "package",
+      "path": "Microsoft.Owin/2.1.0",
+      "files": [
+        "Microsoft.Owin.2.1.0.nupkg.sha512",
+        "Microsoft.Owin.nuspec",
+        "lib/net40/Microsoft.Owin.XML",
+        "lib/net40/Microsoft.Owin.dll",
+        "lib/net45/Microsoft.Owin.XML",
+        "lib/net45/Microsoft.Owin.dll"
+      ]
+    },
+    "Microsoft.Owin.Host.SystemWeb/2.1.0": {
+      "sha512": "S+YOPgtQuXlKGh1OZCVzvmz++2ibNeACzDlMpeXFN1QBUf9l+gstfV0f5hTbhmkDBE8LrSCBWu+9Rrte+ivNhg==",
+      "type": "package",
+      "path": "Microsoft.Owin.Host.SystemWeb/2.1.0",
+      "files": [
+        "Microsoft.Owin.Host.SystemWeb.2.1.0.nupkg.sha512",
+        "Microsoft.Owin.Host.SystemWeb.nuspec",
+        "lib/net40/Microsoft.Owin.Host.SystemWeb.dll",
+        "lib/net40/Microsoft.Owin.Host.SystemWeb.xml",
+        "lib/net45/Microsoft.Owin.Host.SystemWeb.dll",
+        "lib/net45/Microsoft.Owin.Host.SystemWeb.xml"
+      ]
+    },
+    "Microsoft.Owin.Security/2.1.0": {
+      "sha512": "4n1V0p+O6W1L0xHUM8Cjp2Y+MmmUkiCZv6PvRNIDCJD9zlerBJa2HECo9lUiWC+KuasQJ3QxB1FmipNBxdXXIQ==",
+      "type": "package",
+      "path": "Microsoft.Owin.Security/2.1.0",
+      "files": [
+        "Microsoft.Owin.Security.2.1.0.nupkg.sha512",
+        "Microsoft.Owin.Security.nuspec",
+        "lib/net45/Microsoft.Owin.Security.XML",
+        "lib/net45/Microsoft.Owin.Security.dll"
+      ]
+    },
     "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.1.0": {
       "sha512": "iVJCfMpPqZE2QaEAGT5MoEYM65l59rDSNERnZQmJDOiE+itZZ6ZP5wh+Lh9Lv0Nt1SbgvXdN3z39MM435ITldA==",
       "type": "package",
@@ -3673,6 +3951,48 @@
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
+      ]
+    },
+    "MongoDB.Bson/2.3.0": {
+      "sha512": "ImZ8Dstc+ZUxEqgIXJtFuL2+sesc+e0SwF68Wh8P3gSYLyWRL3hacNNgmE9iUgxUyYzVg4Sr55aRsHkHw9IaDw==",
+      "type": "package",
+      "path": "MongoDB.Bson/2.3.0",
+      "files": [
+        "License.rtf",
+        "MongoDB.Bson.2.3.0.nupkg.sha512",
+        "MongoDB.Bson.nuspec",
+        "lib/net45/MongoDB.Bson.XML",
+        "lib/net45/MongoDB.Bson.dll",
+        "lib/netstandard1.5/MongoDB.Bson.dll",
+        "lib/netstandard1.5/MongoDB.Bson.xml"
+      ]
+    },
+    "MongoDB.Driver/2.3.0": {
+      "sha512": "wq4rHgUorkGMn66TNQ4kDlh/u1DihK4bB+LdLgklP6Z7tpq3Y5It25daKrq6zcoLheCoBqhjBsKHUzrfG0KUfQ==",
+      "type": "package",
+      "path": "MongoDB.Driver/2.3.0",
+      "files": [
+        "License.rtf",
+        "lib/net45/MongoDB.Driver.XML",
+        "lib/net45/MongoDB.Driver.dll",
+        "lib/netstandard1.5/MongoDB.Driver.dll",
+        "lib/netstandard1.5/MongoDB.Driver.xml",
+        "mongodb.driver.2.3.0.nupkg.sha512",
+        "mongodb.driver.nuspec"
+      ]
+    },
+    "MongoDB.Driver.Core/2.3.0": {
+      "sha512": "CaMUxfkDkTnRR5iQ/tlVRYtJyoUAl0ToSj9/fWfQb/GYt8veQzSqu6jOLE1+KT+2HMvL6kIhX08tam+xU+iycQ==",
+      "type": "package",
+      "path": "MongoDB.Driver.Core/2.3.0",
+      "files": [
+        "License.rtf",
+        "MongoDB.Driver.Core.2.3.0.nupkg.sha512",
+        "MongoDB.Driver.Core.nuspec",
+        "lib/net45/MongoDB.Driver.Core.XML",
+        "lib/net45/MongoDB.Driver.Core.dll",
+        "lib/netstandard1.5/MongoDB.Driver.Core.dll",
+        "lib/netstandard1.5/MongoDB.Driver.Core.xml"
       ]
     },
     "NETStandard.Library/1.6.1": {
@@ -3892,6 +4212,16 @@
         "lib/net45/NuGet.Versioning.xml",
         "lib/netstandard1.0/NuGet.Versioning.dll",
         "lib/netstandard1.0/NuGet.Versioning.xml"
+      ]
+    },
+    "Owin/1.0.0": {
+      "sha512": "OseTFniKmyp76mEzOBwIKGBRS5eMoYNkMKaMXOpxx9jv88+b6mh1rSaw43vjBOItNhaLFG3d0a20PfHyibH5sw==",
+      "type": "package",
+      "path": "Owin/1.0.0",
+      "files": [
+        "Owin.1.0.0.nupkg.sha512",
+        "Owin.nuspec",
+        "lib/net40/Owin.dll"
       ]
     },
     "System.AppContext/4.3.0": {
@@ -7220,9 +7550,13 @@
   "projectFileDependencyGroups": {
     "": [
       "Microsoft.ApplicationInsights.AspNetCore >= 1.0.2",
+      "Microsoft.AspNet.SignalR >= 2.2.1",
+      "Microsoft.AspNet.SignalR.Core >= 2.2.1",
+      "Microsoft.AspNet.SignalR.Owin >= 1.2.2",
       "Microsoft.AspNetCore.Diagnostics >= 1.1.0",
       "Microsoft.AspNetCore.Hosting >= 1.1.0",
       "Microsoft.AspNetCore.Mvc >= 1.1.0",
+      "Microsoft.AspNetCore.Owin >= 1.1.0",
       "Microsoft.AspNetCore.Razor.Tools >= 1.0.0-preview2-final",
       "Microsoft.AspNetCore.Routing >= 1.1.0",
       "Microsoft.AspNetCore.Server.IISIntegration >= 1.1.0",
@@ -7234,7 +7568,8 @@
       "Microsoft.Extensions.Logging.Console >= 1.1.0",
       "Microsoft.Extensions.Logging.Debug >= 1.1.0",
       "Microsoft.Extensions.Options.ConfigurationExtensions >= 1.1.0",
-      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.1.0"
+      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.1.0",
+      "MongoDB.Driver >= 2.3.0"
     ],
     ".NETFramework,Version=v4.6.1": [
       "AmeCommon",

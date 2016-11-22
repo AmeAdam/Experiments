@@ -1,0 +1,16 @@
+﻿@using System.Threading.Tasks
+@using GiadaServer.Model
+@model AlarmState
+
+<h1>Niwy stan alarmu</h1>
+<div>
+    @if (Model.Armed)
+    {
+        <span>Uzbrojony</span>
+    }
+    else
+    {
+        <span>Rozbrojony</span>
+    }
+    <span>@Model.UpdateTime.ToString("yyyy-MM-dd HH:mm")</span>
+</div>
